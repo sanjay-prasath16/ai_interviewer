@@ -45,7 +45,7 @@ def speech_to_text(audio_file_path):
 # Updated generate_question function
 def generate_question(topic, candidate_name):
     prompt = f"""
-    Only Generate a complex interview question (within 1-2 lines, no more than 20 words) for an AI engineer named {candidate_name} about {topic} and use {candidate_name} for personal touch while asking the question.
+    Only Generate a complex interview question (within 1 line, no more than 20 words) for an AI engineer named {candidate_name} about {topic} and use {candidate_name} for personal touch while asking the question.
     Step 1: Understanding the Purpose
     Goal:
     Recognize that the primary objective is to assess the candidate's foundational knowledge.
