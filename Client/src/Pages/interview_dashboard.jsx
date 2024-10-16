@@ -252,7 +252,7 @@ const Interview = () => {
             <div>
               <p className="px-5 py-2 rounded-3xl flex items-center mb-5 text-[#0072DC]">
                 <span className="w-3 h-3 bg-red-600 rounded inline-block mr-2"></span>
-                {/* {isRecording ?  : "Paused"} */}Recording
+                {/* {isRecording ?  : "Paused"} */}Recording...
               </p>
               <button
                 onClick={handleNextClick}
