@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import PartyIcon from '../assets/party_icon.png'
 
 const Interview = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -177,7 +178,9 @@ const Interview = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-[70%] ml-10 mr-5 my-8 bg-black rounded-3xl"></div>
+      <div className="w-[70%] ml-10 mr-5 my-8 bg-black rounded-3xl justify-center items-center flex">
+        <img src={PartyIcon} alt="" className="w-48 h-48" />
+      </div>
 
       <div className="w-[30%] flex flex-col justify-between my-8 mr-10">
         {/* Scrollable container */}
