@@ -153,13 +153,11 @@ const ApplicantsPool = () => {
           </div>
         </div>
 
-        <div className="mt-2 mr-10 h-96 overflow-hidden">
-          <div className="overflow-hidden">
-            <table
-              className="min-w-full text-left border-separate rounded-xl"
-              style={{ borderSpacing: "0 10px" }}
-            >
-              <thead className="border border-white bg-white sticky top-0 z-10">
+        {/* Scrollable Table */}
+        <div className="mt-2 mr-10">
+          <div className="border border-white rounded-xl">
+            <table className="min-w-full text-left border-separate rounded-xl" style={{ borderSpacing: "0 10px" }}>
+              <thead className="bg-white sticky top-0 z-10">
                 <tr>
                   <th className="p-4 rounded-tl-xl">Applied Date</th>
                   <th className="p-4">
@@ -179,70 +177,60 @@ const ApplicantsPool = () => {
                 </tr>
               </thead>
             </table>
-            <div className="overflow-y-auto max-h-80" style={{ direction: "rtl" }}>
-              {/* Scrollbar starts on the left */}
-              <div style={{ direction: "ltr" }}>
-                <table
-                  className="min-w-full text-left border-separate rounded-xl"
-                  style={{ borderSpacing: "0 10px" }}
-                >
-                  <tbody className="text-gray-600">
-                    {candidates.map((candidate, idx) => (
-                      <tr key={idx} className="border border-white bg-white">
-                        <td className="p-4 bg-[#F1F4F8] text-xl">
-                          <div className="flex flex-col items-center">
-                            <span className="text-base">
-                              {candidate.date.dayMonth}
-                            </span>
-                            <span className="text-base">
-                              {candidate.date.year}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="p-4 rounded-l-xl">
-                          <input
-                            type="checkbox"
-                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                            checked={selectedCandidates.includes(idx)}
-                            onChange={() => handleCheckboxChange(idx)}
-                          />
-                        </td>
-                        <td className="p-4 flex items-center space-x-3">
+
+            {/* Scrollable Table Body */}
+            <div className="max-h-96 overflow-y-auto">
+              <table className="min-w-full text-left border-separate rounded-xl" style={{ borderSpacing: "0 10px" }}>
+                <tbody className="text-gray-600">
+                  {candidates.map((candidate, idx) => (
+                    <tr key={idx} className="border border-white bg-white">
+                      <td className="p-4 bg-[#F1F4F8] text-xl">
+                        <div className="flex flex-col items-center">
+                          <span className="text-base">{candidate.date.dayMonth}</span>
+                          <span className="text-base">{candidate.date.year}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 rounded-l-xl">
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          checked={selectedCandidates.includes(idx)}
+                          onChange={() => handleCheckboxChange(idx)}
+                        />
+                      </td>
+                      <td className="p-4 flex items-center space-x-3">
+                        <img
+                          src="https://via.placeholder.com/40"
+                          alt="Profile"
+                          className="h-10 w-10 rounded-full"
+                        />
+                        <div>
+                          <p className="font-medium text-gray-900">{candidate.name}</p>
+                          <p className="text-gray-500">{candidate.role}</p>
+                        </div>
+                      </td>
+                      <td className="p-4">{candidate.experience}</td>
+                      <td className="p-4">{candidate.company}</td>
+                      <td className="p-4">{candidate.location}</td>
+                      <td className="p-4 space-x-2">
+                        <SkillDisplay skills={candidate.skills} />
+                      </td>
+                      <td className="p-4 rounded-r-xl">
+                        <button className="inline-flex items-center rounded-md py-2 px-7 border border-[#98CDFF]">
                           <img
-                            src="https://via.placeholder.com/40"
-                            alt="Profile"
-                            className="h-10 w-10 rounded-full"
+                            src={SummarizeIcon}
+                            alt=""
+                            className="h-5 mt-[-2px]"
                           />
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {candidate.name}
-                            </p>
-                            <p className="text-gray-500">{candidate.role}</p>
-                          </div>
-                        </td>
-                        <td className="p-4">{candidate.experience}</td>
-                        <td className="p-4">{candidate.company}</td>
-                        <td className="p-4">{candidate.location}</td>
-                        <td className="p-4 space-x-2">
-                          <SkillDisplay skills={candidate.skills} />
-                        </td>
-                        <td className="p-4 rounded-r-xl">
-                          <button className="inline-flex items-center rounded-md py-2 px-7 border border-[#98CDFF]">
-                            <img
-                              src={SummarizeIcon}
-                              alt=""
-                              className="h-5 mt-[-2px]"
-                            />
-                            <span className="pl-2 font-medium text-[#0072DC]">
-                              Summarize
-                            </span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          <span className="pl-2 font-medium text-[#0072DC]">
+                            Summarize
+                          </span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
