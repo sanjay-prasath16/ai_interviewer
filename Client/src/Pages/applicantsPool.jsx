@@ -4,7 +4,7 @@ import { BsStars } from "react-icons/bs";
 import SummarizeIcon from "../assets/summarizeIcon.png";
 import SkillDisplay from "../Components/skillDisplay";
 import Filter from "../assets/filter.png";
-
+import Meta from "../assets/meta.png";
 const candidates = [
   {
     date: { dayMonth: "23 Aug", year: "/2024" },
@@ -109,11 +109,93 @@ const ApplicantsPool = () => {
   return (
     <div className="bg-[#F1F4F8] h-screen overflow-hidden">
       {/* job description */}
-      <div className="flex h-[30%]">
-        <div className="border border-white bg-white w-2/3 h-full ml-10 my-5 rounded-2xl"></div>
-        <div className="w-[26%]">
-          <div className="border border-white bg-white h-[45%] ml-4 mt-5 w-full rounded-2xl"></div>
-          <div className="border border-white bg-white h-[45%] ml-4 mt-4 w-full rounded-2xl"></div>
+      <div className="flex justify-between bg-gray-100 p-4 rounded-lg ">
+        {/* UI/UX Designer Section styled like a separate card */}
+        <div className="w-2/3 border border-white bg-white p-4 rounded-lg ">
+          <div className="flex justify-between">
+            <div className="flex">
+              {/* Logo */}
+              <div className="flex items-center">
+                <img
+                  src={Meta}
+                  alt="Company Logo"
+                  className="w-16 h-16 rounded-full"
+                />
+              </div>
+              {/* Job Info */}
+              <div className="ml-4">
+                <h2 className="text-xl font-bold">UI/UX Designer</h2>
+                <p className="text-sm text-gray-500">Meta @ Noida</p>
+                <div className="flex items-center text-sm text-gray-600 mt-2">
+                  <span>2 years</span>
+                  <span className="mx-2">|</span>
+                  <span>Fulltime</span>
+                  <span className="mx-2">|</span>
+                  <span>₹3 - 5 LPA</span>
+                </div>
+              </div>
+            </div>
+            {/* Buttons */}
+            <div className="flex items-center space-x-4">
+              <button className="bg-blue-500 text-white py-2 px-4 rounded-md">
+                View Details
+              </button>
+              <button className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md">
+                Position Closed
+              </button>
+            </div>
+          </div>
+          <br />
+          {/* Key Skills */}
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold">Key Skills:</h3>
+            <div className="flex flex-wrap mt-2">
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                User Research
+              </span>
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                Figma
+              </span>
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                Framer
+              </span>
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                Photoshop
+              </span>
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                UX
+              </span>
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                Information Architecture
+              </span>
+              <span className="bg-gray-200 text-sm py-1 px-2 rounded-lg mr-2 mb-2">
+                Visual Design
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Section with white borders */}
+        <div className="w-1/3 space-y-4 ml-5">
+          {/* Total Candidate Card with increased height */}
+          <div className="border border-white bg-gradient-to-r from-purple-200 to-blue-200 p-4 rounded-lg flex justify-between items-center h-24">
+            <div>
+              <h3 className="text-sm text-gray-600">Total Candidate</h3>
+              <p className="text-xs text-gray-500">For the entire period</p>
+            </div>
+            <p className="text-2xl font-bold">1200+</p>
+          </div>
+          {/* Total Cost Card with increased height */}
+          <div className="border border-white bg-gradient-to-r from-green-200 to-yellow-200 p-4 rounded-lg flex justify-between items-center h-24">
+            <div>
+              <h3 className="text-sm text-gray-600">Total Cost</h3>
+              <p className="text-xs text-gray-500">Post duration - 27 Days</p>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold">₹3.5k</p>
+              <p className="text-xs text-gray-500">Open 01Sep - Close 27Sep</p>
+            </div>
+          </div>
         </div>
       </div>
 
