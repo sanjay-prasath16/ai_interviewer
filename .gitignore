@@ -1,0 +1,10 @@
+# Ignore virtual environment folder
+venv/
+
+# Ignore any other files or folders you want to exclude
+node_modules/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+Server/.env
