@@ -7,6 +7,18 @@ import SkillDisplay from "../Components/skillDisplay";
 import Filter from "../assets/filter.png";
 import Meta from "../assets/meta.png";
 import Profile from "../assets/emma smith.png";
+import Sanjay from '../assets/sanjay.jpeg';
+import Mukesh from '../assets/mukesh.jpeg';
+import Debaleena from '../assets/debaleena.jpg';
+import Manjeet from '../assets/manjeet.jpeg';
+import Priyansh from '../assets/priyansh.jpg';
+import Bieden from '../assets/bieden.jpeg';
+import Joe from '../assets/joe.jpeg';
+import Rajan from '../assets/rajan.jpg';
+import Edwin from '../assets/edwin.jpg';
+import Joseph from '../assets/joseph.jpg';
+import Raj from '../assets/raj.jpg';
+import Sundar from '../assets/sundar pitchai.jpg';
 import Location from "../assets/location.png";
 import Briefcase from "../assets/briefcase.png";
 import Securitytime from "../assets/securitytime.png";
@@ -16,92 +28,155 @@ import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
 import ReactPaginate from "react-paginate";
 
-const candidates = new Array(74).fill({
-  date: "23 Aug / 2024",
-  name: "Emma Smith",
-  role: "UI/UX Designer",
-  experience: "2 Years",
-  company: "Google",
-  location: "Bangalore",
-  profile: Profile,
-  skills: [
-    "User Research",
-    "Figma",
-    "Photoshop",
-    "Framer",
-    "Illustrator",
-    "Sketch",
-    "Adobe XD",
-  ],
-});
-// const candidates = [
-//   {
-//     date: "23 Aug / 2024",
-//     name: "Emma Smith",
-//     role: "UI/UX Designer",
-//     experience: "2 Years",
-//     company: "Google",
-//     location: "Bangalore",
-//     skills: [
-//       "User Research",
-//       "Figma",
-//       "Photoshop",
-//       "Framer",
-//       "Illustrator",
-//       "Sketch",
-//       "Adobe XD",
-//       "InVision",
-//     ],
-//   },
-//   {
-//     date: "23 Aug / 2024",
-//     name: "Emma Smith",
-//     role: "UI/UX Designer",
-//     experience: "2 Years",
-//     company: "Google",
-//     location: "Bangalore",
-//     skills: [
-//       "User Research",
-//       "Figma",
-//       "Photoshop",
-//       "Framer",
-//     ],
-//   },
-//   {
-//     date: "23 Aug / 2024",
-//     name: "Emma Smith",
-//     role: "UI/UX Designer",
-//     experience: "2 Years",
-//     company: "Google",
-//     location: "Bangalore",
-//     skills: [
-//       "User Research",
-//       "Figma",
-//       "Photoshop",
-//       "Framer",
-//       "Illustrator",
-//       "Sketch",
-//     ],
-//   },
-//   {
-//     date: "23 Aug / 2024",
-//     name: "Emma Smith",
-//     role: "UI/UX Designer",
-//     experience: "2 Years",
-//     company: "Google",
-//     location: "Bangalore",
-//     skills: [
-//       "User Research",
-//       "Figma",
-//       "Photoshop",
-//       "Framer",
-//       "Illustrator",
-//       "Sketch",
-//       "Adobe XD",
-//       "InVision",
-//     ],
-//   },
-// ];
+// const candidates = new Array(74).fill({
+//   date: "23 Aug / 2024",
+//   name: "Emma Smith",
+//   role: "UI/UX Designer",
+//   experience: "2 Years",
+//   company: "Google",
+//   location: "Bangalore",
+//   profile: Profile,
+//   skills: [
+//     "User Research",
+//     "Figma",
+//     "Photoshop",
+//     "Framer",
+//     "Illustrator",
+//     "Sketch",
+//     "Adobe XD",
+//   ],
+// });
+const candidates = [
+  {
+    date: "23 Aug / 2024",
+    name: "Sanjay",
+    role: "UI/UX Designer",
+    experience: "2 Years",
+    company: "Google",
+    location: "Bangalore",
+    profile: Sanjay,
+    skills: [
+      "User Research",
+      "Figma",
+      "Photoshop",
+      "Framer",
+      "Illustrator",
+      "Sketch",
+      "Adobe XD",
+      "InVision",
+    ],
+  },
+  {
+    date: "24 Aug / 2024",
+    name: "John Doe",
+    role: "Frontend Developer",
+    experience: "3 Years",
+    company: "Microsoft",
+    location: "Hyderabad",
+    profile: Mukesh,
+    skills: ["HTML", "CSS", "JavaScript", "React", "Angular", "TypeScript"],
+  },
+  {
+    date: "25 Aug / 2024",
+    name: "Alice Brown",
+    role: "Product Manager",
+    experience: "5 Years",
+    company: "Amazon",
+    location: "Chennai",
+    profile: Manjeet,
+    skills: ["Roadmapping", "Agile", "Scrum", "Leadership", "JIRA"],
+  },
+  {
+    date: "26 Aug / 2024",
+    name: "Debaleena",
+    role: "Backend Developer",
+    experience: "4 Years",
+    company: "Meta",
+    location: "Delhi",
+    profile: Debaleena,
+    skills: ["Node.js", "Python", "Django", "MongoDB", "SQL", "Redis"],
+  },
+  {
+    date: "27 Aug / 2024",
+    name: "Sophia Zhang",
+    role: "Data Scientist",
+    experience: "3 Years",
+    company: "Apple",
+    location: "Pune",
+    profile: Priyansh,
+    skills: ["Python", "Machine Learning", "Data Visualization", "Pandas", "NumPy"],
+  },
+  {
+    date: "28 Aug / 2024",
+    name: "Michael Johnson",
+    role: "DevOps Engineer",
+    experience: "6 Years",
+    company: "Netflix",
+    location: "Mumbai",
+    profile: Bieden,
+    skills: ["AWS", "Docker", "Kubernetes", "CI/CD", "Terraform"],
+  },
+  {
+    date: "29 Aug / 2024",
+    name: "Isabella Williams",
+    role: "Mobile App Developer",
+    experience: "2 Years",
+    company: "Spotify",
+    location: "Kolkata",
+    profile: Joe,
+    skills: ["Swift", "Kotlin", "React Native", "UI Testing", "Firebase"],
+  },
+  {
+    date: "30 Aug / 2024",
+    name: "Chris Taylor",
+    role: "Cybersecurity Specialist",
+    experience: "5 Years",
+    company: "Tesla",
+    location: "Gurgaon",
+    profile: Rajan,
+    skills: ["Network Security", "Penetration Testing", "Encryption", "Firewall"],
+  },
+  {
+    date: "31 Aug / 2024",
+    name: "Emma Watson",
+    role: "Cloud Engineer",
+    experience: "4 Years",
+    company: "IBM",
+    location: "Ahmedabad",
+    profile: Edwin,
+    skills: ["Azure", "AWS", "GCP", "Serverless", "Cloud Security"],
+  },
+  {
+    date: "01 Sep / 2024",
+    name: "Liam Patel",
+    role: "AI Engineer",
+    experience: "3 Years",
+    company: "OpenAI",
+    location: "Noida",
+    profile: Joseph,
+    skills: ["Deep Learning", "PyTorch", "TensorFlow", "NLP", "GANs"],
+  },
+  {
+    date: "02 Sep / 2024",
+    name: "Olivia Martinez",
+    role: "Game Developer",
+    experience: "2 Years",
+    company: "Ubisoft",
+    location: "Bangalore",
+    profile: Raj,
+    skills: ["Unity", "Unreal Engine", "C#", "Game Physics", "3D Modeling"],
+  },
+  {
+    date: "03 Sep / 2024",
+    name: "Ethan White",
+    role: "Blockchain Developer",
+    experience: "4 Years",
+    company: "Coinbase",
+    location: "Hyderabad",
+    profile: Sundar,
+    skills: ["Smart Contracts", "Solidity", "Ethereum", "Cryptography", "Web3.js"],
+  },
+];
 
 const ApplicantsPool = () => {
   const [selectedCandidates, setSelectedCandidates] = useState([]);
@@ -166,11 +241,11 @@ const ApplicantsPool = () => {
   };
 
   return (
-    <div className="bg-[#F1F4F8] h-screen overflow-hidden regular3">
+    <div className="bg-[#F1F4F8] h-screen overflow-hidden">
       {/* job description */}
       <div className="flex justify-between bg-gray-100 p-4 rounded-lg ml-8">
         {/* UI/UX Designer Section styled like a separate card */}
-        <div className="w-3/4 border border-white bg-white pt-4 pb-4 pr-4 rounded-lg ">
+        <div className="w-[68%] border border-white bg-white pt-4 pb-4 pr-4 rounded-lg ">
           <div className="flex justify-between">
             <div className="flex">
               <div className="flex items-center">
@@ -181,25 +256,25 @@ const ApplicantsPool = () => {
                 />
               </div>
               <div className="ml-1 ">
-                <h2 className="text-xl font-bold">UI/UX Designer</h2>
-                <p className=" flex text-sm text-gray-500">
+                <h2 className="text-[24px] font-bold">UI/UX Designer</h2>
+                <p className=" flex text-[16px] font-medium text-[#787878]">
                   Meta |
-                  <img className="h-4" src={Location} alt="" /> Noida
+                  <img className="h-5 mt-2 mr-1" src={Location} alt="" /> Noida
                 </p>
-                <div className="flex items-center text-sm text-gray-600">
-                  <img className="h-4" src={Briefcase} alt="" />
-                  <span>2 years</span>
+                <div className="flex items-center">
+                  <img className="h-5 mr-1" src={Briefcase} alt="" />
+                  <span className="text-[16px] font-medium text-[#747474]">2 years</span>
                   <span className="mx-2">|</span>
-                  <img className="h-4" src={Securitytime} alt="" />
-                  <span>Fulltime</span>
+                  <img className="h-4 mr-1" src={Securitytime} alt="" />
+                  <span className="text-[16px] font-medium text-[#747474]">Fulltime</span>
                   <span className="mx-2">|</span>
-                  <span>₹3 - 5 LPA</span>
+                  <span className="text-[16px] font-medium text-[#747474]">₹ 3 - 5 LPA</span>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4 -mt-10">
               <button
-                className="py-2 px-2 rounded-md border border-[#0072DC] h-12 w-28"
+                className="p-3 rounded-md border border-[#0072DC] text-[16px] font-medium"
                 style={{
                   backgroundColor: "#FFFFFF",
                   color: "#0072DC",
@@ -208,7 +283,7 @@ const ApplicantsPool = () => {
                 View Details
               </button>
               <button
-                className="py-2 px-2 rounded-md h-12 w-32"
+                className="p-3 rounded-md text-[16px] font-medium"
                 style={{ backgroundColor: "#C4C4C4", color: "#FFFFFF" }}
               >
                 Position Closed
@@ -216,27 +291,27 @@ const ApplicantsPool = () => {
             </div>
           </div>
           <div className="mt-4 ml-4 ">
-            <h3 className="text-sm font-semibold ml-2">Key Skills:</h3>
+            <h3 className="text-[16px] font-medium ml-2">Key Skills:</h3>
             <div className="flex flex-wrap mt-2">
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 User Research
               </span>
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 Figma
               </span>
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 Framer
               </span>
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 Photoshop
               </span>
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 UX
               </span>
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 Information Architecture
               </span>
-              <span className="bg-[#F3F3F3] text-sm text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
                 Visual Design
               </span>
             </div>
@@ -244,10 +319,10 @@ const ApplicantsPool = () => {
         </div>
 
         {/* Right Section with white borders */}
-        <div className="w-96 space-y-4 ml-4 mr-6">
+        <div className="w-[30%] space-y-4 ml-4 mr-6">
           {/* Total Candidate Card with increased height */}
           <div
-            className="border border-white p-4 rounded-lg flex justify-between items-center h-24"
+            className="border border-white p-4 rounded-lg flex justify-between items-center h-[50%]"
             style={{
               backgroundImage: `url(${backgroundImage1})`,
               backgroundSize: "cover",
@@ -255,13 +330,13 @@ const ApplicantsPool = () => {
             }}
           >
             <div>
-              <h3 className="ml-1 text-sm font-semibold">Total Candidate</h3>
-              <p className="ml-1 text-xs text-gray-500">For the entire period</p>
+              <h3 className="ml-1 text-[16px] font-semibold">Total Candidate</h3>
+              <p className="ml-1 text-[14px] text-[#A09E9E]">For the entire period</p>
             </div>
-            <p className="text-2xl font-semibold mr-8">1200+</p>
+            <p className="text-[36px] font-semibold mr-2">1200+</p>
           </div>
           <div
-            className="border border-white p-4 rounded-lg flex justify-between items-center h-24"
+            className="border border-white p-4 rounded-lg flex justify-between items-center h-[43%]"
             style={{
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: "cover",
@@ -269,30 +344,30 @@ const ApplicantsPool = () => {
             }}
           >
             <div>
-              <h3 className="ml-1 text-sm font-semibold">Total Cost</h3>
-              <p className="ml-1 text-xs text-gray-500">Post duration - 27 Days</p>
+              <h3 className="ml-1 text-[16px] font-semibold">Total Cost</h3>
+              <p className="ml-1 text-[14px] text-[#A09E9E]">Post duration - 27 Days</p>
             </div>
-            <div className="text-right">
-              <p className="text-2xl font-semibold mr-10">₹3.5k</p>
-              <span className="text-xs text-gray-500 bg-[#E5F6D2] px-2 py-1 rounded-md">
-                Open 5Aug - Close 2Sep
+            <div className="">
+              <p className="text-[36px] font-semibold justify-center flex">₹3.5k</p>
+              <span className="text-[12px] font-medium text-[#858585] bg-[#E5F6D2] px-2 py-1 rounded-md">
+                Open 5 Aug - Close 2 Sep
               </span>
             </div>
           </div>
         </div>
       </div>
       <div className="ml-10 justify-between">
-        <p className="font-semibold text-2xl">Candidate List</p>
+        <p className="font-semibold text-[24px] Inter">Candidate List</p>
         <div className="justify-between flex">
           <div className="mt-2 flex relative">
             <input
               type="text"
-              className="outline-none rounded-full h-10 w-72 placeholder:text-[#656464] pl-10"
+              className="outline-none rounded-full h-12 w-72 placeholder:text-[#656464] text-[16px] font-medium Inter pl-10"
               placeholder="Search Candidates"
             />
-            <CiSearch className="absolute ml-3 mt-2 text-2xl" />
-            <img src={Filter} alt="" className="h-5 mt-3 ml-5" />
-            <p className="mt-3 ml-1 text-[#656464]">Filter</p>
+            <CiSearch className="absolute mt-[8px] ml-[8px] text-[19px]" />
+            <img src={Filter} alt="" className="h-7 mt-3 ml-5" />
+            <p className="mt-3 ml-1 text-[#656464] text-[16px] font-medium Inter">Filter</p>
           </div>
           <div
             className={`border rounded-lg mr-10 h-10 flex items-center justify-center px-3 py-6 ${
@@ -308,25 +383,25 @@ const ApplicantsPool = () => {
             }}
           >
             {isAnyCheckboxSelected ? (
-              <img src={WhiteMagicIcon} alt="" className="h-6" />
+              <img src={WhiteMagicIcon} alt="" className="h-8" />
             ) : (
-              <img src={MagicIcon} alt="" className="h-5" />
+              <img src={MagicIcon} alt="" className="h-8" />
             )}
-            <p className="ml-1 font-regular">
+            <p className="ml-1 Inter text-[16px] font-semibold">
               {`Take AI Interview ${
                 isAnyCheckboxSelected ? `${selectedCandidates.length}` : "0"
               }`}
             </p>
           </div>
         </div>
-        <div className="mt-1 mr-10 h-72 overflow-y-auto table-container">
+        <div className="mt-1 mr-10 max-h-[24rem] overflow-y-auto table-container">
           <table
             className="min-w-full text-left border-separate rounded-xl"
             style={{ borderSpacing: "0 10px" }}
           >
             <thead className="sticky top-0 z-10 border border-white bg-white text-tableHead">
               <tr>
-                <th className="p-4 rounded-tl-xl">Applied Date</th>
+                <th className="p-4 rounded-tl-xl text-[14px] Inter font-semibold">Applied Date</th>
                 <th className="p-4">
                   <input
                     type="checkbox"
@@ -335,12 +410,12 @@ const ApplicantsPool = () => {
                     onChange={handleSelectAllChange}
                   />
                 </th>
-                <th className="p-4">Candidate Name</th>
-                <th className="p-4">Experience</th>
-                <th className="p-4">Current Company</th>
-                <th className="p-4">Location</th>
-                <th className="p-4">Key Skills</th>
-                <th className="p-4 rounded-tr-xl"></th>
+                <th className="p-4 text-[14px] Inter font-semibold">Candidate Name</th>
+                <th className="p-4 text-[14px] Inter font-semibold">Experience</th>
+                <th className="p-4 text-[14px] Inter font-semibold">Current Company</th>
+                <th className="p-4 text-[14px] Inter font-semibold">Location</th>
+                <th className="p-4 text-[14px] Inter font-semibold">Key Skills</th>
+                <th className="p-4 text-[14px] Inter font-semibold rounded-tr-xl"></th>
               </tr>
             </thead>
 
@@ -352,8 +427,8 @@ const ApplicantsPool = () => {
                     style={{ borderTop: "none", margin: 0 }}
                   >
                     <td className="p-4 bg-[#F1F4F8] text-xl">
-                      <div className="flex flex-col items-center text-[14px]">
-                        <span className="text-[#888888]">{candidate.date}</span>
+                      <div className="flex flex-col items-center">
+                        <span className="text-[#888888] text-[14px] font-medium Inter">{candidate.date}</span>
                       </div>
                     </td>
                     <td className="p-4 rounded-l-xl">
@@ -371,16 +446,16 @@ const ApplicantsPool = () => {
                         className="h-10 w-10 rounded-full"
                       />
                       <div>
-                        <p className="text-black mb-[-5px]">{candidate.name}</p>
-                        <span className="text-[#A6A6A6]">{candidate.role}</span>
+                        <p className="text-black mb-[-5px] text-[14px] font-medium">{candidate.name}</p>
+                        <span className="text-[#A6A6A6] text-[14px] font-medium">{candidate.role}</span>
                       </div>
                     </td>
                     <td className="p-4 text-tableBody">
-                      {candidate.experience}
+                      <span className="text-[14px] font-medium">{candidate.experience}</span>
                     </td>
-                    <td className="p-4 text-tableBody">{candidate.company}</td>
-                    <td className="p-4 text-tableBody">{candidate.location}</td>
-                    <td className="p-4 text-[#656565] space-x-2">
+                    <td className="p-4 text-tableBody text-[14px] font-medium">{candidate.company}</td>
+                    <td className="p-4 text-tableBody text-[14px] font-medium">{candidate.location}</td>
+                    <td className="p-4 text-[#656565] text-[14px] font-medium space-x-2">
                       <SkillDisplay skills={candidate.skills} />
                     </td>
                     <td className="p-4 rounded-r-xl">
@@ -396,11 +471,11 @@ const ApplicantsPool = () => {
                           <img
                             src={SummarizeIcon}
                             alt=""
-                            className={`h-5 mt-[-2px]`}
+                            className={`h-6 mt-[-2px]`}
                           />
                         )}
                         <span
-                          className={`text-[#0072DC] ${
+                          className={`text-[#0072DC] text-[16px] font-medium Inter ${
                             loadingSummary[idx] || summaryVisible[idx]
                               ? "content-center"
                               : "pl-2"
@@ -422,13 +497,13 @@ const ApplicantsPool = () => {
                       <div className={`relative flex flex-col px-20 py-5 rounded-lg bg-summarize_gradient opacity-[80%]`}>
                           {loadingSummary[idx] ? (
                             <div className="opacity-100">
-                              <p className="text-sm pl-3 font-semibold flex border border-white bg-white rounded-lg opacity-5 p-1 w-40">
+                              <p className="text-sm font-semibold flex justify-center border border-white/10 bg-white/40 rounded-lg p-1 w-60">
                                 <img
                                   src={SummarizeIcon}
                                   alt=""
-                                  className="h-5"
+                                  className="h-5 mr-2"
                                 />
-                                <span className="text-black">
+                                <span className="text-black text-[16px] font-medium">
                                   AI Summarizing...
                                 </span>
                               </p>
@@ -438,15 +513,15 @@ const ApplicantsPool = () => {
                             </div>
                           ) : (
                             <div>
-                              <p className="text-sm font-semibold flex justify-center border border-white/10 bg-white/40 rounded-lg p-1 w-[17%]">
+                              <p className="text-sm font-semibold flex justify-center border border-white/10 bg-white/40 rounded-lg p-1 w-60">
                                 <img
                                   src={SummarizeIcon}
                                   alt=""
-                                  className="h-5"
+                                  className="h-5 mr-2"
                                 />
-                                <span className="text-black">AI Summary</span>
+                                <span className="text-black text-[16px] font-medium">AI Summary</span>
                               </p>
-                              <p className="text-sm mt-3 text-justify">
+                              <p className="text-[14px] font-medium mt-3 text-justify">
                                 Seeking a creative UI/UX Designer specializing
                                 in web and mobile platforms, focused on
                                 intuitive, responsive, and visually engaging

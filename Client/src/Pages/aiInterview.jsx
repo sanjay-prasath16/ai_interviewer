@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import Ring from '../assets/ring.png';
+import Ring from "../assets/ring.png";
 
 const Interview = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -24,6 +24,7 @@ const Interview = () => {
   const [showExpandingBorder, setShowExpandingBorder] = useState(false);
   const [pulseClass, setPulseClass] = useState(undefined);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
+  const isRecordingRef = useRef(false);
 
   useEffect(() => {
     const startVideo = () => {
@@ -41,26 +42,41 @@ const Interview = () => {
 
     const checkPermissions = async () => {
       try {
-        const audioPermission = await navigator.permissions.query({ name: "microphone" });
-        const videoPermission = await navigator.permissions.query({ name: "camera" });
+        const audioPermission = await navigator.permissions.query({
+          name: "microphone",
+        });
+        const videoPermission = await navigator.permissions.query({
+          name: "camera",
+        });
 
-        if (audioPermission.state === "granted" && videoPermission.state === "granted") {
+        if (
+          audioPermission.state === "granted" &&
+          videoPermission.state === "granted"
+        ) {
           setPermissionsGranted(true);
           startVideo();
         } else {
           setPermissionsGranted(false);
-          alert("Please enable camera and microphone permissions in your browser settings and reload the page.");
+          alert(
+            "Please enable camera and microphone permissions in your browser settings and reload the page."
+          );
         }
 
         audioPermission.onchange = () => {
-          if (audioPermission.state === "granted" && videoPermission.state === "granted") {
+          if (
+            audioPermission.state === "granted" &&
+            videoPermission.state === "granted"
+          ) {
             setPermissionsGranted(true);
             startVideo();
           }
         };
 
         videoPermission.onchange = () => {
-          if (audioPermission.state === "granted" && videoPermission.state === "granted") {
+          if (
+            audioPermission.state === "granted" &&
+            videoPermission.state === "granted"
+          ) {
             setPermissionsGranted(true);
             startVideo();
           }
@@ -71,7 +87,7 @@ const Interview = () => {
       }
     };
 
-    checkPermissions()
+    checkPermissions();
   }, []);
 
   useEffect(() => {
@@ -80,23 +96,60 @@ const Interview = () => {
 
   const speakText = async (text) => {
     try {
-      const response = await axios.post("http://localhost:5000/speak", { text }, { responseType: 'blob' });
+      const response = await axios.post(
+        "http://localhost:8000/speak",
+        { text },
+        { responseType: "blob" }
+      );
       const audioUrl = URL.createObjectURL(response.data);
       const audio = new Audio(audioUrl);
-      audio.onended = () => startRecording();
+
+      audio.onended = () => {
+        startRecording();
+        setTimer(90);
+        startTimer();
+        startRecording();
+        setIsRecording(true);
+      };
+
       await audio.play();
-    } catch {
-      startRecording();
+    } catch (error) {
+      console.error("Error in TTS or audio playback:", error);
+
+      setTimeout(() => {
+        startRecording();
+        setTimer(90);
+        startTimer();
+        startRecording();
+        setIsRecording(true);
+      }, 5000);
     }
+  };
+
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 0) {
+          clearInterval(timerRef.current);
+          stopRecording();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
   const handleAudioSubmission = async (audioBlob) => {
     try {
       const formData = new FormData();
       formData.append("audio", audioBlob, "user_audio.wav");
-      const { data } = await axios.post("http://localhost:5000/transcribe_audio", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { data } = await axios.post(
+        "http://localhost:5000/transcribe_audio",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       handleGenerateNextQuestion(data.transcript);
     } catch (error) {
       console.error("Error handling audio submission:", error);
@@ -107,10 +160,12 @@ const Interview = () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
+        console.log("started recording");
         const mediaRecorder = new MediaRecorder(stream);
         mediaRecorderRef.current = mediaRecorder;
         audioChunks.current = [];
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(stream);
         const analyser = audioContext.createAnalyser();
         analyser.fftSize = 256;
@@ -118,29 +173,37 @@ const Interview = () => {
         source.connect(analyser);
         const updateVolume = () => {
           analyser.getByteFrequencyData(dataArray);
-          const avgVolume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+          const avgVolume =
+            dataArray.reduce((a, b) => a + b) / dataArray.length;
           setVolume(avgVolume);
-          if (isRecording) requestAnimationFrame(updateVolume);
+          if (isRecordingRef.current) requestAnimationFrame(updateVolume);
         };
         updateVolume();
         mediaRecorder.ondataavailable = (event) => {
           audioChunks.current.push(event.data);
         };
         mediaRecorder.onstop = async () => {
-          const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
+          const audioBlob = new Blob(audioChunks.current, {
+            type: "audio/wav",
+          });
           handleAudioSubmission(audioBlob);
           audioContext.close();
+          setVolume(0);
+          isRecordingRef.current = false;
         };
         mediaRecorder.start();
+        isRecordingRef.current = true;
         setIsRecording(true);
       })
-      .catch((error) => console.error("Error accessing the microphone:", error));
-  }, [isRecording]);
+      .catch((error) =>
+        console.error("Error accessing the microphone:", error)
+      );
+  }, []);
 
   const getPulseClass = (volume) => {
-    if (volume > 65) return "high";
-    if (volume > 60) return "medium";
-    if(volume > 55) return "low";
+    if (volume > 70) return "high medium low";
+    if (volume > 65) return "medium low";
+    if (volume > 55) return "low";
     return undefined;
   };
 
@@ -150,11 +213,17 @@ const Interview = () => {
       return;
     }
     try {
-      const { data } = await axios.post("http://localhost:5000/generate_question", {
-        topic: transcript,
-        candidate_name: candidateName,
-      });
-      setInterviewData((prevData) => [...prevData, { question: currentQuestion, answer: transcript }]);
+      const { data } = await axios.post(
+        "http://localhost:5000/generate_question",
+        {
+          topic: transcript,
+          candidate_name: candidateName,
+        }
+      );
+      setInterviewData((prevData) => [
+        ...prevData,
+        { question: currentQuestion, answer: transcript },
+      ]);
       setCurrentQuestion(data.question);
       setCurrentAnswer("");
       setQuestionCount((prevCount) => prevCount + 1);
@@ -181,31 +250,20 @@ const Interview = () => {
             stopRecording();
             return 0;
           }
-          return prev - 1;
+          return prev;
         });
       }, 1000);
     } else {
       clearInterval(timerRef.current);
     }
-  
+
     return () => clearInterval(timerRef.current);
   }, [isRecording, stopRecording]);
-  
+
   const handleNextClick = () => {
     stopRecording();
     setTimer(90);
   };
-
-  useEffect(() => {
-    const initialTimer = setTimeout(() => {
-      startRecording();
-    }, 5000);
-
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(timerRef.current);
-    };
-  }, [startRecording]);
 
   useEffect(() => {
     if (currentAnswer && questionCount > 0) {
@@ -241,7 +299,7 @@ const Interview = () => {
       const timer = setTimeout(() => {
         setShowExpandingBorder(false);
       }, 3000);
-  
+
       return () => clearTimeout(timer);
     }
   }, [volume]);
@@ -249,15 +307,23 @@ const Interview = () => {
   return (
     <div className="flex h-screen overflow-y-hidden regular3">
       <div className="w-[70%] ml-10 mr-5 my-8 bg-black rounded-3xl justify-center items-center flex">
-        <div className={`pulse-container ${getPulseClass(volume)}`} style={{ transform: `scale(${1 + volume / 100})` }}>
-          {showExpandingBorder && (
-            <div className="expanding-border"></div>
-          )}
-          <img
-            src={Ring}
-            alt="Audio Party"
-            className="w-28"
-          />
+        <div className={`pulse-container relative`}>
+          {showExpandingBorder && <div className="expanding-border"></div>}
+          <div className="relative">
+            <div
+              className="pulse-wrapper border border-black h-[200px] w-[200px] absolute z-1"
+              style={{ transform: `scale(${1 + volume / 100})` }}
+            >
+              {volume > 55 && <div className="pulse-layer low"></div>}
+              {volume > 65 && <div className="pulse-layer medium"></div>}
+              {volume > 85 && <div className="pulse-layer high"></div>}
+            </div>
+
+            {/* Ring image stays on top */}
+            <div className="relative z-50">
+              <img src={Ring} alt="Audio Party" className="w-[195px]" />
+            </div>
+          </div>
         </div>
       </div>
       <div className="w-[30%] flex flex-col justify-between my-8 mr-10">
@@ -276,7 +342,7 @@ const Interview = () => {
                 </motion.div>
               </div>
               <div className="justify-start">
-                <p className="text-sm text-white mb-2">{candidateName}</p>
+                <p className="text-[10px] text-white mb-2">{candidateName}</p>
                 <motion.div
                   key={`answer-${index}`}
                   className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-72 text-sm flex justify-start"
@@ -309,13 +375,13 @@ const Interview = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <p className="text-white">{currentAnswer}</p>
+                  <p className="text-white leading-3">{currentAnswer}</p>
                 </motion.div>
               </div>
             </>
           )}
         </div>
-        <div className="flex flex-col items-center mt-5 h-[30%]">
+        <div className="flex flex-col items-center mt-5 h-[30%] w-[95%]">
           <div className="w-full h-full flex">
             <div className="relative">
               <video
@@ -325,9 +391,7 @@ const Interview = () => {
                 playsInline
                 muted
               />
-              <button
-                className="absolute top-0 right-0 bg-white text-white border-4 border-white border-3xl w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-3xl"
-              >
+              <button className="absolute -top-1 -right-1 bg-white text-white w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-full">
                 <svg
                   width="40"
                   height="40"
@@ -348,18 +412,20 @@ const Interview = () => {
                 </svg>
               </button>
             </div>
-            <div className="ml-5">
-              <p className="px-5 py-2 rounded-3xl flex items-center mb-5 text-[#0072DC]">
-                <span className="w-3 h-3 bg-red-600 rounded inline-block mr-2"></span>
-                {/* {isRecording ?  : "Paused"} */}Recording...
-              </p>
-              <button
-                onClick={handleNextClick}
-                className="border border-[#0072DC] px-14 py-2 bg-[#0072DC] text-white font-semibold rounded-3xl"
-              >
-                Next
-              </button>
-              <p className="text-3xl text-gray-400 mt-8 ml-10">
+            <div className="ml-5 flex flex-col justify-between w-[50%]">
+              <div>
+                <p className="px-5 py-2 rounded-3xl flex items-center mb-5 text-[#0072DC]">
+                  <span className="w-3 h-3 bg-[#FF0000] rounded inline-block mr-2 font-medium text-sm"></span>
+                  Recording...
+                </p>
+                <button
+                  onClick={handleNextClick}
+                  className="border border-[#0072DC] px-14 py-2 bg-[#0072DC] text-white rounded-3xl font-medium text-sm"
+                >
+                  Next
+                </button>
+              </div>
+              <p className="text-[40px] text-[#A5A5A7]">
                 {formatTimer(timer)}
               </p>
             </div>

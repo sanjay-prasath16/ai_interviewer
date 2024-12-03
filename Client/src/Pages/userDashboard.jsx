@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import downArrow from "../assets/downArrow.svg";
@@ -17,6 +17,12 @@ import {
   Pagination,
   Navigation,
 } from "swiper/modules";
+import image1 from "../assets/7171.png";
+import image2 from "../assets/7172.png";
+import image3 from "../assets/7173.png";
+import image4 from "../assets/7174.png";
+import image5 from "../assets/clock.svg";
+import image6 from "../assets/level.svg";
 
 const contentData = [
   {
@@ -69,6 +75,41 @@ const contentData = [
   },
 ];
 
+const data = [
+  {
+    image: image1,
+    title: "Basics of Machine Learning",
+    description:
+      "Learn the essentials of machine learning in just 2 hours. Learn the essentials of machine learning in just 2 hours",
+    duration: "2 hours 30 minutes",
+    points: "Up to 25 points",
+  },
+  {
+    image: image2,
+    title: "Deep Learning Fundamentals",
+    description:
+      "Master the fundamentals of deep learning and AI. Learn the essentials of machine learning in just 2 hours",
+    duration: "3 hours 30 minutes",
+    points: "Up to 40 points",
+  },
+  {
+    image: image3,
+    title: "Data Science Bootcamp",
+    description:
+      "Kickstart your data science journey with this bootcamp. Learn the essentials of machine learning in just 2 hours",
+    duration: "4 hours 30 minutes",
+    points: "Up to 50 points",
+  },
+  {
+    image: image4,
+    title: "Data Science Bootcamp",
+    description:
+      "Kickstart your data science journey with this bootcamp. Learn the essentials of machine learning in just 2 hours",
+    duration: "4 hours 30 minutes",
+    points: "Up to 50 points",
+  },
+];
+
 const skillGraphData = {
   AI: {
     labels: [
@@ -107,29 +148,29 @@ const skillGraphData = {
         score: 675,
         label: "Skill Level",
         data: [675, 600, 500, 550, 700, 650, 600],
-        backgroundGradientStart: "#3A8DFF",
-        backgroundGradientEnd: "#1C6FA6",
+        backgroundGradientStart: "#235207",
+        backgroundGradientEnd: "#081950",
       },
     ],
   },
   UXDesigner: {
     labels: [
       "Mockups",
-      "Research",
       "Ideation",
-      "UX Design",
       "Testing",
-      "Prototyping",
       "Visual Design",
+      "Prototyping",
+      "UX Design",
+      "User Experience Research",
     ],
     datasets: [
       {
-        role: "UX Designer",
+        role: "UX Design",
         score: 675,
         label: "Skill Level",
-        data: [675, 500, 600, 700, 650, 580, 630],
-        backgroundGradientStart: "#FF6A00",
-        backgroundGradientEnd: "#D15500",
+        data: [675, 600, 500, 550, 700, 650, 600],
+        backgroundGradientStart: "#108AFC",
+        backgroundGradientEnd: "#102B83",
       },
     ],
   },
@@ -139,6 +180,7 @@ const UserDashboard = () => {
   SwiperCore.use([Autoplay, EffectCoverflow, Pagination, Navigation]);
   const [selected, setSelected] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const swiperRef = useRef(null);
 
   const currentDate = new Date();
   const day = currentDate.toLocaleString("en-US", { weekday: "short" });
@@ -148,11 +190,10 @@ const UserDashboard = () => {
   const eventDate = new Date(2024, 10, 8);
 
   return (
-    <div
-      className="flex p-5 bg-[#F1F4F8] h-screen text-xs Inter">
-      <div className="w-[35%] mr-14 flex flex-col h-full max-h-screen">
+    <div className="flex p-5 bg-[#F1F4F8] h-screen text-xs Inter">
+      <div className="w-[40%] mr-14 flex flex-col h-full max-h-screen">
         <div className="border border-white h-[40%] bg-white rounded-3xl"></div>
-        <div className="h-[60%] mt-5 flex-grow rounded-3xl mb-5 relative overflow-hidden">
+        {/* <div className="h-[60%] mt-5 flex-grow rounded-3xl mb-5 relative overflow-hidden">
           <Swiper
             direction="vertical"
             spaceBetween={30}
@@ -186,10 +227,10 @@ const UserDashboard = () => {
               );
             })}
           </Swiper>
-        </div>
+        </div> */}
       </div>
-      <div className="w-[65%]">
-        <div className="border border-white bg-white h-[65%] rounded-3xl px-8 py-5">
+      <div className="w-[60%]">
+        <div className="border border-white bg-white h-[50%] rounded-3xl px-8 py-5">
           <div className="flex justify-between">
             <p>Featured updates</p>
             <p className="border border-black rounded-full py-1 px-2 flex text-[#A5A5A7]">
@@ -249,7 +290,94 @@ const UserDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="h[35%]"></div>
+        <div className="h-[50%] mt-10">
+        <section className="rounded-3xl text-white h-full">
+  <Swiper
+    autoplay={{
+      delay: 3000,
+      disableOnInteraction: false,
+    }}
+    loop={true}
+    pagination={{
+      el: ".pagination-course", // Custom pagination element
+      bulletClass: "pagination-bullet-course",
+      bulletActiveClass: "pagination-bullet-active-course",
+      clickable: true,
+    }}
+    slidesPerView={1}
+    slidesPerGroup={1}
+    modules={[Autoplay, Pagination]}
+    className="h-[90%]"
+    onSwiper={(swiper) => (swiperRef.current = swiper)}
+  >
+    {data.map((item, index) => (
+      <SwiperSlide key={index} className="relative">
+        <div
+          className="h-full w-full bg-no-repeat rounded-3xl relative overflow-hidden"
+          style={{
+            backgroundImage: `url(${item.image})`,
+          }}
+          onMouseEnter={() => swiperRef.current.autoplay.stop()}
+          onMouseLeave={() => swiperRef.current.autoplay.start()}
+        >
+          <div
+            className="absolute top-0 left-0 w-full h-full text-white text-center"
+            style={{
+              background:
+                "linear-gradient(235deg, rgba(217, 217, 217, 0) 16%, rgba(18, 19, 22, 0.70) 35%, #121316 63%, #121316 100%)",
+            }}
+          >
+            <div className="flex flex-col justify-between h-full p-6">
+              <div>
+                <h2 className="text-left w-[40%] text-[18px] text-white font-semibold leading-6">
+                  Courses to Upgrade Your Skill Stack Score
+                </h2>
+              </div>
+              <div>
+                <h3 className="text-left text-[16px] font-semibold">
+                  {item.title}
+                </h3>
+                <p className=" w-[40%] mt-[18px] text-[#CECECE] text-[12px] text-justify">
+                  {item.description}
+                </p>
+                <div className="mt-[18px] flex w-[40%] gap-[65px] justify-between text-[14px] text-[#AAAAAA]">
+                  <span className="flex items-center gap-[4px] text-[#A5A5A7] text-[10px]">
+                    <img
+                      src={image5}
+                      alt=""
+                      className="block h-[16px] w-[16px]"
+                    />
+                    {item.duration}
+                  </span>
+                  <span className="flex items-center text-[#A5A5A7] text-[10px]">
+                    <img
+                      src={image6}
+                      alt=""
+                      className="block h-[16px] w-[16px]"
+                    />
+                    {item.points}
+                  </span>
+                </div>
+                {/* Pagination Container */}
+                <div className="swiper-pagination-course mt-4"></div>
+              </div>
+            </div>
+            <button
+              className="absolute bottom-[16px] right-[32px] border border-white text-white rounded-2xl p-[10px] cursor-pointer text-[10px] font-normal"
+              style={{
+                backgroundColor: "rgba(0,0,0,0)",
+                transition: "background-color 0.3s ease",
+              }}
+            >
+              View More
+            </button>
+          </div>
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</section>
+        </div>
       </div>
     </div>
   );

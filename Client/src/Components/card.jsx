@@ -55,27 +55,27 @@ const Card = ({ index, candidate }) => {
               alt="Profile"
             />
             <div className="w-[166px] self-stretch flex-col justify-start items-start gap-[5px] inline-flex">
-              <div className="self-stretch h-5 text-black text-[17px] font-medium font-['SF UI Text']">
+              <div className="self-stretch h-5 text-black text-[17px] font-medium">
                 {candidate.name}
               </div>
               <div className="self-stretch h-8 flex-col justify-start items-start gap-1 flex">
-                <div className="w-[178px] text-[#a5a5a7] text-xs font-normal font-['SF UI Text']">
+                <div className="w-[178px] text-[#a5a5a7] text-[12px] font-normal mt-2">
                   {candidate.title} at {candidate.location}
                 </div>
-                <div className="self-stretch text-[#a5a5a7] text-xs font-normal font-['SF UI Text']">
+                <div className="self-stretch text-[#a5a5a7] text-[12px] font-normal">
                   {candidate.experience} years experience
                 </div>
               </div>
             </div>
           </div>
-          <div className="text-[#a5a5a7] text-[10px] font-normal font-['SF UI Text'] mt-1.5 ml-8">
+          <div className="text-[#a5a5a7] text-[10px] font-normal mt-1.5 ml-8">
             Applied {candidate.appliedDaysAgo} days ago
             <img src={Save} alt="" className="ml-20 mt-7" />
           </div>
         </div>
         <div className="w-[352px] h-[0px] border border-[#cacaca]"></div>
       </div>
-      <div className="w-[88px] h-[46px] left-[286px] top-[149px] absolute text-[#09a31b] text-[40px] font-semibold font-['SF UI Text']">
+      <div className="w-[88px] h-[46px] left-[286px] top-[149px] absolute text-[#09a31b] text-[40px] font-semibold">
         86%
       </div>
       {candidate.rounds.map((round, roundIndex) => (
@@ -96,23 +96,23 @@ const Card = ({ index, candidate }) => {
               />
             ))}
           </div>
-          <div className="w-[27px] h-3.5 left-[21px] top-[58px] absolute text-center text-[#757575] text-xs font-bold font-['Inter']">
+          <div className="w-[27px] h-3.5 left-[21px] top-[58px] absolute text-center text-[#757575] text-xs font-bold">
             {round.progress}%
           </div>
-          <div className="w-12 h-3 left-[11px] top-0 absolute text-center text-[#656565] text-[10px] font-normal font-['SF UI Text']">
+          <div className="w-14 h-3 left-[11px] top-0 absolute text-center text-[#656565] text-[10px] font-normal">
             {round.name}
           </div>
-          <div className="w-[69px] h-3 left-0 top-[120px] absolute text-[#656565] text-xs font-normal font-['SF UI Text']">
+          <div className="w-[75px] h-3 left-0 top-[120px] absolute text-[#656565] text-[12px] font-normal">
             {round.description}
           </div>
         </div>
       ))}
-      <div className="w-[107px] h-[19px] left-[268px] top-[232px] absolute text-center text-black text-xs font-semibold font-['SF UI Text']">
+      <div className="w-[107px] h-[19px] left-[268px] top-[232px] absolute text-center text-black text-[12px] font-semibold">
         Cumulative score
       </div>
       <div className="w-[83px] h-8 px-px left-[289px] top-[262px] absolute justify-center items-center inline-flex">
         <div className="p-2.5 rounded-[30px] border border-[#0071db] justify-center items-center gap-2.5 inline-flex">
-          <div className="text-center text-[#0071db] text-xs font-medium font-['SF UI Text'] leading-[14px]">
+          <div className="text-center text-[#0071db] text-xs font-medium leading-[14px]">
             View more
           </div>
         </div>

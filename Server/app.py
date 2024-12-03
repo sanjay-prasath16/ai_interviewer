@@ -7,7 +7,6 @@ from collections import defaultdict
 from flask_cors import CORS
 from dotenv import load_dotenv
 import time  # To use for unique file names
-from openai import OpenAI
 
 # Flask app setup
 app = Flask(__name__)
@@ -137,38 +136,6 @@ def start_session():
     # Initial greeting question
     initial_question = "What specific topic or domain are you well-versed in?"
     return jsonify({"question": initial_question, "candidate_name": candidate_name})
-
-# Folder to store the generated audio files
-OUTPUT_FOLDER = './output'
-if not os.path.exists(OUTPUT_FOLDER):
-    os.makedirs(OUTPUT_FOLDER)
-
-client = OpenAI()
-
-@app.route('/speak', methods=['POST'])
-def speak():
-    data = request.get_json()
-
-    if not data or 'text' not in data:
-        return jsonify({"error": "Text not provided"}), 400
-
-    try:
-        voice_name = "echo"
-        output_file_path = os.path.join(OUTPUT_FOLDER, f"{voice_name}.mp3")
-
-        response = client.audio.speech.create(
-            model="tts-1",
-            voice=voice_name,
-            input=data['text']
-        )
-
-        with open(output_file_path, 'wb') as f:
-            f.write(response.content)
-
-        return send_file(output_file_path, mimetype="audio/mpeg", as_attachment=True, download_name="output.mp3")
-    except Exception as e:
-        print(f"Error in generating speech: {e}")
-        return jsonify({"error": "Speech generation failed", "details": str(e)}), 500
 
 # Run the Flask app
 if __name__ == '__main__':

@@ -240,14 +240,14 @@ const Interview = () => {
   }, [permissionsGranted, isAnalysisPhase, handleInitialTimer]);  
 
   return (
-    <div className="flex h-screen regular3">
-      <img className="w-[70%] ml-10 mr-5 my-8 rounded-3xl" src={describeImage} />
+    <div className="flex h-screen w-screen regular3">
+      <img className="w-[70%] ml-10 mr-5 my-8 rounded-3xl h-[80%]" src={describeImage} />
 
       <div className="w-[30%] flex flex-col justify-between my-8 mr-10">
         {/* Scrollable container */}
         <div
           ref={scrollContainerRef}
-          className="h-[70%] p-4 bg-[#0F0F36] rounded-3xl flex flex-col justify-start overflow-y-hidden"
+          className="h-[70%] p-4 bg-[#0F0F36] rounded-3xl flex flex-col justify-start overflow-y-hidden w-full"
         >
           {/* Render interview history */}
           {interviewData.map((item, index) => (
@@ -258,13 +258,13 @@ const Interview = () => {
                   key={`question-${index}`}
                   className="p-2 mb-4 w-72 rounded-3xl rounded-br-none bg-gradient-to-br from-[#002DBF] via-[#4396F7] to-[#FF9DB2] flex justify-end"
                 >
-                  <p className="text-white text-sm">{item.question}</p>
+                  <p className="text-white text-[10px]">{item.question}</p>
                 </motion.div>
               </div>
 
               {/* Candidate's response */}
               <div className="justify-start">
-                <p className="text-sm text-white mb-2">{candidateName}</p>
+                <p className="text-[10px] text-white mb-2">{candidateName}</p>
                 <motion.div
                   key={`answer-${index}`}
                   className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-72 text-sm flex justify-start"
@@ -279,12 +279,12 @@ const Interview = () => {
           <div className="flex justify-end mt-2">
             <motion.div
               key={`current-question-${questionCount}`}
-              className="p-2 mb-4 w-72 rounded-full rounded-br-md bg-question_gradient flex justify-end"
+              className="p-2 mb-4 w-[235px] rounded-full rounded-br-md bg-question_gradient flex justify-end"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <p className="text-white text-sm pl-3 pr-2 text-justify">{currentQuestion}</p>
+              <p className="text-white text-sm py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">{currentQuestion}</p>
             </motion.div>
           </div>
 
@@ -307,7 +307,7 @@ const Interview = () => {
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col items-center mt-5 h-[30%]">
+        <div className="flex flex-col items-center mt-5 h-[30%] w-[90%]">
           <div className="w-full h-full flex">
           <div className="relative">
               <video
@@ -318,7 +318,7 @@ const Interview = () => {
                 muted
               />
               <button
-                className="absolute top-0 right-0 bg-white text-white border-4 border-white border-3xl w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-3xl"
+                className="absolute -top-1 -right-1 bg-white text-white w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-full"
               >
                 <svg
                   width="40"
@@ -340,18 +340,20 @@ const Interview = () => {
                 </svg>
               </button>
             </div>
-            <div className="ml-5">
-              <p className="px-5 py-2 rounded-3xl flex items-center mb-5 text-[#0072DC]">
-                <span className="w-3 h-3 bg-red-600 rounded inline-block mr-2"></span>
-                {/* {isRecording ?  : "Paused"} */}{isAnalysisPhase ? 'analyze question' : 'Recording...' }
-              </p>
-              <button
-                onClick={handleNextClick}
-                className="border border-[#0072DC] px-14 py-2 bg-[#0072DC] text-white font-semibold rounded-3xl"
-              >
-                Next
-              </button>
-              <p className="text-3xl text-gray-400 mt-8 ml-10">{formatTimer(timer)}</p>
+            <div className="ml-5 flex flex-col justify-between w-[50%] items-center">
+              <div>
+                <p className="px-5 py-2 rounded-3xl flex items-center mb-5 text-[#0072DC]">
+                  <span className="w-3 h-3 bg-[#FF0000] rounded inline-block mr-2 text-sm font-medium"></span>
+                  {isAnalysisPhase ? 'analyze' : 'Recording...' }
+                </p>
+                <button
+                  onClick={handleNextClick}
+                  className="border border-[#0072DC] px-14 py-2 bg-[#0072DC] text-white font-medium text-sm rounded-3xl"
+                >
+                  Next
+                </button>
+              </div>
+              <p className="text-[40px] text-[#A5A5A7] mt-8">{formatTimer(timer)}</p>
             </div>
           </div>
         </div>

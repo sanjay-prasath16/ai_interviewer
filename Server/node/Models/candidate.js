@@ -1,5 +1,4 @@
-// Models/candidate.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Define the Candidate schema
 const candidateSchema = new mongoose.Schema({
@@ -14,5 +13,4 @@ const candidateSchema = new mongoose.Schema({
   ],
 });
 
-// Create and export the Candidate model
-module.exports = mongoose.model('Candidate', candidateSchema);
+export default mongoose.model('Candidate', candidateSchema);

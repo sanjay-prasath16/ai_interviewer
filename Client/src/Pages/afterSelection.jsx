@@ -509,7 +509,7 @@ const AfterSelection = () => {
               <div
                 className="Content flex-1 h-full p-[16px] rounded-[8px] flex flex-col justify-center items-start bg-white " >
                 <div
-                  className="Heading text-[#5C9AFF] text-[24px] font-semibold leading-[28px] break-words bg-none" >
+                  className="Heading text-[#5C9AFF] text-[24px] font-semibold  break-words bg-none" >
                   Difficulty Level
                 </div>
                 {/* Display Selected Level */}
@@ -563,7 +563,6 @@ const AfterSelection = () => {
                 textAlign: 'center',
                 color: '#333232',
                 fontSize: 32,
-                fontFamily: 'SF UI Text',
                 fontWeight: 600,
                 padding: 0,
               }}        >
@@ -580,15 +579,18 @@ const AfterSelection = () => {
                   onClick={() => handleSelection(level)}
                   className="w-[85%] p-2 cursor-pointer rounded-lg flex items-center gap-2"
                 >
-                  <input
-                    type="radio"
-                    name="difficulty"
-                    value={level}
-                    checked={selectedLevel === level}
-                    onChange={() => handleSelection(level)}
-                    className="w-[20px] h-[20px] accent-[#0072DC]"
-                  />
-                  <span className={`text-[16px] text-[#161616] font-[SF UI TEXT] ${selectedLevel === level ? 'font-bold' : 'font-normal'}`}>
+                  <div className="relative w-6 pt-[2px]">
+                    <input
+                      type="radio"
+                      name="difficulty"
+                      value={level}
+                      checked={selectedLevel === level}
+                      onChange={() => handleSelection(level)}
+                      className="custom-radio"
+                    />
+                    <span className="custom-radio-circle"></span>
+                  </div>
+                  <span className={`text-[16px] text-[#161616] ${selectedLevel === level ? 'font-bold' : 'font-normal'}`}>
                     {level}
                   </span>
                 </div>
@@ -817,7 +819,7 @@ const AfterSelection = () => {
               className='mt-6 flex justify-center'
             >
               <button onClick={handleSaveQuestions} className="ButtonsCta w-[137px] h-[56px] px-[48px] py-[16px] bg-[#0072DC] rounded-[30px] justify-center items-center gap-[16px] inline-flex outline-none border-none">
-                <div className="Text flex text-center text-white text-[18px] font-sans font-[400] break-words " >Save</div>
+                <div className="Text flex text-center text-white text-[18px] font-[400] break-words " >Save</div>
               </button>
             </div>
           </Dialog >

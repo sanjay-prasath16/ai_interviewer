@@ -107,6 +107,7 @@ const GraphCard = ({ data }) => {
         style={{ top: "-100px" }}
         data={data}
         options={{
+          
           scales: {
             r: {
               beginAtZero: true,

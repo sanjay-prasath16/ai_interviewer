@@ -10,6 +10,14 @@ import Location from "../assets/location.png";
 import Briefcase from "../assets/briefcase.png";
 import Ellipse from "../assets/Ellipse.png";
 import Ellipse1 from "../assets/Ellipse 2013.png";
+import Sanjay from '../assets/sanjay.jpeg';
+import Mukesh from '../assets/mukesh.jpeg';
+import Debaleena from '../assets/debaleena.jpg';
+import Manjeet from '../assets/manjeet.jpeg';
+import Priyansh from '../assets/priyansh.jpg';
+import Bieden from '../assets/bieden.jpeg';
+import Joe from '../assets/joe.jpeg';
+import Rajan from '../assets/rajan.jpg';
 import hamburgerBar from "../assets/hamburgerBar.png";
 import Star from "../assets/star.svg";
 import Card from "../Components/card";
@@ -20,96 +28,96 @@ import ReactPaginate from "react-paginate";
 const ApplicantResult = () => {
   const candidates = [
     {
-      name: "John Doe",
-      title: "UI/UX Designer",
-      location: "New York",
-      experience: 4,
-      appliedDaysAgo: 2,
-      src: Ellipse,
+      name: "Sanjay Prasath",
+      title: "MERN Stack",
+      location: "India",
+      experience: 12,
+      appliedDaysAgo: 15,
+      src: Sanjay,
       rounds: [
-        { progress: 60, name: "Round 1", description: "Technical" },
-        { progress: 90, name: "Round 2", description: "HR Interview" },
-      ],
-    },
-    {
-      name: "Jane Smith",
-      title: "Product Designer",
-      location: "America",
-      experience: 6,
-      appliedDaysAgo: 5,
-      src: Ellipse1,
-      rounds: [
-        { progress: 50, name: "Round 1", description: "Design Task" },
-        { progress: 85, name: "Round 2", description: "Team Interview" },
-      ],
-    },
-    {
-      name: "Alice Johnson",
-      title: "Graphic Designer",
-      location: "Austin",
-      experience: 3,
-      appliedDaysAgo: 10,
-      src: Ellipse,
-      rounds: [
-        { progress: 30, name: "Round 1", description: "Portfolio Review" },
-        { progress: 70, name: "Round 2", description: "Technical Round" },
-      ],
-    },
-    {
-      name: "Bob Williams",
-      title: "Interaction Designer",
-      location: "Chicago",
-      experience: 7,
-      appliedDaysAgo: 1,
-      src: Ellipse1,
-      rounds: [
-        { progress: 80, name: "Round 1", description: "Technical" },
+        { progress: 85, name: "Round 1", description: "Technical" },
         { progress: 95, name: "Round 2", description: "HR Interview" },
       ],
     },
     {
-      name: "Emma Brown",
-      title: "UX Researcher",
+      name: "Mukesh",
+      title: "React developer",
+      location: "America",
+      experience: 6,
+      appliedDaysAgo: 13,
+      src: Mukesh,
+      rounds: [
+        { progress: 20, name: "Round 1", description: "Design Task" },
+        { progress: 35, name: "Round 2", description: "Team Interview" },
+      ],
+    },
+    {
+      name: "Debaleena",
+      title: "UI/UX designer",
+      location: "Austin",
+      experience: 8,
+      appliedDaysAgo: 10,
+      src: Debaleena,
+      rounds: [
+        { progress: 60, name: "Round 1", description: "Portfolio Review" },
+        { progress: 90, name: "Round 2", description: "Technical Round" },
+      ],
+    },
+    {
+      name: "Manjeet",
+      title: "MERN Stack",
+      location: "Chicago",
+      experience: 12,
+      appliedDaysAgo: 1,
+      src: Manjeet,
+      rounds: [
+        { progress: 60, name: "Round 1", description: "Technical" },
+        { progress: 75, name: "Round 2", description: "HR Interview" },
+      ],
+    },
+    {
+      name: "Priyansh",
+      title: "React Devloper",
       location: "Boston",
-      experience: 5,
+      experience: 12,
       appliedDaysAgo: 7,
-      src: Ellipse,
+      src: Priyansh,
       rounds: [
         { progress: 45, name: "Round 1", description: "Research Task" },
         { progress: 88, name: "Round 2", description: "Team Interview" },
       ],
     },
     {
-      name: "Charlie Green",
+      name: "Joe",
       title: "Visual Designer",
       location: "Seattle",
       experience: 4,
       appliedDaysAgo: 3,
-      src: Ellipse1,
+      src: Joe,
       rounds: [
         { progress: 55, name: "Round 1", description: "Technical" },
         { progress: 90, name: "Round 2", description: "HR Interview" },
       ],
     },
     {
-      name: "Diana White",
+      name: "Bieden",
       title: "Digital Designer",
-      location: "Los Angeles",
+      location: "Bieden",
       experience: 6,
       appliedDaysAgo: 4,
-      src: Ellipse,
+      src: Bieden,
       rounds: [
         { progress: 35, name: "Round 1", description: "Portfolio Review" },
         { progress: 75, name: "Round 2", description: "Team Interview" },
       ],
     },
     {
-      name: "Tom Black",
+      name: "Rajan",
       title: "Lead Designer",
       location: "Miami",
       experience: 8,
       appliedDaysAgo: 6,
-      src: Ellipse,
+      src: Rajan,
       rounds: [
         { progress: 70, name: "Round 1", description: "Technical" },
         { progress: 100, name: "Round 2", description: "Final Round" },
@@ -132,67 +140,67 @@ const ApplicantResult = () => {
   };
 
   return (
-    <div className="bg-[#F7F7F7] overflow-hidden h-screen regular3">
+    <div className="bg-[#F7F7F7] overflow-hidden h-screen">
       <div className="h-[60%]">
         {/* Nav bar */}
         <div className="flex bg-white py-4 px-12 mb-10 justify-between">
           <div>
-            <img src={Logo} alt="" className="w-32 h-12" />
+            <img src={Logo} alt="" className="w-[130px] h-[46px]" />
           </div>
           <div className="flex items-center">
             <div className="relative mr-[29px]">
               <input
                 type="text"
                 placeholder="Search"
-                className="bg-[#F4F4F4] border border-[#EBEBEB] w-[581px] h-12 rounded-full placeholder:text-black pl-4 pr-10 outline-none"
+                className="bg-[#F4F4F4] border border-[#EBEBEB] w-[581px] h-[46px] rounded-full placeholder:text-black text-[14px] font-medium pl-4 pr-10 outline-none"
               />
               <div className="absolute top-1/2 right-3 transform -translate-y-1/2 border border-[#EBEBEB] p-1 rounded-full cursor-pointer">
                 <IoSearch className="text-[#353535] w-[22px] h-[22px]" />
               </div>
             </div>
-            <p className="border border-[#EBEBEB] bg-[#F4F4F4] rounded-full pl-3 pr-1 mr-[29px] pt-[9px] flex ml-4 h-12">
-              <span className="pr-6">3 New Notifications</span>
+            <p className="border border-[#EBEBEB] bg-[#F4F4F4] rounded-full pl-3 pr-1 mr-[29px] flex ml-4 h-[46px] justify-center items-center">
+              <span className="pr-6 text-[14px]">3 New Notifications</span>
               <img src={Notification} alt="" className="mx-2 w-6 h-6" />
             </p>
             <img src={Profile} alt="" className="h-11 w-11" />
-            <div className="text-[#353535] text-lg font-medium font-['SF UI  Text'] leading-[18px] ml-2 mr-1 mb-1">
+            <div className="text-[#353535] text-[18px] font-medium leading-[18px] ml-2 mr-1 mb-1">
               Neha Yadav
             </div>
             <img src={Arrow} alt="" className="cursor-pointer" />
           </div>
         </div>
         {/* company description */}
-        <div className="mx-12 relative mb-10">
+        <div className="mx-12 relative">
           <img src={Gradient} alt="" />
           <img src={Company} alt="" className="absolute top-5 left-0" />
           <div className="bg-white -mt-5 pt-24 pl-9 pb-6 rounded-2xl">
             <div className="flex">
-              <p className="font-bold text-2xl text-[#353535] mr-3">
+              <p className="font-bold text-[24px] text-[#353535] mr-3">
                 Senior UI/UX Designer
               </p>
-              <p className="mt-2 mr-3 flex">
-                <img src={Location} alt="" className="w-4 h-4 mt-1" />
-                <span className="ml-0.5 text-[#979797]">Banglore</span>
+              <p className="mt-3 mr-3 flex">
+                <img src={Location} alt="" className="w-5 h-5 mt-1" />
+                <span className="ml-0.5 text-[#979797] text-[14px]">Banglore</span>
               </p>
-              <p className="mt-2 mr-3 flex">
-                <img src={Briefcase} alt="" className="w-4 h-4 mt-1" />
-                <span className="ml-0.5 text-[#979797]">3 - 5 Yrs</span>
+              <p className="mt-3 mr-3 flex">
+                <img src={Briefcase} alt="" className="w-5 h-5 mt-1" />
+                <span className="ml-0.5 text-[#979797] text-[14px]">3 - 5 Yrs</span>
               </p>
             </div>
             <div className="flex pt-2">
-              <p className="text-[#353535]">Amazon</p>
+              <p className="text-[#353535] text-[18px]">Amazon</p>
               <p className="text-[#979797] pl-5 flex">
-                <img src={Star} alt="" />
-                <span className="pl-1">4.7</span>
+                <img src={Star} alt="" className="w-6 h-6 mt-1" />
+                <span className="pl-1 pr-2 text-[16px]">4.7</span>
               </p>
-              <p className="pl-4 text-[#979797]">1267 review</p>
+              <p className="pl-4 text-[#979797] text-[16px]">1267 review</p>
             </div>
           </div>
         </div>
       </div>
       {/* card property */}
       <div
-        className=" max-h-[30%] overflow-y-auto ml-[30px]"
+        className="max-h-[30%] overflow-y-auto ml-[30px]"
         style={{ direction: "rtl" }}
       >
         <div style={{ direction: "ltr" }} className="flex flex-wrap">
