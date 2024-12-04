@@ -21,6 +21,12 @@ const Interview = () => {
   const scrollContainerRef = useRef(null);
   const videoRef = useRef(null);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
+  const [videoToggleButton, setVideoToggleButton] = useState(true);
+
+  const toggleVideoSize = () => {
+    setVideoToggleButton(!videoToggleButton);
+    console.log(videoToggleButton);
+  }
 
   useEffect(() => {
     const startVideo = () => {
@@ -256,9 +262,9 @@ const Interview = () => {
               <div className="flex justify-end">
                 <motion.div
                   key={`question-${index}`}
-                  className="p-2 mb-4 w-72 rounded-3xl rounded-br-none bg-gradient-to-br from-[#002DBF] via-[#4396F7] to-[#FF9DB2] flex justify-end"
+                  className="p-2 mb-4 w-[235px] rounded-full rounded-br-md bg-question_gradient flex justify-end"
                 >
-                  <p className="text-white text-[10px]">{item.question}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[10px]">{item.question}</p>
                 </motion.div>
               </div>
 
@@ -267,15 +273,15 @@ const Interview = () => {
                 <p className="text-[10px] text-white mb-2">{candidateName}</p>
                 <motion.div
                   key={`answer-${index}`}
-                  className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-72 text-sm flex justify-start"
+                  className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-[285px] flex justify-start"
                 >
-                  <p className="text-white">{item.answer}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">{item.answer}</p>
                 </motion.div>
               </div>
             </div>
           ))}
 
-          {/* New question */}
+          {/* new question */}
           <div className="flex justify-end mt-2">
             <motion.div
               key={`current-question-${questionCount}`}
@@ -284,7 +290,7 @@ const Interview = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <p className="text-white text-sm py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">{currentQuestion}</p>
+              <p className="text-white py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">{currentQuestion}</p>
             </motion.div>
           </div>
 
@@ -294,12 +300,12 @@ const Interview = () => {
               <div className="flex justify-start">
                 <motion.div
                   key={`current-answer-${questionCount}`}
-                  className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-72 text-sm flex justify-start"
+                  className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-[285px] flex justify-start"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <p className="text-white">{currentAnswer}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">{currentAnswer}</p>
                 </motion.div>
               </div>
             </>
@@ -309,7 +315,7 @@ const Interview = () => {
         {/* Controls */}
         <div className="flex flex-col items-center mt-5 h-[30%] w-[90%]">
           <div className="w-full h-full flex">
-          <div className="relative">
+            <div className={`relative ${videoToggleButton ? 'w-full h-full' : 'w-[50%] h-[50%]'}`}>
               <video
                 ref={videoRef}
                 className={`rounded-3xl`}
@@ -319,6 +325,7 @@ const Interview = () => {
               />
               <button
                 className="absolute -top-1 -right-1 bg-white text-white w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-full"
+                onClick={toggleVideoSize}
               >
                 <svg
                   width="40"

@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
-import Group1 from "../assets/group1.png";
+import Ring from "../assets/ring.png";
 import { Editor } from "@monaco-editor/react";
 
 const Technical = () => {
@@ -9,7 +9,21 @@ const Technical = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("python");
   const [tempLanguage, setTempLanguage] = useState("python");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [audioURL, setAudioURL] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [showExpandingBorder, setShowExpandingBorder] = useState(false);
+  const [pulseClass, setPulseClass] = useState(undefined);
+  const mediaRecorderRef = useRef(null);
+  const audioChunks = useRef([]);
+  const [volume, setVolume] = useState(0);
+  const isRecordingRef = useRef(false);
   const codeEditorRef = useRef("");
+  const [videoToggleButton, setVideoToggleButton] = useState(true);
+
+  const toggleVideoSize = () => {
+    setVideoToggleButton(!videoToggleButton);
+    console.log(videoToggleButton);
+  };
 
   const selectRef = useRef(null);
 
@@ -18,14 +32,88 @@ const Technical = () => {
       setTimer((prevTimer) => {
         if (prevTimer <= 0) {
           clearInterval(interval);
+          stopRecording();
           return 0;
         }
         return prevTimer - 1;
       });
     }, 1000);
 
+    if (!isRecording && timer === 15 * 60) {
+      startRecording();
+    }
+
     return () => clearInterval(interval);
+  }, [timer]);
+
+  const startRecording = useCallback(() => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunks.current = [];
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const source = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        source.connect(analyser);
+        const updateVolume = () => {
+          analyser.getByteFrequencyData(dataArray);
+          const avgVolume =
+            dataArray.reduce((a, b) => a + b) / dataArray.length;
+          setVolume(avgVolume);
+          if (isRecordingRef.current) requestAnimationFrame(updateVolume);
+        };
+        updateVolume();
+        mediaRecorder.ondataavailable = (event) => {
+          audioChunks.current.push(event.data);
+        };
+        mediaRecorder.onstop = async () => {
+          new Blob(audioChunks.current, {
+            type: "audio/wav",
+          });
+          audioContext.close();
+          setVolume(0);
+          isRecordingRef.current = false;
+        };
+        mediaRecorder.start();
+        isRecordingRef.current = true;
+        setIsRecording(true);
+      })
+      .catch((error) =>
+        console.error("Error accessing the microphone:", error)
+      );
   }, []);
+
+  const getPulseClass = (volume) => {
+    if (volume > 70) return "high medium low";
+    if (volume > 65) return "medium low";
+    if (volume > 55) return "low";
+    return undefined;
+  };
+
+  useEffect(() => {
+    const pulseClass = getPulseClass(volume);
+    if (pulseClass !== undefined) {
+      setShowExpandingBorder(true);
+      setPulseClass(pulseClass);
+      const timer = setTimeout(() => {
+        setShowExpandingBorder(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [volume]);
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
   const formatTimer = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -128,11 +216,12 @@ const Technical = () => {
             />
 
           </div>
-          <div className="absolute bottom-[-60px] left-0 w-44 h-56 rounded-3xl overflow-hidden shadow-lg">
+          <div className={`absolute bottom-[-60px] left-0 rounded-3xl overflow-hidden shadow-lg ${videoToggleButton ? 'w-[180px] h-[227px]' : 'w-[91px] h-[114px]'}`}>
             <Webcam audio={false} className="w-full h-full object-cover" />
-            <p className="absolute z-10 text-white text-[14px] font-semibold top-[80%] left-2">Sanjay Prasath</p>
+            {videoToggleButton && <p className="absolute z-10 text-white text-[14px] font-semibold top-[80%] left-2">Sanjay Prasath</p>}
             <button
               className="absolute -top-1 -right-1 bg-[#1E1E1E] rounded-full text-white w-[55px] h-[55px] cursor-pointer flex justify-center items-center"
+              onClick={toggleVideoSize}
             >
               <svg
                 width="40"
@@ -154,11 +243,24 @@ const Technical = () => {
               </svg>
             </button>
           </div>
-          <img
-            src={Group1}
-            alt="Icon"
-            className="h-32 w-32 absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2"
-          />
+          <div className={`pulse-container absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2`}>
+            {showExpandingBorder && <div className="expanding-border"></div>}
+            <div className="relative">
+              <div
+                className="pulse-wrapper border border-transparent h-[200px] w-[200px] absolute z-1"
+                style={{ transform: `scale(${1 + volume / 100})` }}
+              >
+                {volume > 55 && <div className="pulse-layer low"></div>}
+                {volume > 65 && <div className="pulse-layer medium"></div>}
+                {volume > 85 && <div className="pulse-layer high"></div>}
+              </div>
+
+              {/* Ring image stays on top */}
+              <div className="relative z-50">
+                <img src={Ring} alt="Audio Party" className="w-[195px]" />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="w-[40%] flex flex-col justify-between my-8 mr-10 space-y-5 overflow-auto">
           <div className="h-[50%] bg-[#0F0F36] rounded-3xl p-8 text-white shadow-lg overflow-auto">
@@ -194,10 +296,16 @@ const Technical = () => {
       </div>
       <div className="justify-end items-end flex mb-10 mr-10">
         <p className="px-5 py-2 rounded-3xl flex items-center text-[#0072DC] mr-10">
-          <span className="w-3 h-3 bg-[#FF0000] rounded inline-block mr-2 font-medium text-sm"></span>
+          <span className="w-3 h-3 bg-[#FF0000] rounded inline-block mr-2 font-medium text-[14px]"></span>
           Recording...
         </p>
-        <button className="border border-[#0072DC] px-14 py-2 bg-[#0072DC] text-white rounded-3xl font-medium text-sm">
+        {audioURL && (
+          <audio controls>
+            <source src={audioURL} type="audio/webm" />
+            Your browser does not support the audio element.
+          </audio>
+        )}
+        <button className="border border-[#0072DC] px-14 py-2 bg-[#0072DC] text-white rounded-3xl font-medium text-[14px]">
           Next
         </button>
       </div>

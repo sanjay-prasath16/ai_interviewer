@@ -147,7 +147,8 @@ const AfterSelection = () => {
       color: '#161616',
       height: '48px',
       width: 'full',
-      fontSize: '16px',
+      minWidth: '520px',
+      fontSize: '18px',
       boxShadow: 'none',
       display: 'flex',
       justifySelf: 'center',
@@ -180,8 +181,9 @@ const AfterSelection = () => {
       zIndex: 999,
       top: 'auto',
       left: 'auto',
-      width: 'full',
-      maxWidth: '550px',
+      fontSize: '18px',
+      // width: 'full',
+      maxWidth: '520px',
       maxHeight: '300px',
       overflowY: 'auto',
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -190,14 +192,15 @@ const AfterSelection = () => {
     placeholder: (provided) => ({
       ...provided,
       color: '#161616',
-      fontWeight: '400'
+      fontWeight: '400',
+      fontSize: '18px',
     }),
     singleValue: (provided) => ({
       ...provided,
       color: '#161616',
       fontSize: '18px',
     }),
-    overflow: 'hidden',
+    // overflow: 'hidden',
   };
 
   const toggleDialogDuration = () => {
@@ -254,7 +257,7 @@ const AfterSelection = () => {
 
 
   return (
-    <div className='.main-container '>
+    <div className='.main-container min-h-screen bg-[#F1F4F8]'>
       <div className="NavBar w-full h-full px-10 py-4 bg-white border border-[#D2D2D2] backdrop-blur-[220px] flex justify-between items-center hover:cursor-pointer">
         <div className="logo-container w-[130px] h-[46px] relative  bg-[#FFF]">
           <div className="Rectangle7391 w-[130px] h-[46px] relative bg-[#0F0F36] rounded-[15px]" />
@@ -263,15 +266,15 @@ const AfterSelection = () => {
             <img className="Group1000007770 bg-transparent w-[64.384px] h-[13.735px] shrink-0" src={image2} />
           </div>
         </div>
-        <div className="SearchBarContainer flex grow justify-center items-center gap-4 bg-white">
-          <div className='InputContainer flex justify-start items-center gap-4 h-[48px] max-w-[657px] pl-6 pr-6 pt-4 pb-4 bg-[#EBEBEB] shadow-[0px_0px_4px_rgba(0,_0,_0,_0.25)] rounded-[32px]' >
+        <div className="SearchBarContainer w-full flex grow justify-center items-center gap-4 bg-white">
+          <div className='InputContainer w-[90%] flex justify-start items-center gap-4 h-[48px] max-w-[657px] pl-6 pr-6 pt-4 pb-4 bg-[#EBEBEB] shadow-[0px_0px_4px_rgba(0,_0,_0,_0.25)] rounded-[32px]' >
             <div className='searchBar inline-flex items-center h-[34px] w-full max-w-[657px] bg-[#EBEBEB]'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" className={`w-[22px] h-[22px] shrink-0 rounded-full mr-[16px] ${isFocused1 ? 'transform scale-110 transition-transform duration-300' : ''}`}   >
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" className={`w-[22px] h-[22px] shrink-0 rounded-full mr-[8px] ${isFocused1 ? 'transform scale-105 transition-transform duration-300' : ''}`}   >
                 <path d="M9.49996 2.75C8.16495 2.75 6.85991 3.14588 5.74989 3.88757C4.63986 4.62927 3.7747 5.68347 3.26381 6.91686C2.75292 8.15026 2.61925 9.50745 2.8797 10.8168C3.14015 12.1262 3.78302 13.3289 4.72702 14.2729C5.67102 15.2169 6.87375 15.8598 8.18311 16.1202C9.49248 16.3807 10.8497 16.247 12.0831 15.7361C13.3165 15.2252 14.3707 14.3601 15.1124 13.25C15.854 12.14 16.2499 10.835 16.2499 9.49996C16.2498 7.70979 15.5386 5.99298 14.2728 4.72714C13.0069 3.46131 11.2901 2.75011 9.49996 2.75Z" stroke="#353535" strokeWidth="2" strokeMiterlimit="10" />
                 <path d="M14.666 14.668L18.3327 18.3346" stroke="#353535" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round" />
               </svg>
               <input
-                className='justify-items-start px-2 w-full max-w-[657px] text-[#353535] py-[10px] my-[-10px] font-medium leading-[18px] border-0 bg-[#EBEBEB] focus:outline-none focus:text-[#353535]'
+                className='justify-items-start px-2 w-full max-w-[657px] text-[#353535] pb-[10px] pt-[8px] text-[18px] leading-[18px] border-0 bg-[#EBEBEB] focus:outline-none focus:text-[#353535]'
                 onClick={focusInput}
                 type="text" name='searchBar'
                 value={isFocused1 ? searchPhrase : ''}
@@ -285,7 +288,7 @@ const AfterSelection = () => {
         </div>
 
         <div className="Frame1000008205 flex justify-start items-center gap-6 w-fit bg-[#fff]" >
-          <div className="Frame1000008204 px-4 py-1 bg-[#EBEBEB] flex justify-start items-center gap-4 shadow-[0px_0px_6px_rgba(0,_0,_0,_0.25)] rounded-[40px] backdrop-blur-[4px]">
+          <div className="Frame1000008204 px-[16px] py-[4px] bg-[#EBEBEB] flex justify-start items-center shadow-[0px_0px_6px_rgba(0,_0,_0,_0.25)] rounded-[40px] backdrop-blur-[4px]">
             <div className="ButtonsNotification w-[44px] h-[44px] mr-[16px] relative bg-[#EBEBEB]" >
               <div className="Ellipse w-[44px] h-[44px] absolute left-0 top-0 bg-white rounded-full" />
               <div className="IconsBell w-[24px] h-[24px] absolute left-[10px] top-[10px] bg-white hover:transform hover:scale-[1.05] hover:transition-transform hover:duration-300" >
@@ -295,7 +298,7 @@ const AfterSelection = () => {
               </div>
             </div>
             <div className="Profile flex justify-start items-center bg-[#EBEBEB] hover:transform hover:scale-[1.05] hover:transition-transform hover:duration-300" >
-              <img className="AvatarPic w-[44px] min-w-[44px] mr-[-25px] h-[44px] bg-none rounded-full" src={image3} />
+              <img className="AvatarPic w-[44px] min-w-[44px] h-[44px] bg-none rounded-full" src={image3} />
             </div>
           </div>
           <div className="Ai w-[56px] h-[56px] bg-none" >
@@ -303,6 +306,8 @@ const AfterSelection = () => {
           </div>
         </div>
       </div>
+
+
       <div className='flex flex-col justify-center items-center'>
         <div className="LetsGetYouStarted text-center text-[48px] font-bold leading-[56px] 
       text-[#D388FF] break-words my-8 text-transparent w-[900px]" style={{
@@ -509,7 +514,7 @@ const AfterSelection = () => {
               <div
                 className="Content flex-1 h-full p-[16px] rounded-[8px] flex flex-col justify-center items-start bg-white " >
                 <div
-                  className="Heading text-[#5C9AFF] text-[24px] font-semibold  break-words bg-none" >
+                  className="Heading text-[#5C9AFF] text-[24px] leading-[28px] font-semibold  break-words bg-none" >
                   Difficulty Level
                 </div>
                 {/* Display Selected Level */}
@@ -620,7 +625,7 @@ const AfterSelection = () => {
                   className="Heading text-[#5C9AFF] text-[24px] font-semibold leading-[28px] break-words bg-none" >
                   Duration per question
                 </div>
-                <div className='text-[#333232] text-lg  mt-2 text-start'
+                <div className='text-[#333232] text-[18px] mt-[8px] text-start'
                 >{duration} {duration ? 'sec' : ''}</div>
               </div>
             </div>
@@ -733,7 +738,7 @@ const AfterSelection = () => {
                   className="Heading text-[#5C9AFF] text-[24px] font-semibold leading-[28px] break-words bg-none" >
                   {questionsList.length ? 'Custom questions' : 'Type custom interview questions'}
                 </div>
-                <div className='text-[#333232] text-lg  mt-2 text-start'> {questionsList.length ? `${questionsList.length} Question${questionsList.length !== 1 ? 's' : ''} Added` : ''}</div>
+                <div className='text-[#333232] text-[18px] mt-[8px] text-start'> {questionsList.length ? `${questionsList.length} Question${questionsList.length !== 1 ? 's' : ''} Added` : ''}</div>
               </div>
             </div>
           </div>
