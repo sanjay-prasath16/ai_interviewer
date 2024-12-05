@@ -425,3 +425,28 @@ table td:last-child {
 }
 
 /* after selection ended */
+
+.monaco-editor-background, .monaco-editor {
+  background-color: transparent !important;
+  outline: none !important;
+}
+
+.monaco-editor .margin {
+  background-color: transparent !important;
+}
+
+.monaco-editor .current-line {
+  background-color: #0F0F36 !important;
+}
+
+.active-line-highlight {
+  background-color: #0F0F36 !important;
+}
+
+.monaco-editor {
+  font-family: "regular", Consolas, "Courier New", monospace !important;
+}
+
+.monaco-editor .mtk {
+  font-family: "regular", Consolas, "Courier New", monospace !important;
+}

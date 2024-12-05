@@ -19,13 +19,12 @@ const Technical = () => {
   const isRecordingRef = useRef(false);
   const codeEditorRef = useRef("");
   const [videoToggleButton, setVideoToggleButton] = useState(true);
+  const selectRef = useRef(null);
 
   const toggleVideoSize = () => {
     setVideoToggleButton(!videoToggleButton);
     console.log(videoToggleButton);
   };
-
-  const selectRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {

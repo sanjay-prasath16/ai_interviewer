@@ -8,6 +8,8 @@ import UserDashboard from './Pages/userDashboard';
 import Technical from './Pages/technical';
 import CourseSummary from "./Pages/courseSummary";
 import AfterSelection from "./Pages/afterSelection";
+import TechnicalPracticeSimulation from "./Pages/technicalPracticeSimulation";
+import NonTechnicalPracticeSimulation from "./Pages/nonTechnicalPracticeSimulation";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/userDashboard" element={<UserDashboard />} />
         <Route path="/technical" element={<Technical />} />
         <Route path="/afterSelection" element={<AfterSelection />} />
+        <Route path="/technicalPracticeSimulation" element={<TechnicalPracticeSimulation />} />
+        <Route path="/nonTechnicalPracticeSimulation" element={<NonTechnicalPracticeSimulation /> } />
         <Route path="/" element={<CourseSummary />} />
       </Routes>
     </BrowserRouter>
