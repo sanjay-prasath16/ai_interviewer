@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Ring from "../assets/ring.png";
+import warning from '../assets/warning icon.svg';
 
 const Interview = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -13,7 +14,7 @@ const Interview = () => {
   const [currentAnswer, setCurrentAnswer] = useState("");
   const [questionCount, setQuestionCount] = useState(0);
   const [candidateName, setCandidateName] = useState("Sanjay");
-  const [isInterviewComplete, setIsInterviewComplete] = useState(false);
+  // const [isInterviewComplete, setIsInterviewComplete] = useState(false);
   const [interviewData, setInterviewData] = useState([]);
   const [timer, setTimer] = useState(90);
   const mediaRecorderRef = useRef(null);
@@ -24,13 +25,29 @@ const Interview = () => {
   const [showExpandingBorder, setShowExpandingBorder] = useState(false);
   const [pulseClass, setPulseClass] = useState(undefined);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
+  const [verifyBlock, setVerifyBlock] = useState(true);
   const isRecordingRef = useRef(false);
   const [videoToggleButton, setVideoToggleButton] = useState(true);
 
   const toggleVideoSize = () => {
     setVideoToggleButton(!videoToggleButton);
-    console.log(videoToggleButton);
   }
+
+  const closePopup = () => {
+    setVerifyBlock(false);
+  }
+
+  const requestPermissions = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      console.log("Permissions granted", stream);
+    } catch (error) {
+      console.error("Permission denied or error occurred:", error);
+    }
+  };  
 
   useEffect(() => {
     const startVideo = () => {
@@ -59,13 +76,11 @@ const Interview = () => {
           audioPermission.state === "granted" &&
           videoPermission.state === "granted"
         ) {
-          setPermissionsGranted(true);
-          startVideo();
-        } else {
           setPermissionsGranted(false);
-          alert(
-            "Please enable camera and microphone permissions in your browser settings and reload the page."
-          );
+          startVideo();
+          speakText(currentQuestion);
+        } else {
+          setPermissionsGranted(true);
         }
 
         audioPermission.onchange = () => {
@@ -73,8 +88,7 @@ const Interview = () => {
             audioPermission.state === "granted" &&
             videoPermission.state === "granted"
           ) {
-            setPermissionsGranted(true);
-            startVideo();
+            location.reload();
           }
         };
 
@@ -83,8 +97,7 @@ const Interview = () => {
             audioPermission.state === "granted" &&
             videoPermission.state === "granted"
           ) {
-            setPermissionsGranted(true);
-            startVideo();
+            location.reload();
           }
         };
       } catch (error) {
@@ -94,10 +107,6 @@ const Interview = () => {
     };
 
     checkPermissions();
-  }, []);
-
-  useEffect(() => {
-    speakText(currentQuestion);
   }, []);
 
   const speakText = async (text) => {
@@ -442,6 +451,18 @@ const Interview = () => {
           </div>
         </div>
       </div>
+      {permissionsGranted && 
+      verifyBlock &&
+        (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="h-[232px] w-[434px] bg-white animate-fadeInScale flex items-center justify-center rounded-3xl">
+            <div className="h-[184px] w-[386px] border-2 border-[#FF3B30] rounded-3xl flex flex-col items-center pt-[14px]" style={{ animation: "fadeInScale 0.8s ease-out", boxShadow: "0px 4px 4px #cccccc", }}>
+              <img src={warning} alt="" className="w-[48px] h-[48px]" />
+              <p className="text-[16px] font-medium pt-[9px]">Microphone and Camera Access Required</p>
+              <p className="text-[14px] text-justify w-[352px] text-[#667085] pt-[5px]">To provide you with the best possible experience, we need access to your microphone and camera. Please enable these permissions in your browser settings.</p>
+            </div>
+          </div>
+        </div>)
+      }
     </div>
   );
 };

@@ -151,7 +151,7 @@ const GraphCard = ({ data }) => {
           },
         }}
       />
-      <div className="flex justify-end relative" style={{ top: '-170px' }}>
+      <div className="flex justify-end relative" style={{ top: '-210px' }}>
         <p className="text-white cursor-pointer border border-white h-8 p-2 rounded-3xl">
           View more
         </p>

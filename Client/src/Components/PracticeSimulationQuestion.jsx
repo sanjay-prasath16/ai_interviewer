@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import smallJupitericon from '../assets/smallJupiter.png';
+import smallJupitericon from "../assets/smallJupiter.png";
+import PropTypes from "prop-types";
 
 const PracticeSimulationQuestion = ({ onSmallJupiterClick }) => {
   return (
@@ -7,21 +7,13 @@ const PracticeSimulationQuestion = ({ onSmallJupiterClick }) => {
       <div className="flex h-[50%] relative">
         <div className="relative flex-grow">
           <div className="p-5 pl-10 rounded-[30px] questionBox relative overflow-hidden">
-            {/* Black background with opacity */}
-            <div className="absolute inset-0 rounded-[30px] bg-black opacity-50"></div>
-            
-            {/* Curved corner overlay */}
-            <div className="absolute top-0 right-0 w-24 h-24">
-              <div className="absolute top-0 right-0 w-full h-full bg-white rounded-bl-[30px]"></div>
-            </div>
-            
-            {/* Content */}
+          <div className="absolute inset-0 rounded-[30px] bg-black opacity-[50%] cutout-box"></div>
             <div className="relative z-10 flex flex-col">
               <div className="absolute -top-5 -right-5 flex items-end">
                 <img
                   className="relative h-[60px] w-[60px] cursor-pointer"
                   src={smallJupitericon}
-                  alt="Small Jupiter Icon"
+                  alt=""
                   onClick={onSmallJupiterClick}
                 />
               </div>
@@ -65,7 +57,7 @@ const PracticeSimulationQuestion = ({ onSmallJupiterClick }) => {
               <div className="flex flex-col">
                 <p>Output: The Hobbit</p>
                 <p>
-                  {`Explanation: Starting from 'To Kill a Mockingbird', considering 4 books, we wrap around to 'The Hobbit', which is the most expensive at $15.`}
+                  {`Explanation: Starting from ‘To Kill a Mockingbird’, considering 4 books, we wrap around to ‘The Hobbit’, which is the most expensive is $15.`}
                 </p>
               </div>
             </div>

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import MagicIcon from "../assets/magicIcon.png";
-import WhiteMagicIcon from "../assets/whiteMagicIcon.png";
-import SummarizeIcon from "../assets/summarizeIcon.png";
+import MagicIcon from "../assets/magicIcon.svg";
+import WhiteMagicIcon from "../assets/whiteMagicIcon.svg";
+import SummarizeIcon from "../assets/summarizeIcon.svg";
 import SkillDisplay from "../Components/skillDisplay";
-import Filter from "../assets/filter.png";
+import Filter from "../assets/filter.svg";
 import Meta from "../assets/meta.png";
-import Profile from "../assets/emma smith.png";
 import Sanjay from '../assets/sanjay.jpeg';
 import Mukesh from '../assets/mukesh.jpeg';
 import Debaleena from '../assets/debaleena.jpg';
@@ -19,9 +18,9 @@ import Edwin from '../assets/edwin.jpg';
 import Joseph from '../assets/joseph.jpg';
 import Raj from '../assets/raj.jpg';
 import Sundar from '../assets/sundar pitchai.jpg';
-import Location from "../assets/location.png";
-import Briefcase from "../assets/briefcase.png";
-import Securitytime from "../assets/securitytime.png";
+import Location from "../assets/location.svg";
+import Briefcase from "../assets/briefcase.svg";
+import Securitytime from "../assets/securitytime.svg";
 import backgroundImage from "../assets/Rectangle 7502.png";
 import backgroundImage1 from "../assets/Rectangle 7522.png";
 import { SlArrowLeft } from "react-icons/sl";
@@ -262,10 +261,10 @@ const ApplicantsPool = () => {
                   <img className="h-5 mt-2 mr-1" src={Location} alt="" /> Noida
                 </p>
                 <div className="flex items-center">
-                  <img className="h-5 mr-1" src={Briefcase} alt="" />
+                  <img className="h-[18px]" src={Briefcase} alt="" />
                   <span className="text-[16px] font-medium text-[#747474]">2 years</span>
                   <span className="mx-2">|</span>
-                  <img className="h-4 mr-1" src={Securitytime} alt="" />
+                  <img className="h-[18px] mr-1" src={Securitytime} alt="" />
                   <span className="text-[16px] font-medium text-[#747474]">Fulltime</span>
                   <span className="mx-2">|</span>
                   <span className="text-[16px] font-medium text-[#747474]">₹ 3 - 5 LPA</span>

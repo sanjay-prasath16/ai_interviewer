@@ -21,6 +21,15 @@ export default {
           "linear-gradient(to bottom right, rgba(0, 45, 191) 7%, rgba(67, 150, 247) 46%, rgba(255, 155, 210) 81%, rgba(201, 255, 252) 99%)",
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
+      animation: {
+        blink: "blink 1.5s infinite",
+      },
+      keyframes: {
+        blink: {
+          "0%, 100%": { opacity: 0 },
+          "50%": { opacity: 1 },
+        },
+      },
     },
   },
   plugins: [],

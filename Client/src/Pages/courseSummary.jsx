@@ -6,8 +6,8 @@ import level from "../assets/level.svg";
 import Play from "../assets/PlayButton.png";
 import chatSection from "../assets/chatSection.png";
 import badges from "../assets/Badges.png";
-import summarizeIcon from "../assets/summarizeIcon.png";
-import vector from "../assets/vector.png";
+import summarizeIcon from "../assets/summarizeIcon.svg";
+import vector from "../assets/coolingGlass.svg";
 import { FaClock } from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 

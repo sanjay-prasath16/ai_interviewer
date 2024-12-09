@@ -5,13 +5,13 @@ import data from "@emoji-mart/data";
 import Jupiter from "../assets/enlargedJupiter.png";
 import Send from "../assets/send.svg";
 import WhiteSend from "../assets/whiteSend.svg";
-import Smile from "../assets/smile.png";
+import Smile from "../assets/smile.svg";
+import starConfetti from '../assets/Star confetti.svg';
+import starConfetti2 from '../assets/Star confetti2.svg';
 import PropTypes from "prop-types";
 
 const JupiterActivatedState = ({ onEnlargedJupiterClick }) => {
-  const [messages, setMessages] = useState([
-    { type: "ai", text: "Heyyya Min! Tell me how can I guide you?" },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const chatEndRef = useRef(null);
@@ -42,13 +42,25 @@ const JupiterActivatedState = ({ onEnlargedJupiterClick }) => {
     <div className="h-full mr-10 pl-10">
       <div className="text-white border border-black h-[80%] bg-black rounded-3xl p-[10px] relative">
         <div className="flex justify-end">
-          <img src={Jupiter} alt="Jupiter" className="h-[120px] w-[120px] cursor-pointer" onClick={onEnlargedJupiterClick} />
+          <img src={starConfetti} alt="" className="w-[29px] h-[29px] mt-[6%] animate-blink" />
+          <p className="mt-[8%] h-16 items-center flex px-[19px] mr-10 bg-white text-black outline-2 w-[225px] outline-dashed outline-[#FFDB5B] rounded-full rounded-tr-md relative">
+            Hello, I am Jupiter, am here to help you. Ask away your doubts!!
+          </p>
+          <img src={starConfetti2} alt="" className="w-[29px] h-[29px] mt-[12%] -ml-8 animate-blink" />
+          <img
+            src={Jupiter}
+            alt="Jupiter"
+            className="h-[120px] w-[120px] cursor-pointer"
+            onClick={onEnlargedJupiterClick}
+          />
         </div>
         <div className="w-full h-[70%] overflow-y-auto px-4 py-2 space-y-[18px]">
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`${msg.type === "ai" ? "justify-end flex" : "justify-start flex"}`}
+              className={`${
+                msg.type === "ai" ? "justify-end flex" : "justify-start flex"
+              }`}
             >
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -79,7 +91,7 @@ const JupiterActivatedState = ({ onEnlargedJupiterClick }) => {
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
-            className="h-full w-full rounded-3xl outline-none pl-[45px] bg-[#3E3B41] text-white"
+            className="h-full w-full rounded-3xl outline-none pl-[45px] bg-[#3E3B41] text-white pr-[40px]"
             placeholder="Start Typing..."
           />
           <img
@@ -99,7 +111,9 @@ const JupiterActivatedState = ({ onEnlargedJupiterClick }) => {
           <div className="absolute bottom-[calc(100%+10px)] left-0 w-full z-10">
             <Picker
               data={data}
-              onEmojiSelect={(emoji) => setUserInput((prev) => prev + emoji.native)}
+              onEmojiSelect={(emoji) =>
+                setUserInput((prev) => prev + emoji.native)
+              }
             />
           </div>
         )}

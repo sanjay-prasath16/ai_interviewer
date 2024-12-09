@@ -4,7 +4,7 @@ import { Editor } from "@monaco-editor/react";
 import { motion } from "framer-motion";
 import JupiterActivatedState from "../Components/jupiterActivatedState";
 import PracticeSimulationQuestion from "../Components/PracticeSimulationQuestion";
-import Timer from "../assets/timer.png";
+import Timer from "../assets/Timer.svg";
 
 const TechnicalPracticeSimulation = () => {
   const [timer, setTimer] = useState(15 * 60);
@@ -237,7 +237,7 @@ const TechnicalPracticeSimulation = () => {
         </div>
       )}
       <div className="absolute bottom-10 right-10">
-        <button className="border border-[#CC9DFF] bg-[#CC9DFF] rounded-full px-10 py-2 text-white text-[14px] font-medium shadow-lg">
+        <button className="border border-[#7403D0] bg-[#7403D0] rounded-full px-10 py-2 text-white text-[14px] font-medium shadow-lg">
           Next
         </button>
       </div>

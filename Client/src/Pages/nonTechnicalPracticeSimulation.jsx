@@ -2,15 +2,20 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import JupiterActivatedState from "../Components/jupiterActivatedState";
 import NonPracticeSimulationQuestion from "../Components/nonPracticeSimulationQuestion";
-import Timer from "../assets/timer.png";
+import Timer from "../assets/Timer.svg";
 import PracticeSimulationImage from '../assets/nonTechnicalPracticeImage.png';
 
 const NonTechnicalPracticeSimulation = () => {
   const [timer, setTimer] = useState(15 * 60);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [messageCount, setMessageCount] = useState(0); // Tracks the number of user messages sent
 
   const handleToggle = () => {
     setIsFlipped((prev) => !prev);
+  };
+
+  const handleUserMessageSend = () => {
+    setMessageCount((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -43,7 +48,7 @@ const NonTechnicalPracticeSimulation = () => {
       <div className="absolute inset-0 bg-black/10" />
       <div className="relative h-full flex">
         <div className="w-[50%] h-[80%] ml-10 mr-5 my-8 rounded-3xl p-5 relative">
-            <img src={PracticeSimulationImage} alt="" className="h-full w-full" />
+          <img src={PracticeSimulationImage} alt="" className="h-full w-full" />
           <div className="flex justify-end">
             <span className="text-white border border-[#FFFFFF] rounded-full p-3 px-5 text-[20px] font-medium flex absolute top-12 right-12">
               <img src={Timer} alt="" className="w-[23px] h-[24px] mt-1 mr-2" />
@@ -67,7 +72,10 @@ const NonTechnicalPracticeSimulation = () => {
                 isFlipped ? "hidden" : "block"
               }`}
             >
-              <NonPracticeSimulationQuestion onSmallJupiterClick={handleToggle} />
+              <NonPracticeSimulationQuestion
+                onSmallJupiterClick={handleToggle}
+                onUserMessageSend={handleUserMessageSend} // Callback to track messages
+              />
             </div>
 
             {/* Back Side: JupiterActivatedState */}
@@ -83,7 +91,14 @@ const NonTechnicalPracticeSimulation = () => {
         </div>
       </div>
       <div className="absolute bottom-10 right-10">
-        <button className="border border-[#CC9DFF] bg-[#CC9DFF] rounded-full px-10 py-2 text-white text-[14px] font-medium shadow-lg">
+        <button
+          disabled={messageCount < 0}
+          className={`rounded-full px-10 py-2 text-white text-[14px] font-medium shadow-lg ${
+            messageCount >= 1
+              ? "bg-[#7403D0] cursor-pointer"
+              : "bg-[#CC8DFF] cursor-not-allowed"
+          }`}
+        >
           Next
         </button>
       </div>
