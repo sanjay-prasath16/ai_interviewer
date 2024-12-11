@@ -28,17 +28,14 @@ const Card = ({ index, candidate }) => {
   const getDotPosition = (index, radius = 31) => {
     const angle = ((2.5 - index) / 10) * 2 * Math.PI;
     return {
-      left: `${Math.round(radius + radius * Math.cos(angle))}px`,
-      top: `${Math.round(radius - radius * Math.sin(angle))}px`,
+      left: `${Math.round(radius + radius * Math.cos(angle))}%`,
+      top: `${Math.round(radius - radius * Math.sin(angle))}%`,
     };
   };
 
   return (
-    <div
-      className={`w-[392px] h-[317px] relative bg-white rounded-[20px] shadow ${
-        index === 2 ? "mx-5 mb-14" : "mx-3 mb-2"
-      }
-      ${index !== 0 && index !== 3 ? "ml-10" : ""}`}
+    <div 
+      className={`w-full md:w-[45%] lg:w-[30%] border border-white bg-white rounded-xl p-[21px] shadow-lg mb-10 ${index === 2 ? "mx-5" : "mx-3"} ${index !== 0 && index !== 3 ? "ml-10" : ""}`}
       style={{ direction: "ltr" }}
       onMouseEnter={(e) =>
         (e.currentTarget.style.boxShadow =
@@ -46,76 +43,67 @@ const Card = ({ index, candidate }) => {
       }
       onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
     >
-      <div className={`h-[67px] left-[20px] top-[20px] absolute flex-col justify-center gap-2 inline-flex`}>
-        <div className="w-[352px] h-[59px] relative justify-start items-start flex">
-          <div className="pb-0.5 justify-center items-start gap-[9px] inline-flex">
-            <img
-              className="w-[45px] h-[45px] rounded-full shadow-inner"
-              src={candidate.src}
-              alt="Profile"
-            />
-            <div className="w-[166px] self-stretch flex-col justify-start items-start gap-[5px] inline-flex">
-              <div className="self-stretch h-5 text-black text-[17px] font-medium">
-                {candidate.name}
+      <div className="flex">
+        <img
+          src={candidate.src}
+          alt={candidate.name}
+          className="w-12 h-12 rounded-full shadow-inner"
+        />
+        <div className="ml-4 flex-1">
+          <div className="flex justify-between">
+            <p className="text-[17px] font-medium">{candidate.name}</p>
+            <p className="text-xs text-gray-400">
+              Applied {candidate.appliedDaysAgo} days ago
+            </p>
+          </div>
+          <p className="text-[#A5A5A7]">
+            {candidate.title} at {candidate.location}
+          </p>
+          <div className="flex justify-between items-center mt-2">
+            <p className="text-[#A5A5A7]">
+              {candidate.experience} years experience
+            </p>
+            <img src={Save} alt="Save" className="w-5 h-5" />
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-gray-300 mt-4 pt-4 relative">
+        <div className="flex justify-between">
+          {candidate.rounds.map((round, roundIndex) => (
+            <div key={roundIndex} className="relative text-center">
+              <div className="flex justify-center ml-[10px] mb-[23px]">
+                <p className="mt-2 text-[10px] font-semibold text-[#656565]">
+                  {round.name}
+                </p>
               </div>
-              <div className="self-stretch h-8 flex-col justify-start items-start gap-1 flex">
-                <div className="w-[178px] text-[#a5a5a7] text-[12px] font-normal mt-2">
-                  {candidate.title} at {candidate.location}
-                </div>
-                <div className="self-stretch text-[#a5a5a7] text-[12px] font-normal">
-                  {candidate.experience} years experience
+              <div className="relative w-[63px] h-[61px] mx-auto">
+                {generateDots(round.progress).map((style, index) => (
+                  <div
+                    key={index}
+                    className="absolute w-[12px] h-[12px] rounded-full"
+                    style={{
+                      ...style,
+                      ...getDotPosition(index, 50),
+                    }}
+                  />
+                ))}
+                <div className="absolute inset-0 flex items-center justify-center ml-[10px] mt-[15px]">
+                  <p className="font-bold text-[#767676]">
+                    {round.progress}%
+                  </p>
                 </div>
               </div>
+              <p className="text-[#656565] mt-[23px] ml-[10px]">{round.description}</p>
             </div>
-          </div>
-          <div className="text-[#a5a5a7] text-[10px] font-normal mt-1.5 ml-8">
-            Applied {candidate.appliedDaysAgo} days ago
-            <img src={Save} alt="" className="ml-20 mt-7" />
-          </div>
-        </div>
-        <div className="w-[352px] h-[0px] border border-[#cacaca]"></div>
-      </div>
-      <div className="w-[88px] h-[46px] left-[286px] top-[149px] absolute text-[#09a31b] text-[40px] font-semibold">
-        86%
-      </div>
-      {candidate.rounds.map((round, roundIndex) => (
-        <div
-          key={roundIndex}
-          className="w-[69px] h-[132px] absolute"
-          style={{ left: `${20 + roundIndex * 135}px`, top: "111px" }}
-        >
-          <div className="w-[63px] h-[61.66px] left-[1px] top-[31.66px] absolute">
-            {generateDots(round.progress).map((style, index) => (
-              <div
-                key={index}
-                className="w-[12.06px] h-[12.06px] absolute rounded-full"
-                style={{
-                  ...style,
-                  ...getDotPosition(index, 25),
-                }}
-              />
-            ))}
-          </div>
-          <div className="w-[27px] h-3.5 left-[21px] top-[58px] absolute text-center text-[#757575] text-xs font-bold">
-            {round.progress}%
-          </div>
-          <div className="w-14 h-3 left-[11px] top-0 absolute text-center text-[#656565] text-[10px] font-normal">
-            {round.name}
-          </div>
-          <div className="w-[75px] h-3 left-0 top-[120px] absolute text-[#656565] text-[12px] font-normal">
-            {round.description}
+          ))}
+          <div className="flex flex-col justify-end">
+            <p className="text-[40px] text-[#0AA31C] font-semibold mb-[25%]">86%</p>
+            <p className="font-semibold">Cumulative score</p>
           </div>
         </div>
-      ))}
-      <div className="w-[107px] h-[19px] left-[268px] top-[232px] absolute text-center text-black text-[12px] font-semibold">
-        Cumulative score
       </div>
-      <div className="w-[83px] h-8 px-px left-[289px] top-[262px] absolute justify-center items-center inline-flex">
-        <div className="p-2.5 rounded-[30px] border border-[#0071db] justify-center items-center gap-2.5 inline-flex">
-          <div className="text-center text-[#0071db] text-xs font-medium leading-[14px]">
-            View more
-          </div>
-        </div>
+      <div className="flex justify-end mt-[9px]">
+        <p className="font-medium text-[#0072DC] border border-[#0072DC] rounded-full p-[10px] cursor-pointer">View more</p>
       </div>
     </div>
   );

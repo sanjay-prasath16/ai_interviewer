@@ -242,9 +242,9 @@ const ApplicantsPool = () => {
   return (
     <div className="bg-[#F1F4F8] h-screen overflow-hidden">
       {/* job description */}
-      <div className="flex justify-between bg-gray-100 p-4 rounded-lg ml-8">
+      <div className="flex justify-between bg-gray-100 p-4 rounded-lg ml-8 h-[32%]">
         {/* UI/UX Designer Section styled like a separate card */}
-        <div className="w-[68%] border border-white bg-white pt-4 pb-4 pr-4 rounded-lg ">
+        <div className="w-[68%] border border-white bg-white pt-4 pb-4 pr-4 rounded-[15px]">
           <div className="flex justify-between">
             <div className="flex">
               <div className="flex items-center">
@@ -321,7 +321,7 @@ const ApplicantsPool = () => {
         <div className="w-[30%] space-y-4 ml-4 mr-6">
           {/* Total Candidate Card with increased height */}
           <div
-            className="border border-white p-4 rounded-lg flex justify-between items-center h-[50%]"
+            className="border border-white p-4 rounded-lg flex justify-between items-center h-[46%]"
             style={{
               backgroundImage: `url(${backgroundImage1})`,
               backgroundSize: "cover",
@@ -335,7 +335,7 @@ const ApplicantsPool = () => {
             <p className="text-[36px] font-semibold mr-2">1200+</p>
           </div>
           <div
-            className="border border-white p-4 rounded-lg flex justify-between items-center h-[43%]"
+            className="border border-white p-4 rounded-lg flex justify-between items-center h-[46%]"
             style={{
               backgroundImage: `url(${backgroundImage})`,
               backgroundSize: "cover",
@@ -355,24 +355,24 @@ const ApplicantsPool = () => {
           </div>
         </div>
       </div>
-      <div className="ml-10 justify-between">
+      <div className="ml-10 justify-between mt-[27px] h-[68%]">
         <p className="font-semibold text-[24px] Inter">Candidate List</p>
         <div className="justify-between flex">
           <div className="mt-2 flex relative">
             <input
               type="text"
-              className="outline-none rounded-full h-12 w-72 placeholder:text-[#656464] text-[16px] font-medium Inter pl-10"
+              className="outline-none rounded-full h-[48px] w-[306px] placeholder:text-[#656464] text-[16px] font-medium Inter pl-10"
               placeholder="Search Candidates"
             />
-            <CiSearch className="absolute mt-[8px] ml-[8px] text-[19px]" />
-            <img src={Filter} alt="" className="h-7 mt-3 ml-5" />
-            <p className="mt-3 ml-1 text-[#656464] text-[16px] font-medium Inter">Filter</p>
+            <CiSearch className="absolute mt-[15px] ml-[8px] text-[19px]" />
+            <img src={Filter} alt="" className="h-7 mt-5 ml-5" />
+            <p className="mt-5 ml-1 text-[#656464] text-[16px] font-medium Inter">Filter</p>
           </div>
           <div
-            className={`border rounded-lg mr-10 h-10 flex items-center justify-center px-3 py-6 ${
+            className={`border rounded-lg mr-10 h-[48px] flex items-center justify-center px-3 py-6 ${
               isAnyCheckboxSelected
                 ? "text-white"
-                : "bg-gray-200 text-gray-500 border-gray-200"
+                : "bg-gray-200 text-[#909090] border-gray-200"
             }`}
             style={{
               background: isAnyCheckboxSelected
@@ -393,9 +393,9 @@ const ApplicantsPool = () => {
             </p>
           </div>
         </div>
-        <div className="mt-1 mr-10 max-h-[24rem] overflow-y-auto table-container">
+        <div className="mt-1 mr-10 overflow-y-auto table-container h-[60%]">
           <table
-            className="min-w-full text-left border-separate rounded-xl"
+            className="min-w-full text-left border-separate rounded-xl h-full"
             style={{ borderSpacing: "0 10px" }}
           >
             <thead className="sticky top-0 z-10 border border-white bg-white text-tableHead">

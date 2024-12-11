@@ -1,158 +1,92 @@
 import PropTypes from "prop-types";
-import { Radar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { useEffect, useRef } from "react";
-
-const customHexagonPlugin = {
-  id: "customHexagonPlugin",
-  beforeDraw(chart) {
-    const {
-      ctx,
-      scales: { r },
-    } = chart;
-    ctx.save();
-
-    const hexagonCoordinates = [
-      r.getPointPositionForValue(0, 600),
-      r.getPointPositionForValue(600, 400),
-      r.getPointPositionForValue(200, 800),
-      r.getPointPositionForValue(800, 800),
-      r.getPointPositionForValue(680, 1000),
-    ];
-
-    ctx.beginPath();
-    ctx.moveTo(hexagonCoordinates[0].x, hexagonCoordinates[0].y);
-    hexagonCoordinates.forEach((point) => {
-      ctx.lineTo(point.x, point.y);
-    });
-    ctx.closePath();
-
-    ctx.fillStyle = "#10314F66";
-    ctx.strokeStyle = "#0072DC";
-    ctx.lineWidth = 1;
-
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.restore();
-  },
-};
-
-const customLabelPlugin = {
-  id: "customLabelPlugin",
-  afterDraw(chart) {
-    const ctx = chart.ctx;
-    ctx.save();
-    const { r } = chart.scales;
-
-    chart.data.labels.forEach((label, index) => {
-      const lines = label.split(" ");
-      const { x, y } = r.getPointPosition(index, r.drawingArea + 30);
-
-      lines.forEach((line, lineIndex) => {
-        ctx.fillStyle = "white";
-        ctx.font = "12px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(line, x, y + lineIndex * 12);
-      });
-    });
-
-    ctx.restore();
-  },
-};
-
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend,
-  customHexagonPlugin,
-  customLabelPlugin
-);
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+} from "recharts";
 
 const GraphCard = ({ data }) => {
-  const chartRef = useRef(null);
+  const formattedData = data.labels.map((label, index) => ({
+    subject: label,
+    blue: data.datasets[0].data[index],
+    green: data.datasets[0]?.score || 0,
+    fullMark: 1000,
+  }));
 
-  const dataset = data?.datasets[0];
-
-  useEffect(() => {
-    return () => {
-      ChartJS.getChart("myRadarChart")?.destroy();
-    };
-  }, [data]);
+  const CustomTick = ({ payload, x, y, textAnchor }) => {
+    const lines = payload.value.split(" ");
+    return (
+      <g transform={`translate(${x},${y})`}>
+        {lines.map((line, index) => (
+          <text
+            key={index}
+            x={0}
+            y={index * 12}
+            dy={12}
+            textAnchor={textAnchor}
+            fill="#fff"
+            fontSize={10}
+          >
+            {line}
+          </text>
+        ))}
+      </g>
+    );
+  };
 
   return (
-    <div
-      ref={chartRef}
-      className="px-1 text-white rounded-lg flex flex-col overflow-hidden"
-    >
-      <div className="flex justify-between">
-        <p>{dataset?.role}</p>
-        <p>Skill Stack Score</p>
+    <div className="p-6 rounded-xl text-white flex flex-col justify-between h-full w-full">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-6">
+        <h2 className="text-xl font-medium">{data.datasets[0].role}</h2>
+        <div className="text-right">
+          <div className="text-sm">Skill Stack Score</div>
+          <div className="text-6xl font-semibold">{data.datasets[0].score}</div>
+        </div>
       </div>
-      <p className="text-3xl flex justify-end font-bold">{dataset?.score}</p>
-      <Radar
-        id="myRadarChart"
-        className="relative"
-        style={{ top: "-100px" }}
-        data={data}
-        options={{
-          
-          scales: {
-            r: {
-              beginAtZero: true,
-              max: 1000,
-              ticks: {
-                stepSize: 200,
-                color: "white",
-                backdropColor: "transparent",
-              },
-              grid: {
-                color: "rgba(255, 255, 255, 0.2)",
-              },
-              angleLines: {
-                color: "rgba(255, 255, 255, 0.2)",
-              },
-              pointLabels: {
-                display: true,
-                color: "transparent",
-              },
-              pointRadius: 0,
-            },
-          },
-          plugins: {
-            legend: {
-              display: false,
-              labels: {
-                color: "white",
-              },
-            },
-          },
-          elements: {
-            line: {
-              borderWidth: 1,
-              borderColor: (context) => {
-                return context.datasetIndex === 0 ? "#8AFF37" : "#0072DC";
-              },
-              backgroundColor: (context) => {
-                return context.datasetIndex === 0 ? "#507A0340" : "#10314F66";
-              },
-            },
-          },
-        }}
-      />
-      <div className="flex justify-end relative" style={{ top: '-210px' }}>
-        <p className="text-white cursor-pointer border border-white h-8 p-2 rounded-3xl">
+
+      {/* Radar Chart */}
+      <div className="flex -mt-[10%] h-80">
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={formattedData}>
+            <PolarGrid stroke="#7E7E7E" />
+            <PolarAngleAxis dataKey="subject" tick={CustomTick} />
+            <PolarRadiusAxis
+              angle={70}
+              domain={[0, 1000]}
+              axisLine={false}
+              tick={{ fill: "#fff", fontSize: 10 }}
+              tickCount={6}
+              tickFormatter={(value) => (value === 0 ? "" : value)}
+            />
+
+            {/* Blue Pentagon - Slightly Tilted */}
+            <Radar
+              name="Blue Skills"
+              dataKey="blue"
+              stroke="#0072DC"
+              fill="#0072DC"
+              fillOpacity={0.4}
+            />
+
+            {/* Green Pambaram Shape */}
+            <Radar
+              name="Green Skills"
+              dataKey="green"
+              stroke="#8AFF37"
+              fill="#8AFF37"
+              fillOpacity={0.4}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* View More Button */}
+      <div className="flex justify-end">
+        <p className="text-white cursor-pointer border border-white h-8 px-4 py-2 rounded-3xl">
           View more
         </p>
       </div>

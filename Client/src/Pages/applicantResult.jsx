@@ -4,18 +4,17 @@ import Notification from "../assets/bell-notification.svg";
 import { IoSearch } from "react-icons/io5";
 import Profile from "../assets/Ellipse.png";
 import Arrow from "../assets/downArrow.svg";
-import Gradient from "../assets/Gradient.png";
 import Company from "../assets/company logo.png";
 import Location from "../assets/location.svg";
 import Briefcase from "../assets/briefcase.svg";
-import Sanjay from '../assets/sanjay.jpeg';
-import Mukesh from '../assets/mukesh.jpeg';
-import Debaleena from '../assets/debaleena.jpg';
-import Manjeet from '../assets/manjeet.jpeg';
-import Priyansh from '../assets/priyansh.jpg';
-import Bieden from '../assets/bieden.jpeg';
-import Joe from '../assets/joe.jpeg';
-import Rajan from '../assets/rajan.jpg';
+import Sanjay from "../assets/sanjay.jpeg";
+import Mukesh from "../assets/mukesh.jpeg";
+import Debaleena from "../assets/debaleena.jpg";
+import Manjeet from "../assets/manjeet.jpeg";
+import Priyansh from "../assets/priyansh.jpg";
+import Bieden from "../assets/bieden.jpeg";
+import Joe from "../assets/joe.jpeg";
+import Rajan from "../assets/rajan.jpg";
 import hamburgerBar from "../assets/hamburgerBar.png";
 import Star from "../assets/star.svg";
 import Card from "../Components/card";
@@ -138,77 +137,81 @@ const ApplicantResult = () => {
   };
 
   return (
-    <div className="bg-[#F7F7F7] overflow-hidden h-screen">
-      <div className="h-[60%]">
-        {/* Nav bar */}
-        <div className="flex bg-white py-4 px-12 mb-10 justify-between">
-          <div>
-            <img src={Logo} alt="" className="w-[130px] h-[46px]" />
-          </div>
-          <div className="flex items-center">
-            <div className="relative mr-[29px]">
-              <input
-                type="text"
-                placeholder="Search"
-                className="bg-[#F4F4F4] border border-[#EBEBEB] w-[581px] h-[46px] rounded-full placeholder:text-black text-[14px] font-medium pl-4 pr-10 outline-none"
-              />
-              <div className="absolute top-1/2 right-3 transform -translate-y-1/2 border border-[#EBEBEB] p-1 rounded-full cursor-pointer">
-                <IoSearch className="text-[#353535] w-[22px] h-[22px]" />
-              </div>
-            </div>
-            <p className="border border-[#EBEBEB] bg-[#F4F4F4] rounded-full pl-3 pr-1 mr-[29px] flex ml-4 h-[46px] justify-center items-center">
-              <span className="pr-6 text-[14px]">3 New Notifications</span>
-              <img src={Notification} alt="" className="mx-2 w-6 h-6" />
-            </p>
-            <img src={Profile} alt="" className="h-11 w-11" />
-            <div className="text-[#353535] text-[18px] font-medium leading-[18px] ml-2 mr-1 mb-1">
-              Neha Yadav
-            </div>
-            <img src={Arrow} alt="" className="cursor-pointer" />
-          </div>
+    <div className="bg-[#F7F7F7] h-screen flex flex-col">
+      {/* Navbar */}
+      <div className="h-[10%] flex bg-white py-4 px-12 justify-between mb-[20px]">
+        <div className="items-center flex">
+          <img src={Logo} alt="Logo" className="w-[130px] h-[46px]" />
         </div>
-        {/* company description */}
-        <div className="mx-12 relative">
-          <img src={Gradient} alt="" />
-          <img src={Company} alt="" className="absolute top-5 left-0" />
-          <div className="bg-white -mt-5 pt-24 pl-9 pb-6 rounded-2xl">
-            <div className="flex">
-              <p className="font-bold text-[24px] text-[#353535] mr-3">
-                Senior UI/UX Designer
-              </p>
-              <p className="mt-3 mr-3 flex">
-                <img src={Location} alt="" className="w-5 h-5 mt-1" />
-                <span className="ml-0.5 text-[#979797] text-[14px]">Banglore</span>
-              </p>
-              <p className="mt-3 mr-3 flex">
-                <img src={Briefcase} alt="" className="w-5 h-5 mt-1" />
-                <span className="ml-0.5 text-[#979797] text-[14px]">3 - 5 Yrs</span>
-              </p>
+        <div className="flex items-center">
+          <div className="relative mr-[29px]">
+            <input
+              type="text"
+              placeholder="Search"
+              className="bg-[#F4F4F4] border border-[#EBEBEB] w-[581px] h-[46px] rounded-full placeholder:text-black text-[14px] font-medium pl-4 pr-10 outline-none"
+            />
+            <div className="absolute top-1/2 right-3 transform -translate-y-1/2 border border-[#EBEBEB] p-1 rounded-full cursor-pointer">
+              <IoSearch className="text-[#353535] w-[22px] h-[22px]" />
             </div>
-            <div className="flex pt-2">
-              <p className="text-[#353535] text-[18px]">Amazon</p>
-              <p className="text-[#979797] pl-5 flex">
-                <img src={Star} alt="" className="w-6 h-6 mt-1" />
-                <span className="pl-1 pr-2 text-[16px]">4.7</span>
-              </p>
-              <p className="pl-4 text-[#979797] text-[16px]">1267 review</p>
+          </div>
+          <p className="border border-[#EBEBEB] bg-[#F4F4F4] rounded-full pl-3 pr-1 mr-[29px] flex h-[46px] justify-center items-center">
+            <span className="pr-6 text-[14px]">3 New Notifications</span>
+            <img src={Notification} alt="Notification" className="mx-2 w-6 h-6" />
+          </p>
+          <img src={Profile} alt="Profile" className="h-11 w-11" />
+          <div className="text-[#353535] text-[18px] font-medium leading-[18px] ml-2 mr-1 mb-1">
+            Neha Yadav
+          </div>
+          <img src={Arrow} alt="Arrow" className="cursor-pointer" />
+        </div>
+      </div>
+
+      {/* Company Description */}
+      <div className="h-[45%] px-12 relative">
+        <div className="relative h-[40%]">
+          <div className="h-full w-full bg-gradient-to-b from-[#FEC4CB] via-[#F4C8EF] to-[#F4C8EF] rounded-[20px]"></div>
+          <img src={Company} alt="Company Logo" className="absolute top-[100%] left-0 transform -translate-y-1/2" />
+        </div>
+        <div className="bg-white -mt-5 pb-6 rounded-[32px] rounded-t-none h-[50%] pt-[65px] pl-[40px] justify-center flex flex-col">
+          <div className="flex">
+            <p className="font-bold text-[24px] text-[#353535] mr-3">
+              Senior UI/UX Designer
+            </p>
+            <p className="mt-3 mr-3 flex">
+              <img src={Location} alt="Location" className="w-5 h-5 mt-1" />
+              <span className="ml-0.5 text-[#979797] text-[14px]">Bangalore</span>
+            </p>
+            <div className="flex items-center mr-[6px]">
+              <div className="border border-[#979797] rounded-full h-[4px] w-[4px] bg-[#979797]"></div>
             </div>
+            <p className="mt-3 mr-3 flex">
+              <img src={Briefcase} alt="Briefcase" className="w-5 h-5 mt-1" />
+              <span className="ml-0.5 text-[#979797] text-[14px]">3 - 5 Yrs</span>
+            </p>
+          </div>
+          <div className="flex pt-2">
+            <p className="text-[#353535] text-[18px]">Amazon</p>
+            <p className="text-[#979797] pl-5 flex">
+              <img src={Star} alt="Star" className="w-6 h-6 mt-1" />
+              <span className="pl-1 pr-2 text-[16px]">4.7</span>
+            </p>
+            <p className="pl-4 text-[#979797] text-[16px]">1267 reviews</p>
           </div>
         </div>
       </div>
-      {/* card property */}
-      <div
-        className="max-h-[30%] overflow-y-auto ml-[30px]"
-        style={{ direction: "rtl" }}
-      >
-        <div style={{ direction: "ltr" }} className="flex flex-wrap">
+
+      {/* Card Section */}
+      <div className="h-[30%] overflow-y-auto ml-[30px]" style={{ direction: "rtl" }}>
+        <div className="h-full flex flex-wrap" style={{ direction: "ltr" }}>
           {currentCandidates.map((candidate, index) => (
             <Card key={index} index={index} candidate={candidate} />
           ))}
         </div>
       </div>
-      <div className="flex mt-4 items-center">
-        <div className="ml-10 w-[50px] -mt-1">
+
+      {/* Pagination */}
+      <div className="h-[15%] flex items-center">
+        <div className="ml-10 w-[50px]">
           <img src={hamburgerBar} alt="Hamburger menu" />
         </div>
         <div className="flex-grow flex justify-center">
@@ -240,9 +243,7 @@ const ApplicantResult = () => {
                 : "bg-paginationBox border-paginationBox cursor-pointer"
             }`}
             nextLinkClassName={`${
-              currentPage === pageCount - 1
-                ? "cursor-default text-[#C9C9C9]"
-                : ""
+              currentPage === pageCount - 1 ? "cursor-default text-[#C9C9C9]" : ""
             }`}
             disabledClassName="cursor-default text-[#C9C9C9]"
           />

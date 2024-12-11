@@ -458,7 +458,7 @@ const Interview = () => {
             <div className="h-[184px] w-[386px] border-2 border-[#FF3B30] rounded-3xl flex flex-col items-center pt-[14px]" style={{ animation: "fadeInScale 0.8s ease-out", boxShadow: "0px 4px 4px #cccccc", }}>
               <img src={warning} alt="" className="w-[48px] h-[48px]" />
               <p className="text-[16px] font-medium pt-[9px]">Microphone and Camera Access Required</p>
-              <p className="text-[14px] text-justify w-[352px] text-[#667085] pt-[5px]">To provide you with the best possible experience, we need access to your microphone and camera. Please enable these permissions in your browser settings.</p>
+              <p className="text-[14px] text-center w-[352px] text-[#667085] pt-[5px]">To provide you with the best possible experience, we need access to your microphone and camera. Please enable these permissions in your browser settings</p>
             </div>
           </div>
         </div>)

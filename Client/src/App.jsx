@@ -10,6 +10,7 @@ import CourseSummary from "./Pages/courseSummary";
 import AfterSelection from "./Pages/afterSelection";
 import TechnicalPracticeSimulation from "./Pages/technicalPracticeSimulation";
 import NonTechnicalPracticeSimulation from "./Pages/nonTechnicalPracticeSimulation";
+import CandidateProfile from './Pages/candidateProfile';
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
         <Route path="/afterSelection" element={<AfterSelection />} />
         <Route path="/technicalPracticeSimulation" element={<TechnicalPracticeSimulation />} />
         <Route path="/nonTechnicalPracticeSimulation" element={<NonTechnicalPracticeSimulation /> } />
-        <Route path="/" element={<CourseSummary />} />
+        <Route path="/courseSummary" element={<CourseSummary />} />
+        <Route path="/" element={<CandidateProfile />} />
       </Routes>
     </BrowserRouter>
   )

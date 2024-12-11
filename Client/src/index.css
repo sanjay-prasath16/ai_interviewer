@@ -75,8 +75,8 @@
     border-width: 0 1.5px 1.5px 0;
     transform: rotate(45deg);
     position: relative;
-    top: 6px;
-    left: 9px;
+    top: 4px;
+    left: 6px;
   }
 
   ::-webkit-scrollbar {
@@ -501,23 +501,6 @@ table td:last-child {
 
 /* ai interview started */
 
-.animated-slide {
-  position: absolute;
-  top: -300px; /* Starts off-screen */
-  left: 50%;
-  transform: translateX(-50%);
-  animation: slideDown 1s ease-out forwards;
-}
-
-@keyframes slideDown {
-  from {
-    top: -200px; /* Off-screen position */
-  }
-  to {
-    top: 10px; /* Final position */
-  }
-}
-
 @keyframes fadeInScale {
   0% {
     opacity: 0;
@@ -528,3 +511,22 @@ table td:last-child {
     transform: scale(1);
   }
 }
+
+/* ai interview end */
+
+/* candidate profile started */
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 5s linear infinite;
+}
+
+/* candidate profile ends */

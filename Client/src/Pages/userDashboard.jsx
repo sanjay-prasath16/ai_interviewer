@@ -195,7 +195,7 @@ const UserDashboard = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="bg-[#F1F4F8] h-screen flex flex-col text-xs Inter overflow-hidden">
+    <div className="bg-[#F1F4F8] h-screen flex flex-col text-xs Inter">
       <Navbar assistant={jupiter} />
       <div className="flex p-5 h-screen">
         {/* Left Side */}
@@ -235,12 +235,12 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          <div className="h-[55%] mt-5 rounded-3xl relative overflow-hidden">
+          <div className="mt-5 h-[55%] rounded-3xl relative overflow-hidden">
             <Swiper
               direction="vertical"
               spaceBetween={30}
               slidesPerView={1}
-              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              // autoplay={{ delay: 5000, disableOnInteraction: false }}
               loop={true}
               pagination={{ clickable: true }}
               modules={[Autoplay, EffectCoverflow, Pagination]}

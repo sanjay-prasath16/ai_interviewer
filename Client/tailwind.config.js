@@ -20,6 +20,8 @@ export default {
         "question_gradient":
           "linear-gradient(to bottom right, rgba(0, 45, 191) 7%, rgba(67, 150, 247) 46%, rgba(255, 155, 210) 81%, rgba(201, 255, 252) 99%)",
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'premium-gradient': 'linear-gradient(0deg, #F5F4CE 0%, #FFBD9F 100%)',
+        'company-gradient': 'linear-gradient(to bottom, #FEC4CB 0%, #F4C8EF 63%)',
       },
       animation: {
         blink: "blink 1.5s infinite",
