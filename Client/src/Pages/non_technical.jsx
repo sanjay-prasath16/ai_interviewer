@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import describeImage from '../assets/non_technical.jpeg'
+import describeImage from "../assets/non_technical.jpeg";
+import warning from '../assets/warning icon.svg';
 
 const Interview = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -26,7 +27,7 @@ const Interview = () => {
   const toggleVideoSize = () => {
     setVideoToggleButton(!videoToggleButton);
     console.log(videoToggleButton);
-  }
+  };
 
   useEffect(() => {
     const startVideo = () => {
@@ -44,28 +45,38 @@ const Interview = () => {
 
     const checkPermissions = async () => {
       try {
-        const audioPermission = await navigator.permissions.query({ name: "microphone" });
-        const videoPermission = await navigator.permissions.query({ name: "camera" });
+        const audioPermission = await navigator.permissions.query({
+          name: "microphone",
+        });
+        const videoPermission = await navigator.permissions.query({
+          name: "camera",
+        });
 
-        if (audioPermission.state === "granted" && videoPermission.state === "granted") {
-          setPermissionsGranted(true);
+        if (
+          audioPermission.state === "granted" &&
+          videoPermission.state === "granted"
+        ) {
+          setPermissionsGranted(false);
           startVideo();
         } else {
-          setPermissionsGranted(false);
-          alert("Please enable camera and microphone permissions in your browser settings and reload the page.");
+          setPermissionsGranted(true);
         }
 
         audioPermission.onchange = () => {
-          if (audioPermission.state === "granted" && videoPermission.state === "granted") {
-            setPermissionsGranted(true);
-            startVideo();
+          if (
+            audioPermission.state === "granted" &&
+            videoPermission.state === "granted"
+          ) {
+            location.reload();
           }
         };
 
         videoPermission.onchange = () => {
-          if (audioPermission.state === "granted" && videoPermission.state === "granted") {
-            setPermissionsGranted(true);
-            startVideo();
+          if (
+            audioPermission.state === "granted" &&
+            videoPermission.state === "granted"
+          ) {
+            location.reload();
           }
         };
       } catch (error) {
@@ -74,7 +85,7 @@ const Interview = () => {
       }
     };
 
-    checkPermissions()
+    checkPermissions();
   }, []);
 
   const startRecording = useCallback(() => {
@@ -204,7 +215,8 @@ const Interview = () => {
 
   useEffect(() => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+      scrollContainerRef.current.scrollTop =
+        scrollContainerRef.current.scrollHeight;
     }
   }, [interviewData, currentQuestion, currentAnswer]);
 
@@ -237,17 +249,20 @@ const Interview = () => {
         setTimer(180);
         handleInitialTimer();
       }, 5000);
-  
+
       return () => {
         clearTimeout(delayTimeout);
         clearInterval(timerRef.current);
       };
     }
-  }, [permissionsGranted, isAnalysisPhase, handleInitialTimer]);  
+  }, [permissionsGranted, isAnalysisPhase, handleInitialTimer]);
 
   return (
     <div className="flex h-screen w-screen regular3">
-      <img className="w-[70%] ml-10 mr-5 my-8 rounded-3xl h-[80%]" src={describeImage} />
+      <img
+        className="w-[70%] ml-10 mr-5 my-8 rounded-3xl h-[80%]"
+        src={describeImage}
+      />
 
       <div className="w-[30%] flex flex-col justify-between my-8 mr-10">
         {/* Scrollable container */}
@@ -264,7 +279,9 @@ const Interview = () => {
                   key={`question-${index}`}
                   className="p-2 mb-4 w-[235px] rounded-full rounded-br-md bg-question_gradient flex justify-end"
                 >
-                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[10px]">{item.question}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[10px]">
+                    {item.question}
+                  </p>
                 </motion.div>
               </div>
 
@@ -275,7 +292,9 @@ const Interview = () => {
                   key={`answer-${index}`}
                   className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-[285px] flex justify-start"
                 >
-                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">{item.answer}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">
+                    {item.answer}
+                  </p>
                 </motion.div>
               </div>
             </div>
@@ -290,7 +309,9 @@ const Interview = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <p className="text-white py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">{currentQuestion}</p>
+              <p className="text-white py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">
+                {currentQuestion}
+              </p>
             </motion.div>
           </div>
 
@@ -305,7 +326,9 @@ const Interview = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">{currentAnswer}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">
+                    {currentAnswer}
+                  </p>
                 </motion.div>
               </div>
             </>
@@ -315,7 +338,11 @@ const Interview = () => {
         {/* Controls */}
         <div className="flex flex-col items-center mt-5 h-[30%] w-[90%]">
           <div className="w-full h-full flex">
-            <div className={`relative ${videoToggleButton ? 'w-full h-full' : 'w-[50%] h-[50%]'}`}>
+            <div
+              className={`relative ${
+                videoToggleButton ? "w-full h-full" : "w-[50%] h-[50%]"
+              }`}
+            >
               <video
                 ref={videoRef}
                 className={`rounded-3xl`}
@@ -351,7 +378,7 @@ const Interview = () => {
               <div>
                 <p className="px-5 py-2 rounded-3xl flex items-center mb-5 text-[#0072DC]">
                   <span className="w-3 h-3 bg-[#FF0000] rounded inline-block mr-2 text-sm font-medium"></span>
-                  {isAnalysisPhase ? 'analyze' : 'Recording...' }
+                  {isAnalysisPhase ? "analyze" : "Recording..."}
                 </p>
                 <button
                   onClick={handleNextClick}
@@ -360,11 +387,36 @@ const Interview = () => {
                   Next
                 </button>
               </div>
-              <p className="text-[40px] text-[#A5A5A7] mt-8">{formatTimer(timer)}</p>
+              <p className="text-[40px] text-[#A5A5A7] mt-8">
+                {formatTimer(timer)}
+              </p>
             </div>
           </div>
         </div>
       </div>
+      {permissionsGranted && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="h-[232px] w-[434px] bg-white animate-fadeInScale flex items-center justify-center rounded-3xl">
+            <div
+              className="h-[184px] w-[386px] border-2 border-[#FF3B30] rounded-3xl flex flex-col items-center pt-[14px]"
+              style={{
+                animation: "fadeInScale 0.8s ease-out",
+                boxShadow: "0px 4px 4px #cccccc",
+              }}
+            >
+              <img src={warning} alt="" className="w-[48px] h-[48px]" />
+              <p className="text-[16px] font-medium pt-[9px]">
+                Microphone and Camera Access Required
+              </p>
+              <p className="text-[14px] text-center w-[352px] text-[#667085] pt-[5px]">
+                To provide you with the best possible experience, we need access
+                to your microphone and camera. Please enable these permissions
+                in your browser settings
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -25,29 +25,12 @@ const Interview = () => {
   const [showExpandingBorder, setShowExpandingBorder] = useState(false);
   const [pulseClass, setPulseClass] = useState(undefined);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
-  const [verifyBlock, setVerifyBlock] = useState(true);
   const isRecordingRef = useRef(false);
   const [videoToggleButton, setVideoToggleButton] = useState(true);
 
   const toggleVideoSize = () => {
     setVideoToggleButton(!videoToggleButton);
   }
-
-  const closePopup = () => {
-    setVerifyBlock(false);
-  }
-
-  const requestPermissions = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      console.log("Permissions granted", stream);
-    } catch (error) {
-      console.error("Permission denied or error occurred:", error);
-    }
-  };  
 
   useEffect(() => {
     const startVideo = () => {
@@ -451,8 +434,7 @@ const Interview = () => {
           </div>
         </div>
       </div>
-      {permissionsGranted && 
-      verifyBlock &&
+      {permissionsGranted &&
         (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="h-[232px] w-[434px] bg-white animate-fadeInScale flex items-center justify-center rounded-3xl">
             <div className="h-[184px] w-[386px] border-2 border-[#FF3B30] rounded-3xl flex flex-col items-center pt-[14px]" style={{ animation: "fadeInScale 0.8s ease-out", boxShadow: "0px 4px 4px #cccccc", }}>

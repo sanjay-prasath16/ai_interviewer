@@ -1,21 +1,22 @@
-import { useState } from "react";
-import Profile from "../assets/candidateProfile.png";
-import CoverPhoto from "../assets/coverPhoto.png";
-import Abacus from "../assets/abacus.png";
-import Settings from "../assets/Settings.svg";
-import Bookmark from "../assets/Bookmark Icon.svg";
-import NewsLetter from "../assets/News Letter.svg";
-import Events from "../assets/Events.svg";
-import blueDownArrow from "../assets/blueDownArrow.svg";
-import add from "../assets/whiteAdd.png";
-import edit from "../assets/whiteEdit.png";
-import ExperienceImg1 from "../assets/ExperienceImg1.png";
-import ExperienceImg2 from "../assets/ExperienceImg2.png";
-import ExperienceImg3 from "../assets/ExperienceImg3.png";
-import projectImage1 from "../assets/projectImage1.png";
-import projectImage2 from "../assets/projectImage2.png";
-import projectImage3 from "../assets/projectImage3.png";
-import ProjectArrow from "../assets/projectArrow.png";
+import { useState, useEffect } from "react";
+import Profile from "./assets/candidateProfile.png";
+import CoverPhoto from "./assets/coverPhoto.png";
+import Abacus from "./assets/abacus.png";
+import Settings from "./assets/Settings.svg";
+import Bookmark from "./assets/Bookmark Icon.svg";
+import NewsLetter from "./assets/News Letter.svg";
+import Events from "./assets/Events.svg";
+import blueDownArrow from "./assets/blueDownArrow.svg";
+import add from "./assets/whiteAdd.png";
+import edit from "./assets/whiteEdit.png";
+import ExperienceImg1 from "./assets/ExperienceImg1.png";
+import ExperienceImg2 from "./assets/ExperienceImg2.png";
+import ExperienceImg3 from "./assets/ExperienceImg3.png";
+import projectImage1 from "./assets/projectImage1.png";
+import projectImage2 from "./assets/projectImage2.png";
+import projectImage3 from "./assets/projectImage3.png";
+import ProjectArrow from "./assets/projectArrow.png";
+import SummarizeIcon from "./assets/summarizeIcon.svg";
 
 const experiences = [
   {
@@ -87,30 +88,73 @@ const projects = [
 ];
 
 const CandidateProfile = () => {
-  const [mapActive, setMapActive] = useState(false);
+  const petalPositions = [
+    { size: "large", rotation: 20 },
+    { size: "small", rotation: 80 },
+    { size: "large", rotation: 140 },
+    { size: "small", rotation: 200 },
+    { size: "large", rotation: 260 },
+    { size: "small", rotation: 320 },
+  ];
 
+  const [animationStage, setAnimationStage] = useState(0);
+  const [shouldRotate, setShouldRotate] = useState(false);
+  const [mapActive, setMapActive] = useState(false);
+  const [summaryVisible1, setSummaryVisible1] = useState(false);
+  const [loadingSummary1, setLoadingSummary1] = useState(false);
+  const [summaryVisible2, setSummaryVisible2] = useState(false);
+
+  const [loadingSummary2, setLoadingSummary2] = useState(false);
   const mapClick = () => {
     setMapActive(!mapActive);
   };
 
-  const [petalsVisible, setPetalsVisible] = useState(true);
-  const [activePetal, setActivePetal] = useState(0);
+  const toggleSummary1 = () => {
+    setSummaryVisible1((prev) => !prev);
 
-  const petalSizes = [83, 52, 83, 52, 83, 52];
+    if (!summaryVisible1) {
+      setLoadingSummary1(true);
 
-  const handleCenterCircleClick = () => {
-    setPetalsVisible(!petalsVisible);
-    setActivePetal((prev) => (prev + 1) % petalSizes.length);
+      setTimeout(() => {
+        setLoadingSummary1(false);
+      }, 2000);
+    }
   };
 
-  const getPetalPosition = (index) => {
-    const angle = index * 60 * (Math.PI / 180);
-    const radius = 120;
-    return {
-      top: `${radius * Math.sin(angle) + 130}px`,
-      left: `${radius * Math.cos(angle) + 130}px`,
-    };
+  const toggleSummary2 = () => {
+    setSummaryVisible2((prev) => !prev);
+
+    if (!summaryVisible2) {
+      setLoadingSummary2(true);
+
+      setTimeout(() => {
+        setLoadingSummary2(false);
+      }, 2000);
+    }
   };
+
+  useEffect(() => {
+    if (mapActive) {
+      const timings = [1000, 1500, 2000, 2500, 3000, 3500];
+  
+      setTimeout(() => {
+        setAnimationStage(1);
+      }, timings[0]);
+  
+      for (let i = 1; i < petalPositions.length; i++) {
+        setTimeout(() => {
+          setAnimationStage(i + 1);
+        }, timings[0] + i * 500);
+      }
+  
+      setTimeout(() => {
+        setAnimationStage(6);
+        setTimeout(() => {
+          setShouldRotate(true);
+        }, 0.1);
+      }, timings[0] + petalPositions.length * 500 + 1000);
+    }
+  }, [mapActive, petalPositions.length]);
 
   return (
     <div className="bg-[#121212] p-[40px] w-full overflow-x-hidden box-border">
@@ -255,22 +299,91 @@ const CandidateProfile = () => {
       <div className="bg-[#1E1E1E] mt-[62px] rounded-[16px] text-white w-full">
         <div className="p-[25px]">
           <div className="flex justify-between">
-            <div>
+            <div className="flex">
               <p className="text-[36px]">Experiences</p>
+              <button
+                className={`inline-flex items-center justify-center rounded-lg border border-white/50 w-[156px] h-[44px] mt-3 ml-[25px] ${
+                  loadingSummary1 || summaryVisible1 ? "px-3 py-2" : "p-3"
+                }`}
+                onClick={toggleSummary1}
+              >
+                {!(loadingSummary1 || summaryVisible1) && (
+                  <img
+                    src={SummarizeIcon}
+                    alt=""
+                    className={`h-[24px] w-[21px] mt-[-2px]`}
+                  />
+                )}
+                <span
+                  className={`text-[#0072DC] text-[16px] font-medium Inter ${
+                    loadingSummary1 || summaryVisible1
+                      ? "content-center"
+                      : "pl-2"
+                  }`}
+                >
+                  {loadingSummary1
+                    ? "Loading..."
+                    : summaryVisible1
+                    ? "Close"
+                    : "Summarize"}
+                </span>
+              </button>
             </div>
-            <div className="flex p-[1.2rem]  space-x-[20px]">
-              <img
-                src={add}
-                alt="Add"
-                className="w-[37px] h-[38px] cursor-pointer"
-              />
-              <img
-                src={edit}
-                alt="Edit"
-                className="w-[36px] h-[36px] cursor-pointer"
-              />
-            </div>
+            <img
+              src={edit}
+              alt="Edit"
+              className="w-[36px] h-[36px] ml-[22px]"
+            />
           </div>
+
+          {loadingSummary1 || summaryVisible1 ? (
+            <div className="mt-[45px]">
+              <div className="p-0">
+                <div
+                  className={`relative flex flex-col pt-[15px] pl-[61px] pb-[34px] pr-[100px] rounded-[10px] rounded-t-none bg-summarize_gradient opacity-[80%]`}
+                >
+                  {loadingSummary1 ? (
+                    <div className="opacity-100">
+                      <p className="text-sm font-semibold flex justify-center items-center border border-white/10 bg-white/50 rounded-lg p-1 w-60">
+                        <img
+                          src={SummarizeIcon}
+                          alt=""
+                          className="h-[24px] w-[21px] mr-2"
+                        />
+                        <span className="text-[#3B3B3B] text-[16px] font-medium">
+                          AI Summarizing...
+                        </span>
+                      </p>
+                      <div className="loading-rectangle opacity-50 mt-[16px]"></div>
+                      <div className="loading-rectangle opacity-50"></div>
+                      <div className="loading-rectangle opacity-50"></div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-sm font-semibold flex justify-center items-center border border-white/10 bg-white/40 rounded-lg p-1 w-60">
+                        <img
+                          src={SummarizeIcon}
+                          alt=""
+                          className="h-[24px] w-[21px] mr-2"
+                        />
+                        <span className="text-[#3B3B3B] text-[16px] font-medium">
+                          AI Summary
+                        </span>
+                      </p>
+                      <p className="text-[14px] font-medium mt-[16px] text-justify">
+                        Seeking a creative UI/UX Designer specializing in web
+                        and mobile platforms, focused on intuitive, responsive,
+                        and visually engaging interfaces. Proficient in Figma,
+                        Transform ideas into high-quality designs, ensuring
+                        seamless user experiences across devices while aligning
+                        with business goals.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : null}
 
           <div className="w-full">
             {experiences.map((exp, index) => (
@@ -334,7 +447,34 @@ const CandidateProfile = () => {
       {/* projects */}
       <div className="h-[810px] text-white rounded-[16px] bg-[#1E1E1E] mt-[61px] pt-[35px] px-[39px]">
         <div className="justify-between flex">
-          <p className="text-[36px]">Projects</p>
+          <div className="flex">
+            <p className="text-[36px]">Projects</p>
+            <button
+              className={`inline-flex items-center justify-center rounded-lg border border-white/50 w-[156px] h-[44px] mt-3 ml-[25px] ${
+                loadingSummary2 || summaryVisible2 ? "px-3 py-2" : "p-3"
+              }`}
+              onClick={toggleSummary2}
+            >
+              {!(loadingSummary2 || summaryVisible2) && (
+                <img
+                  src={SummarizeIcon}
+                  alt=""
+                  className={`h-[24px] w-[21px] mt-[-2px]`}
+                />
+              )}
+              <span
+                className={`text-[#0072DC] text-[16px] font-medium Inter ${
+                  loadingSummary2 || summaryVisible2 ? "content-center" : "pl-2"
+                }`}
+              >
+                {loadingSummary2
+                  ? "Loading..."
+                  : summaryVisible2
+                  ? "Close"
+                  : "Summarize"}
+              </span>
+            </button>
+          </div>
           <div className="flex">
             <img src={add} alt="Add" className="w-[37px] h-[38px]" />
             <img
@@ -344,6 +484,56 @@ const CandidateProfile = () => {
             />
           </div>
         </div>
+
+        {loadingSummary2 || summaryVisible2 ? (
+          <div className="mt-[45px]">
+            <div className="p-0">
+              <div
+                className={`relative flex flex-col pt-[15px] pl-[61px] pb-[34px] pr-[100px] rounded-[10px] rounded-t-none bg-summarize_gradient opacity-[80%]`}
+              >
+                {loadingSummary2 ? (
+                  <div className="opacity-100">
+                    <p className="text-sm font-semibold flex justify-center items-center border border-white/10 bg-white/50 rounded-lg p-1 w-60">
+                      <img
+                        src={SummarizeIcon}
+                        alt=""
+                        className="h-[24px] w-[21px] mr-2"
+                      />
+                      <span className="text-[#3B3B3B] text-[16px] font-medium">
+                        AI Summarizing...
+                      </span>
+                    </p>
+                    <div className="loading-rectangle opacity-50 mt-[16px]"></div>
+                    <div className="loading-rectangle opacity-50"></div>
+                    <div className="loading-rectangle opacity-50"></div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm font-semibold flex justify-center items-center border border-white/10 bg-white/40 rounded-lg p-1 w-60">
+                      <img
+                        src={SummarizeIcon}
+                        alt=""
+                        className="h-[24px] w-[21px] mr-2"
+                      />
+                      <span className="text-[#3B3B3B] text-[16px] font-medium">
+                        AI Summary
+                      </span>
+                    </p>
+                    <p className="text-[14px] font-medium mt-[16px] text-justify">
+                      Seeking a creative UI/UX Designer specializing in web and
+                      mobile platforms, focused on intuitive, responsive, and
+                      visually engaging interfaces. Proficient in Figma,
+                      Transform ideas into high-quality designs, ensuring
+                      seamless user experiences across devices while aligning
+                      with business goals.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="w-full">
           {projects.map((proj, index) => (
             <div key={index} className="mt-[52px]">
@@ -377,35 +567,43 @@ const CandidateProfile = () => {
         <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur flex items-center justify-center z-50">
           {/* Main Container */}
           <div
-            className="relative h-[85%] w-[80%] rounded-[36px] flex items-center justify-center"
+            className="relative h-[85%] w-[80%] flex items-center justify-center rounded-[36px]"
             style={{
               backgroundImage:
                 "linear-gradient(to bottom right, #063678 0%, #420167 69%)",
             }}
           >
-            {/* Center Circle */}
+            {/* Petals */}
             <div
-              id="center-circle"
-              className="h-[160px] w-[160px] bg-white rounded-full flex items-center justify-center z-10 cursor-pointer shadow-lg"
-              onClick={handleCenterCircleClick}
+              className={`absolute h-full w-full flex items-center justify-center ${
+                shouldRotate ? "rotate-petals" : ""
+              }`}
             >
-              Click Me
+              {petalPositions.map((petal, index) => (
+                <div
+                  key={index}
+                  className={`absolute transition-all duration-[1500ms] ease-out ${
+                    petal.size === "large"
+                      ? "h-[103px] w-[103px]"
+                      : "h-[92px] w-[92px]"
+                  } rounded-full bg-[#D9D9D9]`}
+                  style={{
+                    transform:
+                      animationStage <= index
+                        ? `rotate(20deg) translateY(0) scale(0)`
+                        : animationStage === index + 1
+                        ? `rotate(${petal.rotation}deg) translateY(-110px) scale(1)`
+                        : `rotate(${petal.rotation}deg) translateY(-110px) rotate(-${petal.rotation}deg)`,
+                    transitionDelay:
+                      animationStage <= index ? `${index * 0.2}s` : "0s",
+                    zIndex: animationStage <= index ? 6 - index : 0,
+                  }}
+                />
+              ))}
             </div>
 
-            {/* Petals */}
-            {petalSizes.map((size, index) => (
-              <div
-                key={index}
-                className={`absolute rounded-full animate-rotate-petal petal-${index} ${
-                  petalsVisible ? "" : index !== activePetal ? "hidden" : ""
-                }`}
-                style={{
-                  height: `${size}px`,
-                  width: `${size}px`,
-                  ...getPetalPosition(index),
-                }}
-              ></div>
-            ))}
+            {/* Center Circle (Pistil) */}
+            <div className="absolute h-[176px] w-[176px] rounded-full z-10 bg-white" />
           </div>
         </div>
       )}

@@ -1,71 +1,77 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Dummy = () => {
-  const [petalsVisible, setPetalsVisible] = useState(false);
-  const [rotate, setRotate] = useState(false);
+  const petalPositions = [
+    { size: "large", rotation: 20 },
+    { size: "small", rotation: 80 },
+    { size: "large", rotation: 140 },
+    { size: "small", rotation: 200 },
+    { size: "large", rotation: 260 },
+    { size: "small", rotation: 320 },
+  ];
 
-  const petalSizes = [83, 52, 83, 52, 83, 52];
-  const radius = 120; // Radius for the petals around the center
-
-  // Calculate petal position based on index
-  const getPetalPosition = (index) => {
-    const angle = index * (360 / petalSizes.length) * (Math.PI / 180);
-    return {
-      top: `${radius * Math.sin(angle) + 160}px`,
-      left: `${radius * Math.cos(angle) + 160}px`,
-    };
-  };
+  const [animationStage, setAnimationStage] = useState(0);
+  const [shouldRotate, setShouldRotate] = useState(false);
 
   useEffect(() => {
-    // Delay to show petals sequentially, followed by rotation
-    const timeout1 = setTimeout(() => {
-      setPetalsVisible(true); // Show all petals
-    }, 1000);
+    const timings = [1000, 1500, 2000, 2500, 3000, 3500];
 
-    const timeout2 = setTimeout(() => {
-      setRotate(true); // Start rotation
-    }, 2000);
+    setTimeout(() => {
+      setAnimationStage(1);
+    }, timings[0]);
 
-    return () => {
-      clearTimeout(timeout1);
-      clearTimeout(timeout2);
-    };
-  }, []);
+    for (let i = 1; i < petalPositions.length; i++) {
+      setTimeout(() => {
+        setAnimationStage(i + 1);
+      }, timings[0] + i * 500);
+    }
+
+    setTimeout(() => {
+      setAnimationStage(6);
+      setTimeout(() => {
+        setShouldRotate(true);
+      }, 0.1);
+    }, timings[0] + petalPositions.length * 500 + 1000);
+  }, [petalPositions.length]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur flex items-center justify-center z-50">
       {/* Main Container */}
       <div
-        className="relative h-[320px] w-[320px] rounded-full flex items-center justify-center"
+        className="relative h-[85%] w-[80%] flex items-center justify-center rounded-[36px]"
         style={{
           backgroundImage:
             "linear-gradient(to bottom right, #063678 0%, #420167 69%)",
         }}
       >
-        {/* Center Circle */}
+        {/* Petals */}
         <div
-          id="center-circle"
-          className={`h-[100px] w-[100px] bg-white rounded-full flex items-center justify-center z-10 shadow-lg transition-transform duration-1000 ${
-            rotate ? "animate-spin-slow" : ""
+          className={`absolute h-full w-full flex items-center justify-center ${
+            shouldRotate ? "rotate-petals" : ""
           }`}
         >
-          Center
+          {petalPositions.map((petal, index) => (
+            <div
+              key={index}
+              className={`absolute transition-all duration-[1500ms] ease-out ${
+                petal.size === "large" ? "h-[103px] w-[103px]" : "h-[92px] w-[92px]"
+              } rounded-full bg-[#D9D9D9]`}
+              style={{
+                transform:
+                  animationStage <= index
+                    ? `rotate(20deg) translateY(0) scale(0)`
+                    : animationStage === index + 1
+                    ? `rotate(${petal.rotation}deg) translateY(-110px) scale(1)`
+                    : `rotate(${petal.rotation}deg) translateY(-110px) rotate(-${petal.rotation}deg)`,
+                transitionDelay: animationStage <= index ? `${index * 0.2}s` : "0s",
+                zIndex: animationStage <= index ? 6 - index : 0,
+              }}
+            />
+          ))}
         </div>
 
-        {/* Petals */}
-        {petalSizes.map((size, index) => (
-          <div
-            key={index}
-            className={`absolute rounded-full bg-white transition-all duration-500 ${
-              petalsVisible ? "" : "hidden"
-            }`}
-            style={{
-              height: `${size}px`,
-              width: `${size}px`,
-              ...getPetalPosition(index),
-            }}
-          ></div>
-        ))}
+        {/* Center Circle (Pistil) */}
+        <div className="absolute h-[176px] w-[176px] rounded-full z-10 bg-white" />
       </div>
     </div>
   );

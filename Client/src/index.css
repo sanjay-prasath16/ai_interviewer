@@ -530,3 +530,16 @@ table td:last-child {
 }
 
 /* candidate profile ends */
+
+@keyframes rotatePetals {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-petals {
+  animation: rotatePetals 10s linear infinite;
+}
