@@ -543,3 +543,29 @@ table td:last-child {
 .rotate-petals {
   animation: rotatePetals 10s linear infinite;
 }
+
+/* dummy */
+@keyframes circle-spin {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(-360deg);
+  }
+}
+
+@layer utilities {
+  .animate-circle-spin {
+      animation: circle-spin 5s linear infinite;
+  }
+}
+
+/* table */
+.tableRow {
+  border: 1px solid #000 !important;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}

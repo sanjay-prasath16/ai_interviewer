@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
-import Profile from "./assets/candidateProfile.png";
-import CoverPhoto from "./assets/coverPhoto.png";
-import Abacus from "./assets/abacus.png";
-import Settings from "./assets/Settings.svg";
-import Bookmark from "./assets/Bookmark Icon.svg";
-import NewsLetter from "./assets/News Letter.svg";
-import Events from "./assets/Events.svg";
-import blueDownArrow from "./assets/blueDownArrow.svg";
-import add from "./assets/whiteAdd.png";
-import edit from "./assets/whiteEdit.png";
-import ExperienceImg1 from "./assets/ExperienceImg1.png";
-import ExperienceImg2 from "./assets/ExperienceImg2.png";
-import ExperienceImg3 from "./assets/ExperienceImg3.png";
-import projectImage1 from "./assets/projectImage1.png";
-import projectImage2 from "./assets/projectImage2.png";
-import projectImage3 from "./assets/projectImage3.png";
-import ProjectArrow from "./assets/projectArrow.png";
-import SummarizeIcon from "./assets/summarizeIcon.svg";
+import Profile from "../assets/candidateProfile.png";
+import CoverPhoto from "../assets/coverPhoto.png";
+import Abacus from "../assets/abacus.png";
+import Settings from "../assets/Settings.svg";
+import Bookmark from "../assets/Bookmark Icon.svg";
+import NewsLetter from "../assets/News Letter.svg";
+import Events from "../assets/Events.svg";
+import blueDownArrow from "../assets/blueDownArrow.svg";
+import add from "../assets/whiteAdd.png";
+import edit from "../assets/whiteEdit.png";
+import ExperienceImg1 from "../assets/ExperienceImg1.png";
+import ExperienceImg2 from "../assets/ExperienceImg2.png";
+import ExperienceImg3 from "../assets/ExperienceImg3.png";
+import projectImage1 from "../assets/projectImage1.png";
+import projectImage2 from "../assets/projectImage2.png";
+import projectImage3 from "../assets/projectImage3.png";
+import ProjectArrow from "../assets/projectArrow.png";
+import SummarizeIcon from "../assets/summarizeIcon.svg";
 
 const experiences = [
   {

@@ -11,6 +11,7 @@ import AfterSelection from "./Pages/afterSelection";
 import TechnicalPracticeSimulation from "./Pages/technicalPracticeSimulation";
 import NonTechnicalPracticeSimulation from "./Pages/nonTechnicalPracticeSimulation";
 import CandidateProfile from './Pages/candidateProfile';
+import SecondDummy from './Pages/secondDummy';
 
 const App = () => {
   return (
@@ -28,9 +29,17 @@ const App = () => {
         <Route path="/nonTechnicalPracticeSimulation" element={<NonTechnicalPracticeSimulation /> } />
         <Route path="/courseSummary" element={<CourseSummary />} />
         <Route path="/" element={<CandidateProfile />} />
+        <Route path="/secondDummy" element={<SecondDummy />} />
       </Routes>
     </BrowserRouter>
   )
 }
 
 export default App;
+
+{
+  /* <div className='absolute w-[905px] h-[905px] -mt-[500px] ml-[1100px] bg-[rgba(151,151,151,0.7)] rounded-full z-10 '>
+
+<Spline className='items-end w-20 h-20 -ml-[30%] mt-[30%]' scene="https://prod.spline.design/9KpvIenVCsNv9ycN/scene.splinecode" />
+</div> */
+}

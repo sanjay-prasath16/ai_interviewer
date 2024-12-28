@@ -4,9 +4,8 @@ import companyName from "../assets/Aspireit.png";
 import profile from "../assets/Ellipse 1872.svg";
 import PropTypes from "prop-types";
 
-const Navbar = ({ assistant }) => {
-
-    const [searchPhrase, setSearchPhrase] = useState("");
+const Navbar = ({ assistant, onLiylaActivate }) => {
+  const [searchPhrase, setSearchPhrase] = useState("");
   const [isFocused1, setisFocused1] = useState(false);
   const inputRef = useRef(null);
 
@@ -27,32 +26,30 @@ const Navbar = ({ assistant }) => {
   }, [isFocused1]);
 
   return (
-    <div className="NavBar w-full h-[64px] px-10 py-4 bg-white border border-[#D2D2D2] backdrop-blur-[220px] flex justify-between items-center">
-      <div className="logo-container w-[130px] h-[46px] relative  bg-[#FFF]">
-        <div className="Rectangle7391 w-[130px] h-[46px] relative bg-[#0F0F36] rounded-[15px]" />
-        <div className="logo w-[100px] h-[30.22px] absolute left-[15px] top-[8px] bg-[#0F0F36] rounded-[15px] flex justify-center items-center cursor-pointer">
+    <div className="NavBar w-full mx-[auto] h-[8vh] min-h-[42px] px-8 bg-white border border-[#D2D2D2] backdrop-blur-[220px] flex justify-between items-center hover:cursor-pointer">
+      <div className="logo-container w-[130px] h-[5vh] min-h-[24px] relative  bg-[#FFF]">
+        <div className="Rectangle7391 w-[9vw] h-[4.5vh] min-h-[24px] relative bg-[#0F0F36] rounded-[6px]" />
+        <div className="logo w-[9vw] h-[4vh] min-h-[24px] absolute left-[0px] top-[1px] bg-none flex justify-center items-center gap-[0.3vw]">
           <img
-            className="Aspireit w-[29.452px] h-[30.217px] bg-transparent shrink-0"
+            className="Aspireit w-[1.5vw] bg-transparent shrink-0"
             src={logo}
           />
           <img
-            className="Group1000007770 bg-transparent w-[64.384px] h-[13.735px] shrink-0"
+            className="Group1000007770 bg-transparent w-[5vw] h-[2vh] shrink-0"
             src={companyName}
           />
         </div>
       </div>
-      <div className="SearchBarContainer w-full flex grow justify-center items-center gap-4 bg-white">
-        <div className="InputContainer w-[90%] flex justify-start items-center gap-4 h-[48px] max-w-[657px] pl-6 pr-6 pt-4 pb-4 bg-[#EBEBEB] shadow-[0px_0px_4px_rgba(0,_0,_0,_0.25)] rounded-[32px]">
-          <div className="searchBar inline-flex items-center h-[34px] w-full max-w-[657px] bg-[#EBEBEB]">
+      <div className="SearchBarContainer w-full flex grow justify-center items-center gap-4 bg-none">
+        <div className="InputContainer w-[90%] flex justify-start items-center gap-4 h-[5vh] min-h-[24px] max-w-[500px] pl-6 pr-6 pt-4 pb-4 bg-[#EBEBEB] shadow-[0px_0px_4px_rgba(0,_0,_0,_0.25)] rounded-[32px]">
+          <div className="searchBar inline-flex items-center h-[5vh] w-full max-w-[657px] bg-[#EBEBEB]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
               viewBox="0 0 22 22"
               fill="none"
-              className={`w-[22px] h-[22px] shrink-0 rounded-full mr-[8px] ${
+              className={`w-[3vh] h-[3vh] shrink-0 rounded-full mr-1 ${
                 isFocused1
-                  ? "transform scale-105 transition-transform duration-300"
+                  ? "transform scale-110 transition-transform duration-300"
                   : ""
               }`}
             >
@@ -71,7 +68,7 @@ const Navbar = ({ assistant }) => {
               />
             </svg>
             <input
-              className="justify-items-start px-2 w-full max-w-[657px] text-[#353535] pb-[10px] pt-[8px] text-[18px] leading-[18px] border-0 bg-[#EBEBEB] focus:outline-none focus:text-[#353535] placeholder:text-[#353535]"
+              className="justify-start px-2 w-full max-w-[657px] text-[#353535] py-[0.5vh] text-[2vh] leading-[18px] border-0 bg-[#EBEBEB] focus:outline-none focus:text-[#353535]"
               onClick={focusInput}
               type="text"
               name="searchBar"
@@ -79,24 +76,25 @@ const Navbar = ({ assistant }) => {
               onChange={handleSearch}
               onFocus={() => setisFocused1(true)}
               onBlur={() => setisFocused1(false)}
-              placeholder={isFocused1 ? "|" : "Search"}
+              placeholder="Search"
               ref={inputRef}
             />
           </div>
         </div>
       </div>
 
-      <div className="Frame1000008205 flex justify-start items-center gap-6 w-fit bg-[#fff]">
-        <div className="Frame1000008204 px-[16px] py-[4px] bg-[#EBEBEB] flex justify-start items-center shadow-[0px_0px_6px_rgba(0,_0,_0,_0.25)] rounded-[40px] backdrop-blur-[4px]">
-          <div className="ButtonsNotification w-[44px] h-[44px] mr-[16px] relative bg-[#EBEBEB] cursor-pointer">
-            <div className="Ellipse w-[44px] h-[44px] absolute left-0 top-0 bg-white rounded-full" />
-            <div className="IconsBell w-[24px] h-[24px] absolute left-[10px] top-[10px] bg-white hover:transform hover:scale-[1.05] hover:transition-transform hover:duration-300">
+      <div className="Frame1000008205 flex justify-start items-center w-fit gap-[1vw] bg-none">
+        <div className="Frame1000008204 px-[2vh] py-[2px] bg-[#EBEBEB] flex justify-start items-center shadow-[0px_0px_6px_rgba(0,_0,_0,_0.25)] rounded-[40px] backdrop-blur-[4px]">
+          <div className="ButtonsNotification w-[5vh] min-w-[24px] h-[5vh] min-h-[24px] mr-[1.5vh] relative bg-[#EBEBEB]">
+            <div className="Ellipse w-[5vh] h-[5vh] min-w-[24px] min-h-[24px] absolute left-0 top-0 bg-white rounded-full" />
+            <div className="IconsBell w-[4vh] h-[4vh] min-w-[18px] min-h-[18px] absolute left-[1vh] top-[1vh] bg-none hover:transform hover:scale-[1.08] hover:transition-transform hover:duration-300">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
+                className="w-[3vh] h-[3vh] min-w-[16px] min-h-[16px]"
               >
                 <path
                   d="M21 6.50001C21 8.43001 19.43 10 17.5 10C15.57 10 14 8.43001 14 6.50001C14 4.57001 15.57 3.00001 17.5 3.00001C19.43 3.00001 21 4.57001 21 6.50001ZM19 11.79C18.5 11.92 18 12 17.5 12C16.0421 11.9974 14.6447 11.4171 13.6138 10.3862C12.583 9.3553 12.0026 7.95788 12 6.50001C12 5.03001 12.58 3.70001 13.5 2.71001C13.3185 2.48755 13.0897 2.30838 12.8302 2.18555C12.5707 2.06272 12.2871 1.99934 12 2.00001C10.9 2.00001 10 2.90001 10 4.00001V4.29001C7.03 5.17001 5 7.90001 5 11V17L3 19V20H21V19L19 17V11.79ZM12 23C13.11 23 14 22.11 14 21H10C10 21.5304 10.2107 22.0391 10.5858 22.4142C10.9609 22.7893 11.4696 23 12 23Z"
@@ -105,17 +103,18 @@ const Navbar = ({ assistant }) => {
               </svg>
             </div>
           </div>
-          <div className="Profile flex justify-start items-center bg-[#EBEBEB] hover:transform hover:scale-[1.05] hover:transition-transform hover:duration-300 cursor-pointer">
+          <div className="Profile flex justify-end items-center bg-[#EBEBEB] hover:transform hover:scale-[1.08] hover:transition-transform hover:duration-300">
             <img
-              className="AvatarPic w-[44px] min-w-[44px] h-[44px] bg-none rounded-full"
+              className="AvatarPic w-[5vh] min-w-[24px] bg-none rounded-full"
               src={profile}
             />
           </div>
         </div>
-        <div className="Ai w-[56px] h-[56px] bg-none cursor-pointer">
+        <div className="Ai w-[4.5vw] min-w-[42px] bg-none">
           <img
-            className="Layila min-w-[61px] h-[61px] bg-none rounded-full mt-[-2.5px] hover:transform hover:scale-[1.05] hover:transition-transform hover:duration-300"
+            className="Layila h-[7.5vh] bg-none rounded-full hover:transform hover:scale-[1.08] hover:transition-transform hover:duration-300"
             src={assistant}
+            onClick={onLiylaActivate}
           />
         </div>
       </div>
@@ -124,7 +123,8 @@ const Navbar = ({ assistant }) => {
 };
 
 Navbar.propTypes = {
-    assistant: PropTypes.string.isRequired,
-}
+  assistant: PropTypes.string.isRequired,
+  onLiylaActivate: PropTypes.func.isRequired,
+};
 
 export default Navbar;
