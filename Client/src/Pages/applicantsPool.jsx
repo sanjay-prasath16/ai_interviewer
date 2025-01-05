@@ -21,9 +21,9 @@ import Sundar from "../assets/sundar pitchai.jpg";
 import Location from "../assets/location.svg";
 import Briefcase from "../assets/briefcase.svg";
 import Securitytime from "../assets/securitytime.svg";
-import backgroundImage from "../assets/Rectangle 7502.png";
 import backgroundImage1 from "../assets/Rectangle 7522.png";
 import whiteArrow from "../assets/whiteDownArrow.svg";
+import Rupees from '../assets/rupees.svg';
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
 import ReactPaginate from "react-paginate";
@@ -207,8 +207,15 @@ const ApplicantsPool = () => {
   const [summaryVisible, setSummaryVisible] = useState({});
   const [loadingSummary, setLoadingSummary] = useState({});
   const [showSkillScore, setShowSkillScore] = useState(false);
-  const gradientRef = useRef(null);
-  const rotationRef = useRef(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [tableBGColor, setTableBGColor] = useState(false);
+  const [tableScore, setTableScore] = useState(false);
+  const [buttonRotation, setButtonRotation] = useState(0);
+  const [candidateRotations, setCandidateRotations] = useState({});
+  const buttonGradientRef = useRef(null);
+  const candidateGradientRefs = useRef({});
+  const buttonAnimationFrame = useRef(null);
+  const candidateAnimationFrames = useRef({});
 
   const candidatesPerPage = 10;
   const pageCount = Math.ceil(candidates.length / candidatesPerPage);
@@ -265,40 +272,58 @@ const ApplicantsPool = () => {
     }
   };
 
-  useEffect(() => {
-    let animationFrame;
-
-    const rotateGradient = () => {
-      if (gradientRef.current && showSkillScore) {
-        rotationRef.current = (rotationRef.current - 1) % 360;
-        gradientRef.current.style.transform = `translateY(10%) rotate(${rotationRef.current}deg)`;
-        animationFrame = requestAnimationFrame(rotateGradient);
-      }
-    };
-
-    if (showSkillScore) {
-      animationFrame = requestAnimationFrame(rotateGradient);
-    }
-
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, [showSkillScore]);
-
-  const handleSkillScoreClick = () => {
-    setShowSkillScore(true);
-    setTimeout(() => {
-      setShowSkillScore(false);
-    }, 5000);
+  const animateButton = () => {
+    setButtonRotation((prev) => (prev + 1) % 360);
+    buttonAnimationFrame.current = requestAnimationFrame(animateButton);
   };
 
+  const animateCandidate = (idx) => {
+    setCandidateRotations((prev) => ({
+      ...prev,
+      [idx]: ((prev[idx] || 0) + 1) % 360
+    }));
+    candidateAnimationFrames.current[idx] = requestAnimationFrame(() => animateCandidate(idx));
+  };
+
+
+  const handleSkillScoreClick = () => {
+    if (isAnimating) return;
+
+    if (showSkillScore) {
+      setShowSkillScore(false);
+      setTableScore(false);
+      setTableBGColor(false);
+      cancelAnimationFrame(buttonAnimationFrame.current);
+      setButtonRotation(0);
+    } else {
+      setIsAnimating(true);
+      setShowSkillScore(true);
+      setTableScore(false);
+      setTableBGColor(true);
+      animateButton();
+      currentCandidates.forEach((_, idx) => animateCandidate(idx));
+      setTimeout(() => {
+        setIsAnimating(false);
+        setShowSkillScore(true);
+        setTableScore(true);
+        setTableBGColor(false);
+        Object.values(candidateAnimationFrames.current).forEach(cancelAnimationFrame);
+        setCandidateRotations({});
+      }, 5000);
+    }
+    console.log(showSkillScore);
+  };
+
+  useEffect(() => {
+    return () => {
+      cancelAnimationFrame(buttonAnimationFrame.current);
+      Object.values(candidateAnimationFrames.current).forEach(cancelAnimationFrame);
+    };
+  }, []);
+
   return (
-    <div className="bg-[#F1F4F8] h-screen overflow-hidden">
-      {/* job description */}
+    <div className="bg-[#F2F2F2] h-screen overflow-hidden">
       <div className="flex justify-between bg-gray-100 p-4 rounded-lg ml-8 h-[32%]">
-        {/* UI/UX Designer Section styled like a separate card */}
         <div className="w-[68%] border border-white bg-white pt-4 pb-4 pr-4 rounded-[15px]">
           <div className="flex justify-between">
             <div className="flex">
@@ -306,45 +331,41 @@ const ApplicantsPool = () => {
                 <img
                   src={Meta}
                   alt="Company Logo"
-                  className="w-24 h-24 rounded-full -mt-2"
+                  className="w-[86px] h-[72px] rounded-full -mt-2"
                 />
               </div>
               <div className="ml-1 ">
-                <h2 className="text-[24px] font-bold">UI/UX Designer</h2>
+                <h2 className="text-[24px] font-bold text-[#2D2D2D]">UI/UX Designer</h2>
                 <p className=" flex text-[16px] font-medium text-[#787878]">
                   Meta |
-                  <img className="h-5 mt-2 mr-1" src={Location} alt="" /> Noida
+                  <img className="h-[14px] w-[14px] mt-2 mr-1" src={Location} alt="" /> Noida
                 </p>
                 <div className="flex items-center">
-                  <img className="h-[18px]" src={Briefcase} alt="" />
-                  <span className="text-[16px] font-medium text-[#747474]">
+                  <img className="h-[18px] w-[18px]" src={Briefcase} alt="" />
+                  <span className="text-[16px] font-medium text-[#747474] ml-[2px]">
                     2 years
                   </span>
-                  <span className="mx-2">|</span>
-                  <img className="h-[18px] mr-1" src={Securitytime} alt="" />
+                  <span className="mx-2 h-[15px] border border-l border-[#BCB4B4]"></span>
+                  <img className="h-[18px] w-[18px] mr-1" src={Securitytime} alt="" />
                   <span className="text-[16px] font-medium text-[#747474]">
                     Fulltime
                   </span>
-                  <span className="mx-2">|</span>
+                  <span className="mx-2 h-[15px] border border-l border-[#BCB4B4]"></span>
+                  <img className="h-[18px] w-[9px] mr-1" src={Rupees} alt="" />
                   <span className="text-[16px] font-medium text-[#747474]">
-                    ₹ 3 - 5 LPA
+                    3 - 5 LPA
                   </span>
                 </div>
               </div>
             </div>
             <div className="flex items-center space-x-4 -mt-10">
               <button
-                className="p-3 rounded-md border border-[#0072DC] text-[16px] font-medium"
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#0072DC",
-                }}
+                className="p-3 rounded-[10px] border border-[#0072DC] text-[16px] font-medium text-[#0072DC]"
               >
                 View Details
               </button>
               <button
-                className="p-3 rounded-md text-[16px] font-medium"
-                style={{ backgroundColor: "#C4C4C4", color: "#FFFFFF" }}
+                className="p-3 rounded-[10px] text-[16px] font-medium bg-[#C4C4C4] text-white cursor-not-allowed"
               >
                 Position Closed
               </button>
@@ -353,36 +374,33 @@ const ApplicantsPool = () => {
           <div className="mt-4 ml-4 ">
             <h3 className="text-[16px] font-medium ml-2">Key Skills:</h3>
             <div className="flex flex-wrap mt-2">
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 User Research
               </span>
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 Figma
               </span>
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 Framer
               </span>
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 Photoshop
               </span>
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 UX
               </span>
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 Information Architecture
               </span>
-              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-1 px-2 rounded-lg mr-0.5 mb-2">
+              <span className="bg-[#F3F3F3] text-[14px] font-medium text-[#656565] py-[8px] px-[5px] rounded-lg mr-[4px] mb-[24px]">
                 Visual Design
               </span>
             </div>
           </div>
         </div>
-
-        {/* Right Section with white borders */}
-        <div className="w-[30%] space-y-4 ml-4 mr-6">
-          {/* Total Candidate Card with increased height */}
+        <div className="w-[30%] space-y-4 ml-4 mr-6 flex items-center">
           <div
-            className="border border-white p-4 rounded-lg flex justify-between items-center h-[46%]"
+            className="px-[27px] py-[26px] rounded-[10px] flex justify-between items-center h-[55%] w-full"
             style={{
               backgroundImage: `url(${backgroundImage1})`,
               backgroundSize: "cover",
@@ -390,37 +408,14 @@ const ApplicantsPool = () => {
             }}
           >
             <div>
-              <h3 className="ml-1 text-[16px] font-semibold">
+              <h3 className="ml-1 text-[16px] font-semibold text-[#333232]">
                 Total Candidate
               </h3>
-              <p className="ml-1 text-[14px] text-[#A09E9E]">
+              <p className="ml-1 text-[14px] text-[#A09E9E] font-medium">
                 For the entire period
               </p>
             </div>
             <p className="text-[36px] font-semibold mr-2">1200+</p>
-          </div>
-          <div
-            className="border border-white p-4 rounded-lg flex justify-between items-center h-[46%]"
-            style={{
-              backgroundImage: `url(${backgroundImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            <div>
-              <h3 className="ml-1 text-[16px] font-semibold">Total Cost</h3>
-              <p className="ml-1 text-[14px] text-[#A09E9E]">
-                Post duration - 27 Days
-              </p>
-            </div>
-            <div className="">
-              <p className="text-[36px] font-semibold justify-center flex">
-                ₹3.5k
-              </p>
-              <span className="text-[12px] font-medium text-[#858585] bg-[#E5F6D2] px-2 py-1 rounded-md">
-                Open 5 Aug - Close 2 Sep
-              </span>
-            </div>
           </div>
         </div>
       </div>
@@ -444,7 +439,7 @@ const ApplicantsPool = () => {
                 onClick={handleSkillScoreClick}
               >
                 <div
-                  ref={gradientRef}
+                  ref={buttonGradientRef}
                   className={`absolute inset-[-200%] transition-opacity duration-300 ${
                     showSkillScore ? "opacity-100" : "opacity-0"
                   }`}
@@ -457,13 +452,15 @@ const ApplicantsPool = () => {
               #0FB3D4 65%, 
               #241C70 84%, 
               #420167 100%)`,
-                    transform: "rotate(0deg)",
+                    transform: `translateY(10%) rotate(${buttonRotation}deg)`,
                   }}
                 />
-                <span className="relative z-20 text-[16px]">Skill Stack Score</span>
-                {showSkillScore &&
-                  <img src={whiteArrow} className="z-30 ml-[12px]" />
-                }
+                <span className="relative z-20 text-[16px]">
+                  Skill Stack Score
+                </span>
+                {(showSkillScore || isAnimating) && (
+                  <img src={whiteArrow} className="z-30 ml-[12px]" alt="White Arrow" />
+                )}
               </button>
             </div>
             <div className="ml-[16px] border border-white h-[44px] w-[102px] flex items-center rounded-[24px] bg-white text-[16px] text-[#161616]">
@@ -496,149 +493,213 @@ const ApplicantsPool = () => {
             </p>
           </div>
         </div>
-        <div className="mt-1 mr-10 overflow-y-auto table-container h-[60%]">
-          <table
-            className="min-w-full text-left border-separate rounded-xl h-full"
-            style={{ borderSpacing: "0 10px" }}
-          >
-            <thead className="sticky top-0 z-10 bg-white text-tableHead">
-              <tr>
-                <th className="p-4 rounded-tl-xl text-[14px] Inter font-semibold">
-                  Applied Date
-                </th>
-                <th className="p-4">
-                  <input
-                    type="checkbox"
-                    className="custom-checkbox h-6 w-6 appearance-none border-2 border-[#737373] rounded-md checked:border-none checked:bg-[#0072DC] focus:ring-indigo-500"
-                    checked={isAllSelected}
-                    onChange={handleSelectAllChange}
-                  />
-                </th>
-                <th className="p-4 text-[14px] Inter font-semibold">
-                  Candidate Name
-                </th>
-                {showSkillScore && (
-                  <th className="p-4 text-[14px] Inter font-semibold">
-                    Skill Stack Score
-                  </th>
-                )}
-                <th className="p-4 text-[14px] Inter font-semibold">
-                  Experience
-                </th>
-                <th className="p-4 text-[14px] Inter font-semibold">
-                  Current Company
-                </th>
-                <th className="p-4 text-[14px] Inter font-semibold">
-                  Location
-                </th>
-                <th className="p-4 text-[14px] Inter font-semibold">
-                  Key Skills
-                </th>
-                <th className="p-4 text-[14px] Inter font-semibold rounded-tr-xl"></th>
-              </tr>
-            </thead>
-
-            <tbody>
+        <div className="w-[98%] bg-white text-tableHead flex py-[13px] rounded-xl mt-[21px]">
+          <div className="flex items-center justify-center w-[10%] text-[14px] Inter font-semibold">
+            Applied Date
+          </div>
+          <div className="flex items-center justify-center w-[5%]">
+            <input
+              type="checkbox"
+              className="custom-checkbox h-6 w-6 appearance-none border-2 border-[#737373] rounded-md checked:border-none checked:bg-[#0072DC] focus:ring-indigo-500"
+              checked={isAllSelected}
+              onChange={handleSelectAllChange}
+            />
+          </div>
+          <div className="flex items-center w-[15%] text-[14px] Inter font-semibold">
+            Candidate Name
+          </div>
+          {showSkillScore && (
+            <div className="flex w-[10%] -ml-[5%] text-[14px] Inter font-semibold">
+              Skill Stack Score
+            </div>
+          )}
+          <div className="flex items-center justify-center w-[4%] text-[14px] Inter font-semibold">
+            Experience
+          </div>
+          <div className="flex items-center justify-center w-[13%] text-[14px] Inter font-semibold">
+            Company
+          </div>
+          <div className="flex items-center justify-center w-[5%] text-[14px] Inter font-semibold">
+            Location
+          </div>
+          <div className="flex items-center ml-[3%] w-[25%] text-[14px] Inter font-semibold">
+            Key Skills
+          </div>
+          <div className="flex text-[14px] Inter font-semibold"></div>
+        </div>
+        <div className="mr-10 overflow-y-auto h-[47%] bg-[#F1F4F8] mt-[12px] scrollbar-left">
+          <div className="min-w-full text-left rounded-xl h-full">
+            <div className="space-y-[12px]">
               {currentCandidates.map((candidate, idx) => (
                 <React.Fragment key={idx}>
-                  <tr
-                    className={`bg-white tableRow`}
-                  >
-                    <td className="p-4 bg-[#F1F4F8] text-xl">
-                      <div className="flex flex-col items-center">
-                        <span className="text-[#888888] text-[14px] font-medium Inter">
-                          {candidate.date}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-4 rounded-l-xl">
-                      <input
-                        type="checkbox"
-                        className="custom-checkbox h-6 w-6 appearance-none border-2 border-[#737373] rounded-md checked:border-none checked:bg-[#0072DC] focus:ring-indigo-500"
-                        checked={selectedCandidates.includes(idx)}
-                        onChange={() => handleCheckboxChange(idx)}
-                      />
-                    </td>
-                    <td className="p-4 flex items-center space-x-3">
-                      <img
-                        src={candidate.profile}
-                        alt="Profile"
-                        className="h-10 w-10 rounded-full"
-                      />
-                      <div>
-                        <p className="text-black mb-[-5px] text-[14px] font-medium">
-                          {candidate.name}
-                        </p>
-                        <span className="text-[#A6A6A6] text-[14px] font-medium">
-                          {candidate.role}
-                        </span>
-                      </div>
-                    </td>
-                    {showSkillScore && (
-                      <td className="text-tableBody text-[14px] font-medium">
-                        <div
-                          className="rounded-[12px] w-[44px] h-[22px] text-bold items-center flex justify-center"
-                          style={{
-                            background: getScoreBackground(candidate.score),
-                            color: candidate.score >= 700 ? "white" : "black",
-                          }}
-                        >
-                          {candidate.score}
-                        </div>
-                      </td>
-                    )}
-                    <td className="p-4 text-tableBody">
-                      <span className="text-[14px] font-medium">
-                        {candidate.experience}
+                  <div className="flex items-center">
+                    <div className="flex flex-col items-center w-[10%]">
+                      <span className="text-[#888888] text-[14px] font-medium Inter">
+                        {candidate.date}
                       </span>
-                    </td>
-                    <td className="p-4 text-tableBody text-[14px] font-medium">
-                      {candidate.company}
-                    </td>
-                    <td className="p-4 text-tableBody text-[14px] font-medium">
-                      {candidate.location}
-                    </td>
-                    <td className="p-4 text-[#656565] text-[14px] font-medium space-x-2">
-                      <SkillDisplay skills={candidate.skills} />
-                    </td>
-                    <td className="p-4 rounded-r-xl">
-                      <button
-                        className={`inline-flex items-center justify-center rounded-lg border border-[#98CDFF] hover:bg-[#E5F1FB] hover:border-[#0072DC] transition-all duration-1000 ease-in-out w-26 w-full ${
-                          loadingSummary[idx] || summaryVisible[idx]
-                            ? "px-3 py-2"
-                            : "p-3"
+                    </div>
+                    <div
+                      className={`bg-white border-2 flex w-[100%] py-[19.5px] relative overflow-hidden ${
+                        loadingSummary[idx] || summaryVisible[idx]
+                          ? tableScore
+                            ? "rounded-t-[8px] border-transparent"
+                            : "rounded-t-[10px] border-white"
+                          : tableScore
+                          ? "rounded-[8px] border-transparent"
+                          : "rounded-[10px] border-white"
+                      }`}
+                    >
+                      {isAnimating && (
+                        <div
+                          ref={(el) => (candidateGradientRefs.current[idx] = el)}
+                          className="absolute inset-[-1200%] transition-opacity duration-300"
+                          style={{
+                            background: `conic-gradient(from 270deg, 
+                              #420167 1%, 
+                              #8F48F8 22%, 
+                              #2061F8 36%, 
+                              #2D79F5 51%, 
+                              #0FB3D4 65%, 
+                              #241C70 84%, 
+                              #420167 100%)`,
+                            transform: `translateY(10%) rotate(${candidateRotations[idx] || 0}deg)`,
+                            opacity: 1,
+                          }}
+                        />
+                      )}
+                      {tableScore && (
+                        <div
+                          className="absolute inset-0 border-[2px] border-transparent pointer-events-none overflow-hidden"
+                          style={{
+                            borderImage: `${getScoreBackground(candidate.score)} 1`,
+                          }}
+                        />
+                      )}
+                      <div className="flex items-center justify-center w-[6%] pl-[1.5%]">
+                        <input
+                          type="checkbox"
+                          className="custom-checkbox h-6 w-6 appearance-none border-2 border-[#737373] rounded-md checked:border-none checked:bg-[#0072DC] focus:ring-indigo-500"
+                          checked={selectedCandidates.includes(idx)}
+                          onChange={() => handleCheckboxChange(idx)}
+                        />
+                      </div>
+                      <div className="z-20 flex items-center w-[15%]">
+                        <img
+                          src={candidate.profile}
+                          alt="Profile"
+                          className="h-10 w-10 rounded-full"
+                        />
+                        <div className="z-20 ml-[4px]">
+                          <p
+                            className={`mb-[-5px] text-[14px] font-medium ${
+                              tableBGColor ? "text-white" : "text-black"
+                            }`}
+                          >
+                            {candidate.name}
+                          </p>
+                          <span
+                            className={`text-[14px] font-medium ${
+                              tableBGColor ? "text-white" : "text-[#A6A6A6]"
+                            }`}
+                          >
+                            {candidate.role}
+                          </span>
+                        </div>
+                      </div>
+
+                      {tableScore && (
+                        <div className="flex items-center justify-center">
+                          <div
+                            className="rounded-[12px] w-[44px] h-[22px] font-bold items-center flex justify-center"
+                            style={{
+                              background: getScoreBackground(candidate.score),
+                              color: candidate.score >= 700 ? "white" : "#6F6F6F",
+                            }}
+                          >
+                            {candidate.score}
+                          </div>
+                        </div>
+                      )}
+                      <div
+                        className={`flex z-20 items-center ${
+                          showSkillScore
+                            ? "pl-[5.5%] w-[10%] ml-[1%]"
+                            : "pl-[2%] w-[7%]"
                         }`}
-                        onClick={() => toggleSummary(idx)}
                       >
-                        {!(loadingSummary[idx] || summaryVisible[idx]) && (
-                          <img
-                            src={SummarizeIcon}
-                            alt=""
-                            className={`h-6 mt-[-2px]`}
-                          />
-                        )}
                         <span
-                          className={`text-[#0072DC] text-[16px] font-medium Inter ${
-                            loadingSummary[idx] || summaryVisible[idx]
-                              ? "content-center"
-                              : "pl-2"
+                          className={`text-[14px] font-medium ${
+                            tableBGColor ? "text-white" : "text-black"
                           }`}
                         >
-                          {loadingSummary[idx]
-                            ? "Close"
-                            : summaryVisible[idx]
-                            ? "Close"
-                            : "Summarize"}
+                          {candidate.experience}
                         </span>
-                      </button>
-                    </td>
-                  </tr>
+                      </div>
+
+                      <div
+                        className={`z-20 flex items-center pl-[5%] text-[14px] font-medium w-[13%] ${
+                          tableBGColor ? "text-white" : "text-tableBody"
+                        }`}
+                      >
+                        {candidate.company}
+                      </div>
+
+                      <div
+                        className={`z-20 flex items-center text-[14px] font-medium ${
+                          showSkillScore ? "w-[7%] ml-[4%]" : "w-[7%] pl-[2.3%]"
+                        } ${tableBGColor ? "text-white" : "text-tableBody"}`}
+                      >
+                        {candidate.location}
+                      </div>
+
+                      <div
+                        className={`flex items-center ml-[2.3%] w-[35%] text-[14px] font-medium bg-transparent ${
+                          tableBGColor ? "text-white" : "text-[#656565]"
+                        }`}
+                      >
+                        <SkillDisplay skills={candidate.skills} tableBGColor={tableBGColor} />
+                      </div>
+
+                      <div className="flex items-center justify-center w-[18%]">
+                        <button
+                          className={`inline-flex items-center justify-center rounded-lg border hover:bg-[#E5F1FB] hover:border-[#0072DC] transition-all duration-1000 ease-in-out w-26 w-[70%] ${tableBGColor ? "border-black" : "border-[#98CDFF]"} ${
+                            loadingSummary[idx] || summaryVisible[idx]
+                              ? "px-3 py-2"
+                              : "p-3"
+                          }`}
+                          onClick={() => toggleSummary(idx)}
+                        >
+                          {!(loadingSummary[idx] || summaryVisible[idx]) && (
+                            <img
+                              src={SummarizeIcon}
+                              alt=""
+                              className={`h-6 mt-[-2px]`}
+                            />
+                          )}
+                          <span
+                            className={`text-[16px] font-medium Inter ${
+                              tableBGColor ? "text-black" : "text-[#0072DC]"
+                            } ${
+                              loadingSummary[idx] || summaryVisible[idx]
+                                ? "content-center"
+                                : "pl-2"
+                            }`}
+                          >
+                            {loadingSummary[idx]
+                              ? "Close"
+                              : summaryVisible[idx]
+                              ? "Close"
+                              : "Summarize"}
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   {loadingSummary[idx] || summaryVisible[idx] ? (
-                    <tr className="bg-[#F1F4F8]">
-                      <td className="p-0"></td>
-                      <td colSpan="7" className="p-0">
+                    <div className="bg-[#F1F4F8]">
+                      <div className="p-0">
                         <div
-                          className={`relative flex flex-col px-20 py-5 rounded-lg bg-summarize_gradient opacity-[80%]`}
+                          className={`relative flex flex-col px-20 py-5 rounded-b-[10px] bg-summarize_gradient opacity-[80%] w-[91%] ml-[9%] -mt-[12px]`}
                         >
                           {loadingSummary[idx] ? (
                             <div className="opacity-100">
@@ -680,13 +741,13 @@ const ApplicantsPool = () => {
                             </div>
                           )}
                         </div>
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   ) : null}
                 </React.Fragment>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
         <ReactPaginate
           previousLabel={<SlArrowLeft />}

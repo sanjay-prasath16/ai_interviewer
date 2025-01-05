@@ -87,6 +87,14 @@
     @apply bg-[#A8A8A8] rounded-xl;
   }
 
+  .scrollbar-left {
+    direction: rtl;
+  }
+
+  .scrollbar-left > * {
+    direction: ltr;
+  }
+
   /* applicant pool ended */
 
   /* user dashboard started */

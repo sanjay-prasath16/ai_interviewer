@@ -68,7 +68,7 @@ const Navbar = ({ assistant, onLiylaActivate }) => {
               />
             </svg>
             <input
-              className="justify-start px-2 w-full max-w-[657px] text-[#353535] py-[0.5vh] text-[2vh] leading-[18px] border-0 bg-[#EBEBEB] focus:outline-none focus:text-[#353535]"
+              className="justify-start px-2 w-full max-w-[657px] text-[#353535] py-[0.5vh] text-[2vh] leading-[18px] border-0 bg-[#EBEBEB] focus:outline-none placeholder:text-[#353535]"
               onClick={focusInput}
               type="text"
               name="searchBar"

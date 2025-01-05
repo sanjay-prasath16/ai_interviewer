@@ -7,7 +7,9 @@ import Liyla from "../assets/Type=Layila.svg";
 import Navbar from "../Components/Navbar";
 import Carousel from "../Components/Carousel";
 import Spline from "@splinetool/react-spline";
-import { useConversation } from '@11labs/react';
+import { useConversation } from "@11labs/react";
+
+const transcriptionObject = { liyla: [], user: [] };
 
 const AfterSelection = () => {
   const [selected, setSelected] = useState("nonTechnical");
@@ -179,10 +181,89 @@ const AfterSelection = () => {
   }, []);
 
   const [liylaStatus, setLiylaStatus] = useState(false);
+  const [microphoneStream, setMicrophoneStream] = useState(null);
+
+  useEffect(() => {
+    let audioChunks = [];
+    let recorder;
+    let websocket;
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            setMicrophoneStream(stream);
+
+            // Set up WebSocket connection to the backend
+            websocket = new WebSocket("ws://localhost:5001");
+
+            websocket.onopen = () => {
+                console.log("WebSocket connection established.");
+            };
+
+            websocket.onmessage = (event) => {
+                // Handle transcription text from the backend
+                const transcriptionText = event.data;
+                console.log("Transcription: ", transcriptionText);
+            };
+
+            websocket.onclose = () => {
+                console.log("WebSocket connection closed.");
+            };
+
+            recorder = new MediaRecorder(stream);
+
+            recorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            recorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+                audioChunks = [];
+
+                // Send audio blob to WebSocket for live transcription
+                if (websocket.readyState === WebSocket.OPEN) {
+                    websocket.send(audioBlob);
+                }
+            };
+
+            recorder.start(1000); // Send audio chunks every second
+        } catch (error) {
+            console.error("Error accessing microphone:", error);
+        }
+    };
+
+    if (liylaStatus) {
+        startRecording();
+    } else {
+        if (recorder) {
+            recorder.stop();
+        }
+        if (microphoneStream) {
+            microphoneStream.getTracks().forEach((track) => track.stop());
+        }
+        setMicrophoneStream(null);
+
+        if (websocket) {
+            websocket.close();
+        }
+    }
+
+    return () => {
+        if (recorder) {
+            recorder.stop();
+        }
+        if (microphoneStream) {
+            microphoneStream.getTracks().forEach((track) => track.stop());
+        }
+        if (websocket) {
+            websocket.close();
+        }
+    };
+}, [liylaStatus]);
 
   const toggleLiylaStatus = async () => {
     setLiylaStatus((prev) => !prev);
-    if(!liylaStatus) {
+    if (!liylaStatus) {
       const conversationId = await conversation.startSession({
         agentId: import.meta.env.VITE_APP_ELEVENLABS,
       });
@@ -204,10 +285,30 @@ const AfterSelection = () => {
           </span>
         </div>
       ) : (
-        <div className="relative ">
-          <div className='absolute z-50 ml-[80%] mt-20' onClick={toggleLiylaStatus}>
+        <div className={`relative ${liylaStatus && "bg-black z-50"}`}>
+          {liylaStatus && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+          )}
+          <div
+            className="absolute z-50 ml-[80%] mt-20"
+            onClick={toggleLiylaStatus}
+          >
             {liylaStatus && (
-              <Spline className='items-end' scene="https://prod.spline.design/dmBccWJHg23ZYriK/scene.splinecode" />
+              // <Spline className='items-end' scene="https://prod.spline.design/dmBccWJHg23ZYriK/scene.splinecode" />
+              <div>
+                <img
+                  src={Liyla}
+                  className="w-[86px] h-[86px] mt-[81px] mr-[31px]"
+                />
+                <div className="mr-[35px]">
+                  <p className="border border-white bg-white rounded-[8px] mt-[20px] px-[24px] py-[20px] text-justify">
+                    Hi,I’m Liyla. What can I do for you today?
+                  </p>
+                  <p className="mt-[8px] bg-[#0F0F36] opacity-[30%] text-white rounded-[8px] px-[24px] py-[20px] text-justify justify-end items-end flex">
+                    <span className="opacity-[100%]">Post a job for UI/UX designer</span>
+                  </p>
+                </div>
+              </div>
             )}
           </div>
           <div className=".main-container min-h-[100vh] bg-[#F1F4F8]">

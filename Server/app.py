@@ -1,4 +1,6 @@
-from flask import Flask, request, send_file, jsonify
+import asyncio
+import websockets
+from flask import Flask, request, jsonify
 import openai
 import os
 from faster_whisper import WhisperModel
@@ -7,6 +9,8 @@ from collections import defaultdict
 from flask_cors import CORS
 from dotenv import load_dotenv
 import time  # To use for unique file names
+import threading
+from io import BytesIO
 
 # Flask app setup
 app = Flask(__name__)
@@ -41,6 +45,59 @@ def speech_to_text(audio_file_path):
     except Exception as e:
         print(f"Error transcribing audio file {audio_file_path}: {e}")
         return ""
+
+# WebSocket handling for live transcription
+async def live_transcribe(websocket):
+    audio_data = b""
+
+    while True:
+        try:
+            # Receive audio data from the frontend (in binary format)
+            audio_chunk = await websocket.recv()
+            audio_data += audio_chunk
+
+            # Process the audio data when enough data has been received
+            if len(audio_data) >= 16000:  # Approximately 1 second of audio at 16000Hz
+                # Transcribe the audio to text
+                transcript_text = speech_to_text(BytesIO(audio_data))
+
+                # Send the transcription back to the frontend
+                await websocket.send(transcript_text)
+
+                # Reset audio_data buffer for the next chunk
+                audio_data = b""
+        except Exception as e:
+            print(f"Error during live transcription: {e}")
+            break
+
+def start_websocket_server():
+    # Create a new asyncio event loop and start the server
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    async def start():
+        port = 5001
+        while True:
+            try:
+                start_server = await websockets.serve(live_transcribe, "localhost", port)
+                print(f"WebSocket server started on port {port}")
+                await start_server.wait_closed()
+                break
+            except OSError as e:
+                if e.errno == 98:  # Address already in use
+                    print(f"Port {port} is already in use. Trying another port...")
+                    port += 1  # Try next port
+                else:
+                    raise e
+    
+    # Run the event loop
+    loop.run_until_complete(start())
+
+# Starting the WebSocket server in a new thread to run asynchronously
+def run_websocket_server():
+    thread = threading.Thread(target=start_websocket_server)
+    thread.daemon = True
+    thread.start()
 
 # Updated generate_question function
 def generate_question(topic, candidate_name):
@@ -139,4 +196,8 @@ def start_session():
 
 # Run the Flask app
 if __name__ == '__main__':
+    # Ensure the WebSocket server starts in a background thread
+    run_websocket_server()
+
+    # Continue with your Flask server
     app.run(port=5000, debug=True)
