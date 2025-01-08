@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Select from "react-select";
@@ -6,7 +6,7 @@ import image5 from "../assets/Search.svg";
 import Liyla from "../assets/Type=Layila.svg";
 import Navbar from "../Components/Navbar";
 import Carousel from "../Components/Carousel";
-// import Spline from "@splinetool/react-spline";
+import Spline from "@splinetool/react-spline";
 import { useConversation } from "@11labs/react";
 
 const AfterSelection = () => {
@@ -179,84 +179,6 @@ const AfterSelection = () => {
   }, []);
 
   const [liylaStatus, setLiylaStatus] = useState(false);
-  const audioContextRef = useRef(null);
-
-  useEffect(() => {
-    const setupAudioContext = () => {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    };
-
-    const monitorAudioBlobs = () => {
-      if (!audioContextRef.current) {
-        setupAudioContext();
-      }
-
-      const originalCreateMediaElementSource = audioContextRef.current.createMediaElementSource;
-      audioContextRef.current.createMediaElementSource = function(mediaElement) {
-        console.log("New audio element detected:", mediaElement.src);
-        if (mediaElement.src.startsWith('blob:')) {
-          handleNewBlob(mediaElement.src);
-        }
-        return originalCreateMediaElementSource.call(this, mediaElement);
-      };
-
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'childList') {
-            mutation.addedNodes.forEach((node) => {
-              if (node instanceof HTMLAudioElement && node.src.startsWith('blob:')) {
-                console.log("New audio blob detected:", node.src);
-                handleNewBlob(node.src);
-              }
-            });
-          }
-        });
-      });
-
-      observer.observe(document.body, { childList: true, subtree: true });
-
-      return () => {
-        observer.disconnect();
-        if (audioContextRef.current) {
-          audioContextRef.current.close();
-        }
-      };
-    };
-
-    const handleNewBlob = async (blobUrl) => {
-      try {
-        const response = await fetch(blobUrl);
-        const blob = await response.blob();
-        await sendBlobToBackend(blob);
-      } catch (error) {
-        console.error("Error handling blob:", error);
-      }
-    };
-
-    const sendBlobToBackend = async (blob) => {
-      try {
-        const formData = new FormData();
-        formData.append("audio", blob, "audio.webm");
-
-        const uploadResponse = await fetch("http://localhost:6000/upload-audio", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (uploadResponse.ok) {
-          console.log("Audio uploaded successfully!");
-        } else {
-          console.error("Error uploading audio:", uploadResponse.statusText);
-        }
-      } catch (error) {
-        console.error("Error sending blob to backend:", error);
-      }
-    };
-
-    const cleanup = monitorAudioBlobs();
-
-    return cleanup;
-  }, []);
 
   const toggleLiylaStatus = async () => {
     setLiylaStatus((prev) => !prev);
@@ -288,19 +210,10 @@ const AfterSelection = () => {
             onClick={toggleLiylaStatus}
           >
             {liylaStatus && (
-              // <Spline className='items-end' scene="https://prod.spline.design/dmBccWJHg23ZYriK/scene.splinecode" />
-              <div>
-                <img
-                  src={Liyla}
-                  className="w-[86px] h-[86px] mt-[81px] mr-[31px]"
-                />
-                <p className="border border-white mt-[20px] px-[24px] py-[20px] text-justify">
-                  Hi,I’m Liyla. What can I do for you today?
-                </p>
-                <p className="mt-[8px] bg-[#0F0F36] opacity-[30%]">
-                  Post a job for UI/UX designer
-                </p>
-              </div>
+              <Spline
+                className="items-end"
+                scene="https://prod.spline.design/dmBccWJHg23ZYriK/scene.splinecode"
+              />
             )}
           </div>
           <div className=".main-container min-h-[100vh] bg-[#F1F4F8]">

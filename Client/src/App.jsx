@@ -12,6 +12,8 @@ import TechnicalPracticeSimulation from "./Pages/technicalPracticeSimulation";
 import NonTechnicalPracticeSimulation from "./Pages/nonTechnicalPracticeSimulation";
 import CandidateProfile from './Pages/candidateProfile';
 import SecondDummy from './Pages/secondDummy';
+import RecruiterDashboard from './Pages/recruiterDashboard';
+import Suggestion from './Pages/Suggestion';
 
 const App = () => {
   return (
@@ -30,6 +32,8 @@ const App = () => {
         <Route path="/courseSummary" element={<CourseSummary />} />
         <Route path="/" element={<CandidateProfile />} />
         <Route path="/secondDummy" element={<SecondDummy />} />
+        <Route path="/recruitDash" element={<RecruiterDashboard />} />
+        <Route path="/suggestion" element={<Suggestion />} />
       </Routes>
     </BrowserRouter>
   )

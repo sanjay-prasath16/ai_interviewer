@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import logo from "../assets/image1.png";
-import companyName from "../assets/Aspireit.png";
+import Logo from '../assets/CompanyLogo.svg';
 import profile from "../assets/Ellipse 1872.svg";
 import PropTypes from "prop-types";
 
@@ -26,22 +25,17 @@ const Navbar = ({ assistant, onLiylaActivate }) => {
   }, [isFocused1]);
 
   return (
-    <div className="NavBar w-full mx-[auto] h-[8vh] min-h-[42px] px-8 bg-white border border-[#D2D2D2] backdrop-blur-[220px] flex justify-between items-center hover:cursor-pointer">
-      <div className="logo-container w-[130px] h-[5vh] min-h-[24px] relative  bg-[#FFF]">
-        <div className="Rectangle7391 w-[9vw] h-[4.5vh] min-h-[24px] relative bg-[#0F0F36] rounded-[6px]" />
-        <div className="logo w-[9vw] h-[4vh] min-h-[24px] absolute left-[0px] top-[1px] bg-none flex justify-center items-center gap-[0.3vw]">
+    <div className="NavBar w-full mx-[auto] h-[68px] min-h-[42px] px-8 bg-white border border-[#D2D2D2] backdrop-blur-[220px] flex justify-between items-center hover:cursor-pointer">
+      <div className="logo-container bg-[#FFF]">
+        <div className="logo flex justify-center items-center gap-[0.3vw]">
           <img
-            className="Aspireit w-[1.5vw] bg-transparent shrink-0"
-            src={logo}
-          />
-          <img
-            className="Group1000007770 bg-transparent w-[5vw] h-[2vh] shrink-0"
-            src={companyName}
+            className="Aspireit h-[42px] w-[130px]"
+            src={Logo}
           />
         </div>
       </div>
       <div className="SearchBarContainer w-full flex grow justify-center items-center gap-4 bg-none">
-        <div className="InputContainer w-[90%] flex justify-start items-center gap-4 h-[5vh] min-h-[24px] max-w-[500px] pl-6 pr-6 pt-4 pb-4 bg-[#EBEBEB] shadow-[0px_0px_4px_rgba(0,_0,_0,_0.25)] rounded-[32px]">
+        <div className="InputContainer w-[90%] flex justify-start items-center gap-4 h-[44px] min-h-[24px] max-w-[60%] pl-6 pr-6 pt-4 pb-4 bg-[#EBEBEB] shadow-[0px_0px_4px_rgba(0,_0,_0,_0.25)] rounded-[32px]">
           <div className="searchBar inline-flex items-center h-[5vh] w-full max-w-[657px] bg-[#EBEBEB]">
             <svg
               xmlns="http://www.w3.org/2000/svg"

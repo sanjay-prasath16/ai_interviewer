@@ -19,6 +19,7 @@
     "@mui/material": "^6.1.6",
     "@mui/styled-engine": "^6.1.9",
     "@mui/x-date-pickers": "^7.22.2",
+    "@nivo/line": "^0.88.0",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "@splinetool/react-spline": "^4.0.0",
@@ -41,6 +42,7 @@
     "react-router-dom": "^6.26.2",
     "react-select": "^5.8.3",
     "react-speech-recognition": "^3.10.0",
+    "react-toastify": "^11.0.2",
     "react-webcam": "^7.2.0",
     "recharts": "^2.14.1",
     "swiper": "^11.1.14"
