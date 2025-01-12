@@ -14,11 +14,13 @@ import CandidateProfile from './Pages/candidateProfile';
 import SecondDummy from './Pages/secondDummy';
 import RecruiterDashboard from './Pages/recruiterDashboard';
 import Suggestion from './Pages/Suggestion';
+import Home from './Pages/Home';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Routes>
+      <Route path="/" element={<Home />} />
         <Route path="/applicantPool" element={<ApplicantPool />} />
         <Route path="/aiInterview" element={<AiInterview />} />
         <Route path="/non_technical" element={<NonTechnical />} />
@@ -30,7 +32,7 @@ const App = () => {
         <Route path="/technicalPracticeSimulation" element={<TechnicalPracticeSimulation />} />
         <Route path="/nonTechnicalPracticeSimulation" element={<NonTechnicalPracticeSimulation /> } />
         <Route path="/courseSummary" element={<CourseSummary />} />
-        <Route path="/" element={<CandidateProfile />} />
+        <Route path="/candidateProfile" element={<CandidateProfile />} />
         <Route path="/secondDummy" element={<SecondDummy />} />
         <Route path="/recruitDash" element={<RecruiterDashboard />} />
         <Route path="/suggestion" element={<Suggestion />} />

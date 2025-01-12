@@ -27,6 +27,7 @@ export default {
       animation: {
         blink: "blink 1.5s infinite",
         'slide-in': 'slide-in 0.5s ease-out forwards',
+        gradient: 'gradient 8s linear infinite'
       },
       keyframes: {
         blink: {
@@ -36,6 +37,11 @@ export default {
         'slide-in': {
           '0%': { transform: 'translateY(100%)', opacity: 0 },
           '100%': { transform: 'translateY(0)', opacity: 1 },
+        },
+        gradient: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
       },
     },

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import describeImage from "../assets/non_technical.jpeg";
+import describeImage from "../assets/non_technical_sample_image.jpeg";
 import warning from '../assets/warning icon.svg';
 
 const Interview = () => {
@@ -11,7 +11,7 @@ const Interview = () => {
     "Observe the illustration been displayed on the screen and point out 3 key design philosophy."
   );
   const [currentAnswer, setCurrentAnswer] = useState("");
-  const [questionCount, setQuestionCount] = useState(0);
+  const [questionNumber, setQuestionNumber] = useState(1);
   const [candidateName] = useState("Sanjay");
   const [isInterviewComplete, setIsInterviewComplete] = useState(false);
   const [interviewData, setInterviewData] = useState([]);
@@ -23,6 +23,7 @@ const Interview = () => {
   const videoRef = useRef(null);
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const [videoToggleButton, setVideoToggleButton] = useState(true);
+  const hasSpokenRef = useRef(false);
 
   const toggleVideoSize = () => {
     setVideoToggleButton(!videoToggleButton);
@@ -58,6 +59,10 @@ const Interview = () => {
         ) {
           setPermissionsGranted(false);
           startVideo();
+          if (!hasSpokenRef.current) {
+            speakText(currentQuestion);
+            hasSpokenRef.current = true;
+          }
         } else {
           setPermissionsGranted(true);
         }
@@ -155,22 +160,27 @@ const Interview = () => {
 
   const handleGenerateNextQuestion = useCallback(
     async (transcript) => {
-      if (questionCount >= 9) {
+      if (questionNumber >= 10) {
         setIsInterviewComplete(true);
-        setCurrentQuestion("The interview is complete. Thank you!");
+        setCurrentQuestion("Your interview has been completed. Thank you for your cooperation!");
+        speakText("Your interview has been completed. Thank you for your cooperation!");
         return;
       }
 
       try {
-        const response = await axios.post(
-          "http://localhost:5000/generate_question",
-          {
-            topic: transcript,
-            candidate_name: candidateName,
-          }
-        );
-
-        const nextQuestion = response.data.question;
+        let nextQuestion;
+        if (questionNumber < 9) {
+          const response = await axios.post(
+            "http://localhost:5000/generate_question",
+            {
+              topic: transcript,
+              candidate_name: candidateName,
+            }
+          );
+          nextQuestion = response.data.question;
+        } else {
+          nextQuestion = "Your interview has been completed. Thank you for your cooperation!";
+        }
 
         setInterviewData((prevData) => [
           ...prevData,
@@ -179,17 +189,52 @@ const Interview = () => {
 
         setCurrentQuestion(nextQuestion);
         setCurrentAnswer("");
-        setQuestionCount((prevCount) => prevCount + 1);
+        setQuestionNumber((prevNumber) => prevNumber + 1);
 
-        setTimeout(() => {
-          startRecording();
-        }, 5000);
+        await speakText(nextQuestion);
+
+        if (questionNumber < 9) {
+          setTimeout(() => {
+            setTimer(180);
+            handleInitialTimer();
+          }, 1000);
+        }
       } catch (error) {
         console.error("Error fetching next question:", error);
       }
     },
-    [questionCount, candidateName, currentQuestion, startRecording]
+    [questionNumber, candidateName, currentQuestion]
   );
+
+  const speakText = useCallback(async (text) => {
+    return new Promise((resolve, reject) => {
+      try {
+        axios
+          .post(
+            "http://localhost:8000/speak",
+            { text },
+            { responseType: "blob" }
+          )
+          .then((response) => {
+            const audioUrl = URL.createObjectURL(response.data);
+            const audio = new Audio(audioUrl);
+
+            audio.onended = () => {
+              if (!isInterviewComplete && questionNumber <= 9) {
+                setTimer(180);
+                handleInitialTimer();
+              }
+              resolve();
+            };
+
+            audio.play();
+          });
+      } catch (error) {
+        console.error("Error in TTS or audio playback:", error);
+        reject(error);
+      }
+    });
+  }, [isInterviewComplete, questionNumber]);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
@@ -204,14 +249,14 @@ const Interview = () => {
   };
 
   useEffect(() => {
-    if (currentAnswer && questionCount > 0) {
+    if (currentAnswer && questionNumber > 0) {
       axios.post("http://localhost:8000/store_interview", {
         candidate_name: candidateName,
         question: currentQuestion,
         answer: currentAnswer,
       });
     }
-  }, [currentAnswer, currentQuestion, candidateName, questionCount]);
+  }, [currentAnswer, currentQuestion, candidateName, questionNumber]);
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -242,20 +287,6 @@ const Interview = () => {
       });
     }, 1000);
   }, [startRecording]);
-
-  useEffect(() => {
-    if (permissionsGranted && isAnalysisPhase) {
-      const delayTimeout = setTimeout(() => {
-        setTimer(180);
-        handleInitialTimer();
-      }, 5000);
-
-      return () => {
-        clearTimeout(delayTimeout);
-        clearInterval(timerRef.current);
-      };
-    }
-  }, [permissionsGranted, isAnalysisPhase, handleInitialTimer]);
 
   return (
     <div className="flex h-screen w-screen regular3">
@@ -303,7 +334,7 @@ const Interview = () => {
           {/* new question */}
           <div className="flex justify-end mt-2">
             <motion.div
-              key={`current-question-${questionCount}`}
+              key={`current-question-${questionNumber}`}
               className="p-2 mb-4 w-[235px] rounded-full rounded-br-md bg-question_gradient flex justify-end"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -320,7 +351,7 @@ const Interview = () => {
               <p className="text-sm text-white mb-2">{candidateName}</p>
               <div className="flex justify-start">
                 <motion.div
-                  key={`current-answer-${questionCount}`}
+                  key={`current-answer-${questionNumber}`}
                   className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-[285px] flex justify-start"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -345,7 +376,7 @@ const Interview = () => {
             >
               <video
                 ref={videoRef}
-                className={`rounded-3xl`}
+                className={`rounded-3xl transform scale-x-[-1]`}
                 autoPlay
                 playsInline
                 muted

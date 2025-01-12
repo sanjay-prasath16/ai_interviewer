@@ -69,6 +69,7 @@ def generate_question(topic, candidate_name):
     Relevance and Alignment:
     Ensure questions are relevant to the candidate’s field and aligned with the foundational principles they need to know.
     Avoid questions that deviate from the core objective.
+    If the user response is Yeah I'm fine then generate a random question
     """
 
     # Use the new ChatCompletion method for chat-based responses

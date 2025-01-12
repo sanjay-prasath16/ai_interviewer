@@ -261,7 +261,7 @@ const Technical = () => {
               videoToggleButton ? "w-[180px] h-[227px]" : "w-[91px] h-[114px]"
             }`}
           >
-            <Webcam audio={false} className="w-full h-full object-cover" />
+            <Webcam audio={false} className="w-full h-full object-cover transform scale-x-[-1]" />
             {videoToggleButton && (
               <p className="absolute z-10 text-white text-[14px] font-semibold top-[80%] left-2">
                 Sanjay Prasath

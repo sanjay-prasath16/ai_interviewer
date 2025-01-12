@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Ring from "../assets/ring.png";
-import warning from '../assets/warning icon.svg';
+import warning from "../assets/warning icon.svg";
 
 const Interview = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -14,7 +14,7 @@ const Interview = () => {
   const [currentAnswer, setCurrentAnswer] = useState("");
   const [questionCount, setQuestionCount] = useState(0);
   const [candidateName, setCandidateName] = useState("Sanjay");
-  // const [isInterviewComplete, setIsInterviewComplete] = useState(false);
+  const [isInterviewComplete, setIsInterviewComplete] = useState(false);
   const [interviewData, setInterviewData] = useState([]);
   const [timer, setTimer] = useState(90);
   const mediaRecorderRef = useRef(null);
@@ -27,12 +27,18 @@ const Interview = () => {
   const [permissionsGranted, setPermissionsGranted] = useState(false);
   const isRecordingRef = useRef(false);
   const [videoToggleButton, setVideoToggleButton] = useState(true);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const hasSpokenRef = useRef(false);
+  const questionCountRef = useRef(questionCount);
+  const isInterviewCompleteRef = useRef(isInterviewComplete);
 
   const toggleVideoSize = () => {
     setVideoToggleButton(!videoToggleButton);
-  }
+  };
 
   useEffect(() => {
+    let permissionsChecked = false;
+
     const startVideo = () => {
       navigator.mediaDevices
         .getUserMedia({ video: true })
@@ -47,6 +53,9 @@ const Interview = () => {
     };
 
     const checkPermissions = async () => {
+      if (permissionsChecked) return;
+      permissionsChecked = true;
+  
       try {
         const audioPermission = await navigator.permissions.query({
           name: "microphone",
@@ -54,18 +63,22 @@ const Interview = () => {
         const videoPermission = await navigator.permissions.query({
           name: "camera",
         });
-
+  
         if (
           audioPermission.state === "granted" &&
           videoPermission.state === "granted"
         ) {
           setPermissionsGranted(false);
           startVideo();
-          speakText(currentQuestion);
+  
+          if (!hasSpokenRef.current) {
+            speakText(currentQuestion);
+            hasSpokenRef.current = true;
+          }
         } else {
           setPermissionsGranted(true);
         }
-
+  
         audioPermission.onchange = () => {
           if (
             audioPermission.state === "granted" &&
@@ -74,7 +87,7 @@ const Interview = () => {
             location.reload();
           }
         };
-
+  
         videoPermission.onchange = () => {
           if (
             audioPermission.state === "granted" &&
@@ -90,52 +103,52 @@ const Interview = () => {
     };
 
     checkPermissions();
+
+    return () => {
+      permissionsChecked = false;
+    };
   }, []);
 
-  const speakText = async (text) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/speak",
-        { text },
-        { responseType: "blob" }
-      );
-      const audioUrl = URL.createObjectURL(response.data);
-      const audio = new Audio(audioUrl);
+  const speakText = useCallback(async (text) => {
+    return new Promise((resolve, reject) => {
+      try {
+        axios
+          .post(
+            "http://localhost:8000/speak",
+            { text },
+            { responseType: "blob" }
+          )
+          .then((response) => {
+            const audioUrl = URL.createObjectURL(response.data);
+            const audio = new Audio(audioUrl);
 
-      audio.onended = () => {
-        startRecording();
-        setTimer(90);
-        startTimer();
-        startRecording();
-        setIsRecording(true);
-      };
+            audio.onended = () => {
+              if (!isInterviewComplete) {
+                startRecording();
+                setTimer(90);
+                setIsTimerRunning(true);
+                startTimer();
+              }
+              resolve();
+            };
 
-      await audio.play();
-    } catch (error) {
-      console.error("Error in TTS or audio playback:", error);
+            audio.play();
+          });
+      } catch (error) {
+        console.error("Error in TTS or audio playback:", error);
 
-      setTimeout(() => {
-        startRecording();
-        setTimer(90);
-        startTimer();
-        startRecording();
-        setIsRecording(true);
-      }, 5000);
-    }
-  };
-
-  const startTimer = () => {
-    timerRef.current = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 0) {
-          clearInterval(timerRef.current);
-          stopRecording();
-          return 0;
+        if (!isInterviewComplete) {
+          setTimeout(() => {
+            startRecording();
+            setTimer(90);
+            setIsTimerRunning(true);
+            startTimer();
+          }, 5000);
         }
-        return prev - 1;
-      });
-    }, 1000);
-  };
+        reject(error);
+      }
+    });
+  }, [isInterviewComplete, setIsTimerRunning]);
 
   const handleAudioSubmission = async (audioBlob) => {
     try {
@@ -148,7 +161,9 @@ const Interview = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      handleGenerateNextQuestion(data.transcript);
+      if(questionCountRef.current <= 10) {
+        handleGenerateNextQuestion(data.transcript);
+      }
     } catch (error) {
       console.error("Error handling audio submission:", error);
     }
@@ -170,11 +185,14 @@ const Interview = () => {
         source.connect(analyser);
         const updateVolume = () => {
           analyser.getByteFrequencyData(dataArray);
-          const avgVolume =
-            dataArray.reduce((a, b) => a + b) / dataArray.length;
+          const avgVolume = dataArray.reduce((a, b) => a + b) / dataArray.length;
           setVolume(avgVolume);
-          if (isRecordingRef.current) requestAnimationFrame(updateVolume);
+        
+          if (isRecordingRef.current) {
+            requestAnimationFrame(updateVolume);
+          }
         };
+        isRecordingRef.current = true;
         updateVolume();
         mediaRecorder.ondataavailable = (event) => {
           audioChunks.current.push(event.data);
@@ -201,65 +219,91 @@ const Interview = () => {
     if (volume > 70) return "high medium low";
     if (volume > 65) return "medium low";
     if (volume > 55) return "low";
-    return undefined;
+    return "no-pulse";
   };
 
+  useEffect(() => {
+    questionCountRef.current = questionCount;
+  }, [questionCount]);
+  
+  useEffect(() => {
+    isInterviewCompleteRef.current = isInterviewComplete;
+  }, [isInterviewComplete]);
+
   const handleGenerateNextQuestion = async (transcript) => {
-    if (questionCount >= 9) {
-      setCurrentQuestion("The interview is complete. Thank you!");
-      return;
+    if (questionCountRef.current <= 10) {
+      try {
+        const { data } = await axios.post(
+          "http://localhost:5000/generate_question",
+          {
+            topic: transcript,
+            candidate_name: candidateName,
+          }
+        );
+        setInterviewData((prevData) => [
+          ...prevData,
+          { question: currentQuestion, answer: transcript },
+        ]);
+        setCurrentQuestion(data.question);
+        setCurrentAnswer("");
+        setQuestionCount((prevCount) => prevCount + 1);
+        await speakText(data.question);
+      } catch (error) {
+        console.error("Error fetching next question:", error);
+      }
     }
-    try {
-      const { data } = await axios.post(
-        "http://localhost:5000/generate_question",
-        {
-          topic: transcript,
-          candidate_name: candidateName,
-        }
-      );
-      setInterviewData((prevData) => [
-        ...prevData,
-        { question: currentQuestion, answer: transcript },
-      ]);
-      setCurrentQuestion(data.question);
-      setCurrentAnswer("");
-      setQuestionCount((prevCount) => prevCount + 1);
-      setTimeout(() => speakText(data.question), 1000);
-    } catch (error) {
-      console.error("Error fetching next question:", error);
-    }
-  };
+  };  
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
     }
-    clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   }, [isRecording]);
 
-  useEffect(() => {
-    if (isRecording) {
-      timerRef.current = setInterval(() => {
-        setTimer((prev) => {
-          if (prev <= 0) {
-            clearInterval(timerRef.current);
-            stopRecording();
-            return 0;
-          }
-          return prev;
-        });
-      }, 1000);
-    } else {
+  const startTimer = useCallback(() => {
+    if (timerRef.current) {
       clearInterval(timerRef.current);
     }
+  
+    setIsTimerRunning(true);
+  
+    timerRef.current = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 0) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+          setIsTimerRunning(false);
+          stopRecording();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [stopRecording]);  
 
-    return () => clearInterval(timerRef.current);
-  }, [isRecording, stopRecording]);
+  useEffect(() => {
+    if (isRecording && !isTimerRunning) {
+      startTimer();
+    }
+  }, [isRecording, isTimerRunning, startTimer]);  
+
+  useEffect(() => {
+  }, [isRecording, isTimerRunning]);
+
+  useEffect(() => {
+  }, [timer]);
 
   const handleNextClick = () => {
-    stopRecording();
-    setTimer(90);
+    if (!isInterviewComplete) {
+      stopRecording();
+      setTimer(90);
+      setIsTimerRunning(false);
+    }
   };
 
   useEffect(() => {
@@ -290,7 +334,7 @@ const Interview = () => {
 
   useEffect(() => {
     const pulseClass = getPulseClass(volume);
-    if (pulseClass !== undefined) {
+    if (pulseClass && pulseClass !== "no-pulse") {
       setShowExpandingBorder(true);
       setPulseClass(pulseClass);
       const timer = setTimeout(() => {
@@ -300,6 +344,24 @@ const Interview = () => {
       return () => clearTimeout(timer);
     }
   }, [volume]);
+
+  useEffect(() => {
+    console.log(questionCount);
+  }, [questionCount]);
+
+  useEffect(() => {
+    if (questionCount >= 10 && !isInterviewComplete) {
+      console.log("Question count reached 2, ending interview");
+      const completionMessage = "The interview is complete. Thank you!";
+      setCurrentQuestion(completionMessage);
+      setIsInterviewComplete(true);
+      stopRecording();
+      setIsRecording(false);
+      setIsTimerRunning(false);
+      clearInterval(timerRef.current);
+      speakText(completionMessage);
+    }
+  }, [questionCount, stopRecording, isInterviewComplete, speakText]);
 
   return (
     <div className="flex h-screen overflow-y-hidden regular3">
@@ -336,7 +398,9 @@ const Interview = () => {
                   key={`question-${index}`}
                   className="p-2 mb-4 w-[235px] rounded-full rounded-br-md bg-question_gradient flex justify-end"
                 >
-                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[10px]">{item.question}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[10px]">
+                    {item.question}
+                  </p>
                 </motion.div>
               </div>
 
@@ -347,7 +411,9 @@ const Interview = () => {
                   key={`answer-${index}`}
                   className="p-4 border border-[#F59BD5] bg-transparent rounded-3xl rounded-bl-none w-[285px] flex justify-start"
                 >
-                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">{item.answer}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">
+                    {item.answer}
+                  </p>
                 </motion.div>
               </div>
             </div>
@@ -362,7 +428,9 @@ const Interview = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <p className="text-white py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">{currentQuestion}</p>
+              <p className="text-white py-[7px] pl-[23px] pr-[15px] text-[10px] leading-[15px]">
+                {currentQuestion}
+              </p>
             </motion.div>
           </div>
 
@@ -377,7 +445,9 @@ const Interview = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">{currentAnswer}</p>
+                  <p className="text-white py-[7px] pl-[23px] pr-[15px] leading-[15px] text-[12px]">
+                    {currentAnswer}
+                  </p>
                 </motion.div>
               </div>
             </>
@@ -385,15 +455,22 @@ const Interview = () => {
         </div>
         <div className="flex flex-col items-center mt-5 h-[30%] w-[95%]">
           <div className="w-full h-full flex">
-            <div className={`relative ${videoToggleButton ? 'w-full h-full' : 'w-[50%] h-[50%]'}`}>
+            <div
+              className={`relative ${
+                videoToggleButton ? "w-full h-full" : "w-[50%] h-[50%]"
+              }`}
+            >
               <video
                 ref={videoRef}
-                className={`rounded-3xl`}
+                className={`rounded-3xl transform scale-x-[-1]`}
                 autoPlay
                 playsInline
                 muted
               />
-              <button className="absolute -top-1 -right-1 bg-white text-white w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-full" onClick={toggleVideoSize}>
+              <button
+                className="absolute -top-1 -right-1 bg-white text-white w-[55px] h-[55px] cursor-pointer flex justify-center items-center rounded-full"
+                onClick={toggleVideoSize}
+              >
                 <svg
                   width="40"
                   height="40"
@@ -427,24 +504,34 @@ const Interview = () => {
                   Next
                 </button>
               </div>
-              <p className="text-[40px] text-[#A5A5A7]">
-                {formatTimer(timer)}
-              </p>
+              <p className="text-[40px] text-[#A5A5A7]">{formatTimer(timer)}</p>
             </div>
           </div>
         </div>
       </div>
-      {permissionsGranted &&
-        (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {permissionsGranted && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="h-[232px] w-[434px] bg-white animate-fadeInScale flex items-center justify-center rounded-3xl">
-            <div className="h-[184px] w-[386px] border-2 border-[#FF3B30] rounded-3xl flex flex-col items-center pt-[14px]" style={{ animation: "fadeInScale 0.8s ease-out", boxShadow: "0px 4px 4px #cccccc", }}>
+            <div
+              className="h-[184px] w-[386px] border-2 border-[#FF3B30] rounded-3xl flex flex-col items-center pt-[14px]"
+              style={{
+                animation: "fadeInScale 0.8s ease-out",
+                boxShadow: "0px 4px 4px #cccccc",
+              }}
+            >
               <img src={warning} alt="" className="w-[48px] h-[48px]" />
-              <p className="text-[16px] font-medium pt-[9px]">Microphone and Camera Access Required</p>
-              <p className="text-[14px] text-center w-[352px] text-[#667085] pt-[5px]">To provide you with the best possible experience, we need access to your microphone and camera. Please enable these permissions in your browser settings</p>
+              <p className="text-[16px] font-medium pt-[9px]">
+                Microphone and Camera Access Required
+              </p>
+              <p className="text-[14px] text-center w-[352px] text-[#667085] pt-[5px]">
+                To provide you with the best possible experience, we need access
+                to your microphone and camera. Please enable these permissions
+                in your browser settings
+              </p>
             </div>
           </div>
-        </div>)
-      }
+        </div>
+      )}
     </div>
   );
 };
